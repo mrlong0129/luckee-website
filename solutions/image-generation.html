@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>E-commerce Image Generation | Luckee AI Solutions</title>
+    <meta name="description" content="Luckee E-commerce Image Generation prepares product image concepts, scene briefs, comparison frames, and ad creative directions for Amazon and e-commerce conversion." />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://luckee.ai/solutions/image-generation" />
+
+    <!-- ===== Luckee canonical chrome — head bits ===== -->
+    <meta name="theme-color" content="#16241D" />
+    <link rel="icon" href="../assets/luckee-logo.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <script>document.documentElement.classList.add("js")</script>
+    <link rel="stylesheet" href="../styles.css" />
+
+    <!-- ===== Page-local styles (built entirely from Luckee 2.0 tokens) ===== -->
+    <style>
+      /* Image Generation hero — deep-forest band with radial mesh + grain */
+      .ig-hero {
+        position: relative;
+        background: var(--forest-900);
+        color: var(--oat-100);
+        overflow: hidden;
+        padding: 88px 0 80px;
+      }
+      .ig-hero::before {
+        content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: .95;
+        background:
+          radial-gradient(40% 52% at 18% 26%, rgba(120,160,121,.30), transparent 62%),
+          radial-gradient(32% 44% at 82% 10%, rgba(201,168,76,.16), transparent 60%),
+          radial-gradient(50% 64% at 94% 98%, rgba(62,91,63,.52), transparent 66%);
+        filter: blur(2px);
+      }
+      .ig-hero > .wrap { position: relative; z-index: 2; }
+      .ig-hero-grid {
+        display: grid; grid-template-columns: minmax(0, 1.04fr) minmax(0, .96fr);
+        gap: 56px; align-items: center;
+      }
+      .ig-hero .eyebrow { color: var(--forest-300); }
+      .ig-hero h1 {
+        color: var(--oat-100); margin: 20px 0 0; max-width: 18ch;
+        font-size: clamp(2.6rem, 5vw, 4.1rem); line-height: 1.04; letter-spacing: -.02em;
+      }
+      .ig-hero h1 em { font-family: var(--serif); font-style: italic; font-weight: 400; color: var(--gold-light); }
+      .ig-hero .lead { color: var(--forest-300); font-size: 1.18rem; line-height: 1.64; max-width: 52ch; margin: 22px 0 0; }
+      .ig-hero .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+
+      /* Hero workflow card — soft framed panel floating on the dark band */
+      .ig-flow-card {
+        position: relative; z-index: 1;
+        background: rgba(217, 232, 218, .05);
+        border: 1px solid var(--hair-dark);
+        border-radius: var(--r-sheet);
+        box-shadow: var(--sh-float);
+        padding: 26px;
+        display: flex; flex-direction: column; gap: 12px;
+      }
+      .ig-flow-card::before {
+        content: ""; position: absolute; inset: -8% -6% -12% -4%; z-index: -1; pointer-events: none;
+        background: radial-gradient(60% 60% at 70% 26%, rgba(201,168,76,.16), transparent 70%);
+        filter: blur(10px);
+      }
+      .ig-step {
+        display: flex; align-items: flex-start; gap: 16px;
+        padding: 16px 18px; border-radius: var(--r-frame);
+        background: rgba(217, 232, 218, .06); border: 1px solid var(--hair-dark);
+        transition: transform .28s var(--ease-out), border-color .28s var(--ease-out), background .28s var(--ease-out);
+      }
+      .ig-step:hover { transform: translateY(-3px); border-color: rgba(201,168,76,.4); background: rgba(217,232,218,.09); }
+      .ig-step-num {
+        flex: 0 0 auto; width: 40px; height: 40px; border-radius: 12px;
+        display: grid; place-items: center;
+        background: linear-gradient(150deg, var(--forest-600), var(--forest-800));
+        border: 1px solid var(--hair-dark);
+        font-family: var(--serif); font-size: 1.3rem; color: var(--gold-light);
+        box-shadow: var(--sh-brand);
+      }
+      .ig-step-body { display: flex; flex-direction: column; gap: 3px; }
+      .ig-step-body b { font-family: var(--serif); font-weight: 400; font-size: 1.18rem; color: var(--oat-100); line-height: 1.15; }
+      .ig-step-body span { font-size: .9rem; color: var(--forest-300); line-height: 1.55; }
+
+      /* Four-step process strip — adjust the shared 5-col grid + connecting line for 4 steps */
+      .ig-process { grid-template-columns: repeat(4, 1fr); }
+
+      @media (max-width: 980px) {
+        .ig-hero { padding: 72px 0 64px; }
+        .ig-hero-grid { grid-template-columns: 1fr; gap: 40px; }
+        .ig-hero h1 { max-width: none; }
+        .ig-process { grid-template-columns: repeat(2, 1fr); }
+      }
+      @media (max-width: 640px) {
+        .ig-process { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <nav class="wrap nav" aria-label="Primary navigation">
+        <a class="brand" href="../index.html" aria-label="Luckee AI home">
+          <span class="brand-mark up" aria-hidden="true"></span>
+          <span>Luckee AI</span>
+        </a>
+        <ul class="nav-list">
+          <li class="nav-item">
+            <a class="nav-link" href="../products/amazon-operation-assistant.html">Products</a>
+            <div class="mega" aria-label="Product links">
+              <a href="../products/amazon-operation-assistant.html"><strong>Amazon Operation Assistant</strong><span>Luckee 1.0 for daily Amazon account operations.</span></a>
+              <a href="../products/amazon-ads-workbench.html"><strong>Amazon Ads Workbench</strong><span>Human-approved PPC execution from diagnosis to outcome.</span></a>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="../solutions.html">Solutions</a>
+            <div class="mega" aria-label="Solution links">
+              <a href="../solutions/listing-optimizer.html"><strong>Listing Optimizer</strong><span>Listing copy, A+ content, backend keywords, and answerability.</span></a>
+              <a href="../solutions/ads-audit.html"><strong>Ads Audit</strong><span>PPC diagnosis for TACoS, ROAS, CPC, placement, and waste.</span></a>
+              <a href="../solutions/ads-automation.html"><strong>Ads Automation</strong><span>Human-approved bid, budget, keyword, and negative changes.</span></a>
+              <a href="../solutions/image-generation.html"><strong>E-commerce Image Generation</strong><span>Conversion-focused product, lifestyle, and comparison visuals.</span></a>
+              <a href="../solutions/review-analysis.html"><strong>Review Analysis</strong><span>Complaint themes, buyer language, and product improvement signals.</span></a>
+              <a href="../solutions/competition-analysis.html"><strong>Competition Analysis</strong><span>Competitor pricing, creatives, keywords, reviews, and market moves.</span></a>
+            </div>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="../index.html#pricing">Pricing</a></li>
+          <li class="nav-item"><a class="nav-link" href="../index.html#resources">Resources</a></li>
+          <li class="nav-item"><a class="nav-link" href="../index.html#company">Company</a></li>
+        </ul>
+        <div class="nav-actions">
+          <a class="btn btn-outline btn-sm" href="../solutions.html">See solutions</a>
+          <a class="btn btn-primary btn-sm" href="../index.html#contact">Hire a team</a>
+          <button class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <!-- ===== MOBILE MENU (right after </header>) ===== -->
+    <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+      <div class="mobile-menu-panel">
+        <div class="mm-head">
+          <a class="brand" href="../index.html"><span class="brand-mark up" aria-hidden="true"></span><span>Luckee AI</span></a>
+          <button class="mm-close" aria-label="Close menu"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+        </div>
+        <span class="mm-group-label">Products</span>
+        <a href="../products/amazon-operation-assistant.html">Amazon Operation Assistant</a>
+        <a href="../products/amazon-ads-workbench.html">Amazon Ads Workbench</a>
+        <span class="mm-group-label">Solutions</span>
+        <a href="../solutions/listing-optimizer.html">Listing Optimizer</a>
+        <a href="../solutions/ads-audit.html">Ads Audit</a>
+        <a href="../solutions/ads-automation.html">Ads Automation</a>
+        <a href="../solutions/image-generation.html">Image Generation</a>
+        <a href="../solutions/review-analysis.html">Review Analysis</a>
+        <a href="../solutions/competition-analysis.html">Competition Analysis</a>
+        <span class="mm-group-label">Company</span>
+        <a href="../index.html#pricing">Pricing</a>
+        <a href="../index.html#resources">Resources</a>
+        <a href="../index.html#company">Company</a>
+        <div class="mm-actions">
+          <a class="btn btn-outline btn-block" href="../solutions.html">See solutions</a>
+          <a class="btn btn-primary btn-block" href="../index.html#contact">Hire a team</a>
+        </div>
+      </div>
+    </div>
+
+    <main id="main">
+      <!-- ============================ HERO ============================ -->
+      <section class="ig-hero grain">
+        <div class="wrap ig-hero-grid">
+          <div class="reveal">
+            <span class="eyebrow">Solution / Image Generation</span>
+            <h1>Create e-commerce images from real <em>buyer intent</em>.</h1>
+            <p class="lead">Luckee turns listing gaps, review language, competitor positioning, and buyer objections into image concepts, scene briefs, comparison frames, and ad creative directions.</p>
+            <div class="hero-actions">
+              <a class="btn btn-light btn-lg" href="../index.html#contact">Plan image assets</a>
+              <a class="btn btn-outline btn-lg" href="../solutions.html">Back to solutions</a>
+            </div>
+          </div>
+          <aside class="ig-flow-card reveal" aria-label="How Luckee prepares image assets">
+            <div class="ig-step">
+              <span class="ig-step-num">1</span>
+              <div class="ig-step-body">
+                <b>Mine intent</b>
+                <span>Use reviews, competitors, and listing gaps to define visual jobs.</span>
+              </div>
+            </div>
+            <div class="ig-step">
+              <span class="ig-step-num">2</span>
+              <div class="ig-step-body">
+                <b>Draft concepts</b>
+                <span>Product, lifestyle, comparison, callout, and scenario directions.</span>
+              </div>
+            </div>
+            <div class="ig-step">
+              <span class="ig-step-num">3</span>
+              <div class="ig-step-body">
+                <b>Prepare production</b>
+                <span>Briefs ready for AI generation, design, or photo production.</span>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- ============================ THE PROBLEM ============================ -->
+      <section class="band-white">
+        <div class="wrap section">
+          <div class="section-head reveal">
+            <div>
+              <p class="section-kicker">The problem</p>
+              <h2 class="section-title">Polished images that <em>don&rsquo;t actually sell.</em></h2>
+            </div>
+            <p class="section-copy">
+              Most AI image work looks slick and ships fast, but it is briefed from guesswork.
+              It ignores the questions buyers actually ask, the objections sitting in your reviews,
+              and the comparison points that win the click. Pretty is not the same as persuasive.
+            </p>
+          </div>
+          <div class="grid-3 reveal-stagger">
+            <article class="tile">
+              <h3>Pretty but off-message</h3>
+              <p>Generic visuals look professional yet say nothing about fit, use case, or the reason this product wins the sale.</p>
+            </article>
+            <article class="tile">
+              <h3>Briefed from guesswork</h3>
+              <p>Image work is slow and disconnected from listing gaps, target keywords, and review evidence, so each round is a fresh gamble.</p>
+            </article>
+            <article class="tile">
+              <h3>Ignores buyer objections</h3>
+              <p>The doubts that stall a purchase, hidden in reviews and Q&amp;A, never make it onto the main image, gallery, or A+ modules.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ CREATIVE OUTPUTS ============================ -->
+      <section class="band">
+        <div class="wrap section">
+          <div class="section-head reveal">
+            <div>
+              <p class="section-kicker">Creative outputs</p>
+              <h2 class="section-title">Images that explain why the product should <em>win</em>.</h2>
+            </div>
+            <p class="section-copy">The page focuses on e-commerce conversion assets, not generic image generation.</p>
+          </div>
+          <div class="grid-3 reveal-stagger">
+            <article class="tile"><h3>Scenario images</h3><p>Use cases that match shopper intent and buying context.</p></article>
+            <article class="tile"><h3>Comparison frames</h3><p>Explain the difference against alternatives and objections.</p></article>
+            <article class="tile"><h3>Ad creative briefs</h3><p>Angles for Sponsored Brands, DSP, social, and storefront campaigns.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ HOW IT WORKS ============================ -->
+      <section class="band-white">
+        <div class="wrap section">
+          <div class="section-head reveal">
+            <div>
+              <p class="section-kicker">How it works</p>
+              <h2 class="section-title">From buyer evidence to approved visuals in <em>four steps.</em></h2>
+            </div>
+            <p class="section-copy">
+              Every concept starts with real buyer intent, not a blank prompt. A human briefs,
+              reviews, and approves at each gate, so the set you ship is on-message and on-brand.
+            </p>
+          </div>
+          <div class="process-strip ig-process reveal-stagger">
+            <div>
+              <span>01</span>
+              <b>Read the evidence</b>
+              <p>Pull listing gaps, buyer questions, review language, target keywords, and competitor creatives into one clear picture of intent.</p>
+            </div>
+            <div>
+              <span>02</span>
+              <b>Plan the set</b>
+              <p>Decide which scenes, claims, and objections each image must cover, so the gallery answers the questions that win the click.</p>
+            </div>
+            <div>
+              <span>03</span>
+              <b>Generate on-brand visuals</b>
+              <p>Produce product, lifestyle, infographic, and comparison images, conversion-focused and matched to your palette and claims.</p>
+            </div>
+            <div>
+              <span>04</span>
+              <b>Review &amp; iterate</b>
+              <p>A human picks and approves the strongest concepts, then revises against the brief until the set is ready to publish.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ USE CASES ============================ -->
+      <section class="band">
+        <div class="wrap section">
+          <div class="section-head reveal">
+            <div>
+              <p class="section-kicker">Where teams use it</p>
+              <h2 class="section-title">Visuals briefed for the moments that <em>convert.</em></h2>
+            </div>
+            <p class="section-copy">
+              The same evidence-driven approach covers the whole image stack, from the first
+              thumbnail a shopper sees to the modules that close the doubt.
+            </p>
+          </div>
+          <div class="grid-3 reveal-stagger">
+            <article class="tile">
+              <h3>Conversion-driven main &amp; gallery</h3>
+              <p>A main image and gallery set built to communicate the core reason-to-buy, framed by keywords and the questions buyers search for.</p>
+            </article>
+            <article class="tile">
+              <h3>A+ content &amp; lifestyle scenes</h3>
+              <p>Lifestyle and A+ modules that place the product in real buying context, matched to your brand palette, claims, and listing direction.</p>
+            </article>
+            <article class="tile">
+              <h3>Comparison &amp; objection infographics</h3>
+              <p>Comparison frames and callout infographics that answer the objections in your reviews and explain why this product wins against alternatives.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ FAQ ============================ -->
+      <section class="band-soft">
+        <div class="wrap section">
+          <div class="section-head reveal">
+            <div>
+              <p class="section-kicker">Questions</p>
+              <h2 class="section-title">What teams ask before they <em>brief a set.</em></h2>
+            </div>
+            <p class="section-copy">
+              Image Generation is evidence-driven and human-in-control by design. Here is how it
+              stays accurate, on-brand, and accountable.
+            </p>
+          </div>
+          <div class="grid-2 reveal-stagger">
+            <article class="tile">
+              <h3>Is this just text-to-image?</h3>
+              <p>No. Every concept is briefed from real buyer intent, with review, keyword, and listing evidence shaping each scene, claim, and comparison, not a blank prompt.</p>
+            </article>
+            <article class="tile">
+              <h3>Will it stay on-brand?</h3>
+              <p>Yes. It follows your palette, your claims, and your listing direction, so the output reads as your brand rather than generic AI imagery.</p>
+            </article>
+            <article class="tile">
+              <h3>Do humans stay in control?</h3>
+              <p>Yes. You approve every concept and every final asset. Nothing ships without a human picking it, reviewing it against the brief, and signing off.</p>
+            </article>
+            <article class="tile">
+              <h3>What formats do I get?</h3>
+              <p>Main image, gallery, lifestyle scenes, A+ modules, and comparison infographics, prepared for AI generation, design, or photo production.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ FINAL CTA ============================ -->
+      <section class="band-dark grain cta">
+        <div class="wrap reveal">
+          <h2>Turn product evidence into <em>better visual assets</em>.</h2>
+          <p>Luckee prepares the creative strategy your team can generate or produce.</p>
+          <a class="btn btn-light btn-lg" href="mailto:hello@luckee.ai">Book a demo</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap footer-shell">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <a class="brand" href="../index.html" aria-label="Luckee AI home"><span class="brand-mark up" aria-hidden="true"></span><span>Luckee AI</span></a>
+            <p>Human-agent workbench for Amazon teams. Hire AI cowork teams that plan, prepare, execute, monitor, roll back, and prove complex e-commerce work.</p>
+          </div>
+          <div class="footer-col">
+            <h3>Products</h3>
+            <div class="footer-links">
+              <a href="../products/amazon-operation-assistant.html">Amazon Operation Assistant</a>
+              <a href="../products/amazon-ads-workbench.html">Amazon Ads Workbench</a>
+              <a href="../index.html#pricing">Pricing</a>
+            </div>
+          </div>
+          <div class="footer-col">
+            <h3>Solutions</h3>
+            <div class="footer-links">
+              <a href="../solutions/listing-optimizer.html">Listing Optimizer</a>
+              <a href="../solutions/ads-audit.html">Ads Audit</a>
+              <a href="../solutions/ads-automation.html">Ads Automation</a>
+              <a href="../solutions/image-generation.html">Image Generation</a>
+              <a href="../solutions/review-analysis.html">Review Analysis</a>
+              <a href="../solutions/competition-analysis.html">Competition Analysis</a>
+            </div>
+          </div>
+          <div class="footer-col">
+            <h3>Company</h3>
+            <div class="footer-links">
+              <a href="../solutions.html">Solutions hub</a>
+              <a href="../index.html#resources">Resources</a>
+              <a href="../index.html#company">Company</a>
+              <a href="../index.html#contact">Book a demo</a>
+              <a href="mailto:hello@luckee.ai">hello@luckee.ai</a>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <span>© 2026 Luckee AI. All rights reserved.</span>
+          <span>Built for lean brands, agencies, and human-approved AI operations.</span>
+        </div>
+      </div>
+    </footer>
+    <script src="../app.js"></script>
+  </body>
+</html>

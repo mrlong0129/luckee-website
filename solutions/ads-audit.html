@@ -1,0 +1,614 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ads Audit | Luckee AI Solutions</title>
+    <meta name="description" content="Luckee Ads Audit diagnoses Amazon PPC waste, TACoS, ROAS, CPC, placement, query, campaign structure, and budget leakage with ranked fixes." />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://luckee.ai/solutions/ads-audit" />
+    <meta property="og:title" content="Ads Audit | Luckee AI Solutions" />
+    <meta property="og:description" content="Luckee Ads Audit diagnoses Amazon PPC waste, TACoS, ROAS, CPC, placement, query, campaign structure, and budget leakage with ranked fixes." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://luckee.ai/solutions/ads-audit" />
+
+    <meta name="theme-color" content="#16241D" />
+    <link rel="icon" href="../assets/luckee-logo.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <script>document.documentElement.classList.add("js")</script>
+    <link rel="stylesheet" href="../styles.css" />
+
+    <!-- ===== PAGE-LOCAL STYLE · Ad Diagnosis-specific sections (Luckee 2.0 tokens only) ===== -->
+    <style>
+      /* ---- Dark diagnosis hero ---- */
+      .ad-hero {
+        position: relative; background: var(--forest-900); color: var(--oat-100);
+        overflow: hidden; padding: 96px 0 84px;
+      }
+      .ad-hero::before {
+        content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: .95;
+        background:
+          radial-gradient(40% 52% at 18% 26%, rgba(120,160,121,.30), transparent 62%),
+          radial-gradient(32% 44% at 82% 10%, rgba(201,168,76,.16), transparent 60%),
+          radial-gradient(50% 64% at 94% 98%, rgba(62,91,63,.55), transparent 66%);
+        filter: blur(2px);
+      }
+      .ad-hero > .grain-layer { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+      .ad-hero-grid {
+        position: relative; z-index: 2;
+        display: grid; grid-template-columns: minmax(0,1.04fr) minmax(0,1.02fr);
+        gap: 60px; align-items: center;
+      }
+      .ad-hero h1 {
+        color: var(--oat-100); margin: 20px 0 0; max-width: 16ch;
+        font-size: clamp(2.6rem, 5vw, 4.1rem); line-height: 1.03; letter-spacing: -.02em;
+      }
+      .ad-hero h1 em { font-family: var(--serif); font-style: italic; font-weight: 400; color: var(--gold-light); }
+      .ad-hero .lead { color: var(--forest-300); font-size: 1.18rem; line-height: 1.64; max-width: 52ch; margin: 22px 0 0; }
+      .ad-hero .hero-actions { margin-top: 30px; }
+
+      /* hero visual frame */
+      .ad-hero-visual { position: relative; }
+      .ad-hero-visual::before {
+        content: ""; position: absolute; inset: -8% -6% -12% -4%;
+        background: radial-gradient(60% 60% at 70% 28%, rgba(201,168,76,.16), transparent 70%);
+        filter: blur(10px); z-index: 0; pointer-events: none;
+      }
+      .live-badge {
+        position: absolute; top: 18px; left: 18px; z-index: 3;
+        display: inline-flex; align-items: center; gap: 7px;
+        font-size: .72rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
+        color: var(--forest-900); background: var(--gold-light);
+        padding: 6px 12px; border-radius: var(--r-pill); box-shadow: var(--sh-sm);
+      }
+      .live-badge i { width: 7px; height: 7px; border-radius: 50%; background: var(--forest-700); animation: pulseDot 1.2s infinite var(--ease); }
+
+      /* ---- Soft image frame (reused across page) ---- */
+      .ad-frame {
+        position: relative; z-index: 1; border-radius: var(--r-frame); overflow: hidden;
+        border: 1px solid var(--hair); box-shadow: var(--sh-card); background: var(--card);
+      }
+      .ad-hero-visual .ad-frame { border-color: var(--hair-dark); box-shadow: var(--sh-float); }
+      .ad-frame img { width: 100%; display: block; }
+
+      /* ---- Three value cards under hero ---- */
+      .ad-value-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+      .ad-value-grid article {
+        background: var(--card); border: 1px solid var(--hair); border-radius: var(--r-card);
+        box-shadow: var(--sh-card); padding: 30px;
+        transition: transform .32s var(--ease-out), box-shadow .32s var(--ease-out), border-color .32s var(--ease-out);
+      }
+      .ad-value-grid article:hover { transform: translateY(-4px); box-shadow: var(--sh-card-hover); border-color: rgba(62,91,63,.22); }
+      .ad-value-grid h3 { font-size: 1.3rem; margin: 0 0 8px; }
+      .ad-value-grid p { color: var(--muted); font-size: .95rem; line-height: 1.62; margin: 0; }
+
+      /* ---- Numbered pain / use-case grid ---- */
+      .ad-num-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
+      .ad-num-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+      .ad-num-grid article {
+        background: var(--card); border: 1px solid var(--hair); border-radius: var(--r-card);
+        box-shadow: var(--sh-card); padding: 28px 30px; position: relative;
+        transition: transform .32s var(--ease-out), box-shadow .32s var(--ease-out), border-color .32s var(--ease-out);
+      }
+      .ad-num-grid article:hover { transform: translateY(-4px); box-shadow: var(--sh-card-hover); border-color: rgba(62,91,63,.22); }
+      .ad-num-grid article > span {
+        display: inline-grid; place-items: center; width: 40px; height: 40px; border-radius: 11px; margin-bottom: 16px;
+        background: linear-gradient(150deg, var(--forest-050), var(--card)); border: 1px solid var(--forest-100);
+        color: var(--forest-600); font-family: var(--mono); font-weight: 600; font-size: .9rem;
+      }
+      .ad-num-grid h3 { font-size: 1.22rem; margin: 0 0 8px; }
+      .ad-num-grid p { color: var(--muted); font-size: .95rem; line-height: 1.62; margin: 0; }
+
+      /* ---- Capability rows (alternating image + copy) ---- */
+      .ad-capability {
+        display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; margin-top: 56px;
+      }
+      .ad-capability.reverse > div { order: 2; }
+      .ad-capability.reverse > figure { order: 1; }
+      .ad-capability .ad-label {
+        display: inline-flex; align-items: center; gap: 9px; margin: 0 0 16px;
+        font-family: var(--sans); font-weight: 600; font-size: .72rem; letter-spacing: .16em;
+        text-transform: uppercase; color: var(--forest-600);
+      }
+      .ad-capability .ad-label::before { content: ""; width: 22px; height: 1px; background: currentColor; opacity: .55; }
+      .ad-capability h3 { font-size: clamp(1.5rem, 2.4vw, 1.9rem); margin: 0 0 22px; }
+      .ad-capability ul { list-style: none; display: flex; flex-direction: column; gap: 16px; }
+      .ad-capability ul li {
+        display: grid; gap: 3px; padding-left: 24px; position: relative;
+        color: var(--neutral-700); line-height: 1.55;
+      }
+      .ad-capability ul li::before {
+        content: ""; position: absolute; left: 0; top: 8px; width: 9px; height: 9px; border-radius: 3px;
+        background: var(--forest-100); border: 1px solid var(--forest-300);
+      }
+      .ad-capability ul li b { font-size: 1rem; font-weight: 600; color: var(--neutral-900); }
+      .ad-capability ul li span { font-size: .92rem; color: var(--muted); line-height: 1.55; }
+      .ad-capability figure { margin: 0; }
+
+      /* ---- Workflow phase grid (8 steps) ---- */
+      .ad-workflow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; counter-reset: phase; }
+      .ad-workflow article {
+        background: var(--card); border: 1px solid var(--hair); border-radius: var(--r-card);
+        box-shadow: var(--sh-card); padding: 24px 24px 26px; position: relative;
+        transition: transform .3s var(--ease-out), box-shadow .3s var(--ease-out), border-color .3s var(--ease-out);
+      }
+      .ad-workflow article:hover { transform: translateY(-3px); box-shadow: var(--sh-card-hover); border-color: rgba(62,91,63,.22); }
+      .ad-workflow article::before {
+        counter-increment: phase; content: "0" counter(phase);
+        display: block; font-family: var(--mono); font-size: .82rem; font-weight: 600;
+        color: var(--gold); margin-bottom: 12px;
+      }
+      .ad-workflow h3 { font-size: 1.12rem; margin: 0 0 8px; }
+      .ad-workflow p { color: var(--muted); font-size: .9rem; line-height: 1.58; margin: 0; }
+
+      /* ---- Live example showcase ---- */
+      .ad-showcase {
+        background: var(--card); border: 1px solid var(--hair); border-radius: var(--r-sheet);
+        box-shadow: var(--sh-card); padding: 34px; margin-top: 8px;
+      }
+      .ad-showcase-head {
+        display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;
+        padding-bottom: 24px; border-bottom: 1px solid var(--hair);
+      }
+      .ad-showcase-head h3 { font-size: 1.5rem; margin: 0 0 4px; }
+      .ad-showcase-head p { color: var(--muted); font-size: .92rem; margin: 0; }
+      .ad-showcase-head > span {
+        font-family: var(--mono); font-size: .82rem; font-weight: 600; color: var(--forest-700);
+        background: var(--forest-050); border: 1px solid var(--forest-100);
+        padding: 7px 14px; border-radius: var(--r-pill);
+      }
+      .ad-kpi-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 28px 0; }
+      .ad-kpi-strip article {
+        background: var(--oat-100); border: 1px solid var(--hair); border-radius: var(--r-card);
+        padding: 20px 22px; display: flex; flex-direction: column; gap: 4px;
+      }
+      .ad-kpi-strip article b { font-family: var(--serif); font-size: 2rem; line-height: 1; color: var(--forest-700); }
+      .ad-kpi-strip article span { font-size: .8rem; color: var(--muted); font-weight: 500; }
+      .ad-showcase-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-bottom: 28px; }
+      .ad-showcase-grid figure { margin: 0; }
+      .ad-showcase-grid figcaption { font-size: .86rem; color: var(--muted); line-height: 1.55; margin-top: 12px; }
+      .ad-showcase-grid figcaption b { color: var(--neutral-900); font-weight: 600; }
+      .ad-files { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+      .ad-files article {
+        background: var(--oat-100); border: 1px solid var(--hair); border-radius: var(--r-card);
+        padding: 22px 24px; display: flex; flex-direction: column; gap: 8px;
+      }
+      .ad-files article b { font-family: var(--mono); font-size: .86rem; font-weight: 600; color: var(--forest-800); word-break: break-all; }
+      .ad-files article p { color: var(--muted); font-size: .9rem; line-height: 1.55; margin: 0; }
+      .ad-files article span {
+        align-self: flex-start; font-size: .72rem; font-weight: 600; letter-spacing: .03em;
+        color: var(--forest-700); background: var(--forest-050); border: 1px solid var(--forest-100);
+        padding: 4px 11px; border-radius: var(--r-pill);
+      }
+
+      /* ---- Comparison matrix ---- */
+      .ad-compare {
+        border: 1px solid var(--hair); border-radius: var(--r-card); overflow: hidden;
+        box-shadow: var(--sh-card); background: var(--card);
+      }
+      .ad-compare > div {
+        display: grid; grid-template-columns: 1.2fr 1fr 1fr 1fr 1.4fr;
+        border-bottom: 1px solid var(--hair);
+      }
+      .ad-compare > div:last-child { border-bottom: 0; }
+      .ad-compare > div > * { padding: 16px 20px; font-size: .9rem; line-height: 1.5; }
+      .ad-compare > div:first-child {
+        background: var(--forest-900); color: var(--oat-100);
+      }
+      .ad-compare > div:first-child b { font-family: var(--serif); font-weight: 400; font-size: 1.02rem; color: var(--oat-100); }
+      .ad-compare > div:first-child b:last-child { color: var(--gold-light); }
+      .ad-compare > div:not(:first-child) span:first-child { font-weight: 600; color: var(--neutral-900); }
+      .ad-compare > div:not(:first-child) span { color: var(--muted); }
+      .ad-compare > div:not(:first-child) span:last-child {
+        color: var(--forest-700); font-weight: 600; background: var(--forest-050);
+      }
+      .ad-compare > div:nth-child(even):not(:first-child) { background: var(--oat-100); }
+
+      /* ---- FAQ grid ---- */
+      .ad-faq { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
+      .ad-faq article {
+        background: var(--card); border: 1px solid var(--hair); border-radius: var(--r-card);
+        box-shadow: var(--sh-card); padding: 28px 30px;
+        transition: transform .3s var(--ease-out), box-shadow .3s var(--ease-out), border-color .3s var(--ease-out);
+      }
+      .ad-faq article:hover { transform: translateY(-3px); box-shadow: var(--sh-card-hover); border-color: rgba(62,91,63,.22); }
+      .ad-faq h3 { font-size: 1.2rem; margin: 0 0 10px; }
+      .ad-faq p { color: var(--muted); font-size: .95rem; line-height: 1.62; margin: 0; }
+
+      /* ---- Responsive ---- */
+      @media (max-width: 980px) {
+        .ad-hero { padding: 76px 0 64px; }
+        .ad-hero-grid { grid-template-columns: 1fr; gap: 44px; }
+        .ad-value-grid { grid-template-columns: 1fr; }
+        .ad-num-grid, .ad-num-grid.cols-3 { grid-template-columns: 1fr 1fr; }
+        .ad-capability { grid-template-columns: 1fr; gap: 32px; }
+        .ad-capability.reverse > div { order: 1; }
+        .ad-capability.reverse > figure { order: 2; }
+        .ad-workflow { grid-template-columns: repeat(2, 1fr); }
+        .ad-kpi-strip { grid-template-columns: repeat(2, 1fr); }
+        .ad-showcase-grid, .ad-files, .ad-faq { grid-template-columns: 1fr; }
+        .ad-compare { overflow-x: auto; }
+        .ad-compare > div { grid-template-columns: 1.2fr 1fr 1fr 1fr 1.4fr; min-width: 640px; }
+      }
+      @media (max-width: 600px) {
+        .ad-num-grid, .ad-num-grid.cols-3 { grid-template-columns: 1fr; }
+        .ad-workflow { grid-template-columns: 1fr; }
+        .ad-kpi-strip { grid-template-columns: 1fr 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <nav class="wrap nav" aria-label="Primary navigation">
+        <a class="brand" href="../index.html" aria-label="Luckee AI home">
+          <span class="brand-mark up" aria-hidden="true"></span>
+          <span>Luckee AI</span>
+        </a>
+        <ul class="nav-list">
+          <li class="nav-item">
+            <a class="nav-link" href="../products/amazon-operation-assistant.html">Products</a>
+            <div class="mega" aria-label="Product links">
+              <a href="../products/amazon-operation-assistant.html"><strong>Amazon Operation Assistant</strong><span>Luckee 1.0 for daily Amazon account operations.</span></a>
+              <a href="../products/amazon-ads-workbench.html"><strong>Amazon Ads Workbench</strong><span>Human-approved PPC execution from diagnosis to outcome.</span></a>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="../solutions.html">Solutions</a>
+            <div class="mega" aria-label="Solution links">
+              <a href="../solutions/listing-optimizer.html"><strong>Listing Optimizer</strong><span>Listing copy, A+ content, backend keywords, and answerability.</span></a>
+              <a href="../solutions/ads-audit.html"><strong>Ads Audit</strong><span>PPC diagnosis for TACoS, ROAS, CPC, placement, and waste.</span></a>
+              <a href="../solutions/ads-automation.html"><strong>Ads Automation</strong><span>Human-approved bid, budget, keyword, and negative changes.</span></a>
+              <a href="../solutions/image-generation.html"><strong>E-commerce Image Generation</strong><span>Conversion-focused product, lifestyle, and comparison visuals.</span></a>
+              <a href="../solutions/review-analysis.html"><strong>Review Analysis</strong><span>Complaint themes, buyer language, and product improvement signals.</span></a>
+              <a href="../solutions/competition-analysis.html"><strong>Competition Analysis</strong><span>Competitor pricing, creatives, keywords, reviews, and market moves.</span></a>
+            </div>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="../index.html#pricing">Pricing</a></li>
+          <li class="nav-item"><a class="nav-link" href="../index.html#resources">Resources</a></li>
+          <li class="nav-item"><a class="nav-link" href="../index.html#company">Company</a></li>
+        </ul>
+        <div class="nav-actions">
+          <a class="btn btn-outline btn-sm" href="../solutions.html">See solutions</a>
+          <a class="btn btn-primary btn-sm" href="../index.html#contact">Hire a team</a>
+          <button class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+      <div class="mobile-menu-panel">
+        <div class="mm-head">
+          <a class="brand" href="../index.html"><span class="brand-mark up" aria-hidden="true"></span><span>Luckee AI</span></a>
+          <button class="mm-close" aria-label="Close menu"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+        </div>
+        <span class="mm-group-label">Products</span>
+        <a href="../products/amazon-operation-assistant.html">Amazon Operation Assistant</a>
+        <a href="../products/amazon-ads-workbench.html">Amazon Ads Workbench</a>
+        <span class="mm-group-label">Solutions</span>
+        <a href="../solutions/listing-optimizer.html">Listing Optimizer</a>
+        <a href="../solutions/ads-audit.html">Ads Audit</a>
+        <a href="../solutions/ads-automation.html">Ads Automation</a>
+        <a href="../solutions/image-generation.html">Image Generation</a>
+        <a href="../solutions/review-analysis.html">Review Analysis</a>
+        <a href="../solutions/competition-analysis.html">Competition Analysis</a>
+        <span class="mm-group-label">Company</span>
+        <a href="../index.html#pricing">Pricing</a>
+        <a href="../index.html#resources">Resources</a>
+        <a href="../index.html#company">Company</a>
+        <div class="mm-actions">
+          <a class="btn btn-outline btn-block" href="../solutions.html">See solutions</a>
+          <a class="btn btn-primary btn-block" href="../index.html#contact">Hire a team</a>
+        </div>
+      </div>
+    </div>
+
+    <main id="main">
+      <!-- ============================ HERO ============================ -->
+      <section class="ad-hero">
+        <div class="grain-layer grain"></div>
+        <div class="wrap ad-hero-grid">
+          <div class="reveal">
+            <span class="eyebrow on-dark">Ad Diagnosis</span>
+            <h1>Amazon Sponsored Products <em>diagnostics</em>.</h1>
+            <p class="lead">
+              Diagnose Amazon SP campaigns across campaigns, keywords, and search terms. Luckee
+              turns ACOS, wasted spend, ROAS, orders, search-term quality, and keyword harvesting
+              opportunities into ready-to-act Markdown reports.
+            </p>
+            <div class="hero-actions">
+              <a class="btn btn-primary btn-lg" href="../products/amazon-ads-workbench.html">Move to execution</a>
+              <a class="btn btn-on-dark-outline btn-lg" href="#example">See sample diagnosis</a>
+            </div>
+          </div>
+          <div class="ad-hero-visual reveal" aria-label="Ad Diagnosis report preview">
+            <span class="live-badge"><i></i> Diagnosis running</span>
+            <div class="ad-frame">
+              <img src="../assets/ad-diagnosis/summary.png" alt="Luckee Ad Diagnosis summary" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ VALUE ============================ -->
+      <section class="section">
+        <div class="wrap">
+          <div class="ad-value-grid reveal-stagger">
+            <article><h3>Diagnose every layer.</h3><p>Campaign, keyword, and search-term agents run in parallel so teams can see where spend is working and where it is leaking.</p></article>
+            <article><h3>Convert findings to action.</h3><p>Each row is labeled with keep, optimize, observe, pause, harvest, or negative-list recommendations.</p></article>
+            <article><h3>Deliver reports teams can use.</h3><p>Four Markdown reports plus JSON summaries drop into Notion, Linear, Slack, or your execution workbench.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ WHERE TEAMS GET STUCK ============================ -->
+      <section class="band section">
+        <div class="wrap">
+          <div class="section-head reveal">
+            <div>
+              <p class="section-kicker">Where PPC teams get stuck</p>
+              <h2 class="section-title">Amazon Ads Console shows numbers. It does not explain the <em>next move</em>.</h2>
+            </div>
+            <p class="section-copy">Luckee Ad Diagnosis is built for operators who need a ranked, defensible action brief.</p>
+          </div>
+          <div class="ad-num-grid reveal-stagger">
+            <article><span>01</span><h3>ACOS spikes are hard to isolate</h3><p>The leak may come from one campaign, several keywords, or a wave of poor search terms.</p></article>
+            <article><span>02</span><h3>Search-term cleanup is manual</h3><p>Building a negative list with evidence takes hours across Auto and broad-match campaigns.</p></article>
+            <article><span>03</span><h3>Winners stay buried</h3><p>Auto-discovered terms with strong ROAS often never get promoted into exact-match structure.</p></article>
+            <article><span>04</span><h3>Reports do not travel</h3><p>Native dashboards are hard to paste into weekly reviews, client updates, or approval queues.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ CORE CAPABILITIES ============================ -->
+      <section class="band-white section">
+        <div class="wrap">
+          <div class="section-head reveal">
+            <div>
+              <p class="section-kicker">Core capabilities</p>
+              <h2 class="section-title">Eight automated phases, <em>one diagnosis</em>.</h2>
+            </div>
+            <p class="section-copy">Based on the reference Ad Diagnosis page: macro health, campaign triage, keyword classification, search-term actions, and generated reports.</p>
+          </div>
+
+          <div class="ad-capability reveal">
+            <div>
+              <span class="ad-label">Macro diagnosis</span>
+              <h3>Store-level PPC health in one executive view.</h3>
+              <ul>
+                <li><b>Core metrics dashboard</b><span>ACOS, ROAS, ad sales, orders, spend, conversion, and health distribution in one consolidated report.</span></li>
+                <li><b>Health status tiers</b><span>Classify campaigns into Star, Healthy, Problematic, and observation states based on thresholds.</span></li>
+                <li><b>Spend share by tier</b><span>See whether budget is flowing toward winners or being consumed by problematic campaigns.</span></li>
+              </ul>
+            </div>
+            <figure><div class="ad-frame"><img src="../assets/ad-diagnosis/consolidated-report.png" alt="Ad Diagnosis consolidated report" /></div></figure>
+          </div>
+
+          <div class="ad-capability reverse reveal">
+            <div>
+              <span class="ad-label">Campaign diagnosis</span>
+              <h3>Find which campaigns deserve scale, repair, or pause.</h3>
+              <ul>
+                <li><b>Per-campaign performance</b><span>Spend, sales, ACOS, ROAS, orders, CTR, CVR, budget, and diagnosis status.</span></li>
+                <li><b>Action labels</b><span>Scale Star campaigns, monitor Healthy campaigns, and pause or repair Problematic campaigns.</span></li>
+                <li><b>Budget movement</b><span>Identify budget-capped winners and campaigns consuming budget without enough return.</span></li>
+              </ul>
+            </div>
+            <figure><div class="ad-frame"><img src="../assets/ad-diagnosis/campaign-analysis.jpg" alt="Ad Diagnosis campaign analysis report" /></div></figure>
+          </div>
+
+          <div class="ad-capability reveal">
+            <div>
+              <span class="ad-label">Keyword diagnosis</span>
+              <h3>Label every keyword with what should happen next.</h3>
+              <ul>
+                <li><b>Keep / Optimize / Observe / Pause</b><span>Classify each keyword with evidence, not spreadsheet guesswork.</span></li>
+                <li><b>Match-type breakdown</b><span>See whether exact, phrase, and broad structures are carrying the right work.</span></li>
+                <li><b>Per-row recommended action</b><span>Each keyword gets a practical instruction for review or execution.</span></li>
+              </ul>
+            </div>
+            <figure><div class="ad-frame"><img src="../assets/ad-diagnosis/keyword-report.png" alt="Ad Diagnosis keyword report" /></div></figure>
+          </div>
+
+          <div class="ad-capability reverse reveal">
+            <div>
+              <span class="ad-label">Search-term diagnosis</span>
+              <h3>Harvest winners and draft negative lists.</h3>
+              <ul>
+                <li><b>Search-term labels</b><span>Keep, optimize, observe, or negative based on spend, orders, ACOS, and ROAS.</span></li>
+                <li><b>Auto to exact migration</b><span>Promote auto-discovered winners into tighter keyword control with ROAS evidence.</span></li>
+                <li><b>Negative list drafts</b><span>Ready-to-copy negative terms with the rationale attached.</span></li>
+              </ul>
+            </div>
+            <figure><div class="ad-frame"><img src="../assets/ad-diagnosis/search-term-report.png" alt="Ad Diagnosis search term report" /></div></figure>
+          </div>
+
+          <div class="ad-capability reveal">
+            <div>
+              <span class="ad-label">Multi-format reports</span>
+              <h3>Four Markdown reports plus JSON summaries.</h3>
+              <ul>
+                <li><b>Consolidated report</b><span>Executive summary, KPI dashboard, campaign analysis, keyword highlights, search-term highlights, and next steps.</span></li>
+                <li><b>Three detail reports</b><span>Campaign, Keyword, and Search Term reports for execution teams.</span></li>
+                <li><b>JSON summaries</b><span>Machine-readable outputs for dashboards, scripts, or downstream workflows.</span></li>
+              </ul>
+            </div>
+            <figure><div class="ad-frame"><img src="../assets/ad-diagnosis/files-generated.png" alt="Ad Diagnosis generated report files" /></div></figure>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ HOW IT WORKS ============================ -->
+      <section class="section">
+        <div class="wrap">
+          <div class="section-head reveal">
+            <div>
+              <p class="section-kicker">How it works</p>
+              <h2 class="section-title">Eight automated phases, one <em>operator-ready</em> diagnosis.</h2>
+            </div>
+          </div>
+          <div class="ad-workflow reveal-stagger">
+            <article><h3>Parameter collection</h3><p>Normalize store, ASIN, country, and date range.</p></article>
+            <article><h3>Resolve profile</h3><p>Find the Sponsored Products advertising profile.</p></article>
+            <article><h3>Resolve portfolio</h3><p>Narrow scope when portfolio filtering is needed.</p></article>
+            <article><h3>Fetch ad data</h3><p>Pull campaign, keyword, and search-term metrics.</p></article>
+            <article><h3>3D diagnosis</h3><p>Campaign, keyword, and search-term agents run in parallel.</p></article>
+            <article><h3>Generate report</h3><p>Markdown generator stitches findings into an executive view.</p></article>
+            <article><h3>Validate output</h3><p>Consistency checks confirm the logic before delivery.</p></article>
+            <article><h3>Deliver files</h3><p>Four .md reports plus JSON summaries are ready to act on.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ LIVE EXAMPLE ============================ -->
+      <section id="example" class="band section">
+        <div class="wrap">
+          <div class="section-head reveal">
+            <div>
+              <p class="section-kicker">Live example</p>
+              <h2 class="section-title">See it on a <em>real store</em>.</h2>
+            </div>
+            <p class="section-copy">LanHome jewelry organizer in the US marketplace. Luckee scanned 3 campaigns, 22 keywords, and 35 search terms, then flagged what to scale, optimize, pause, and harvest.</p>
+          </div>
+          <div class="ad-showcase reveal">
+            <div class="ad-showcase-head">
+              <div><h3>LanHome Ad Diagnosis</h3><p>Jewelry Organizer · US Marketplace · 3 campaigns · 22 keywords · 35 search terms</p></div>
+              <span>B0FVXS65LV</span>
+            </div>
+            <div class="ad-kpi-strip">
+              <article><b>21.41%</b><span>Overall ACOS</span></article>
+              <article><b>4.67</b><span>Overall ROAS</span></article>
+              <article><b>$782</b><span>Ad sales</span></article>
+              <article><b>44</b><span>Orders</span></article>
+            </div>
+            <div class="ad-showcase-grid">
+              <figure><div class="ad-frame"><img src="../assets/ad-diagnosis/consolidated-report.png" alt="Consolidated ad report" /></div><figcaption><b>Consolidated report</b> Core KPIs, health status distribution, and spend share by tier.</figcaption></figure>
+              <figure><div class="ad-frame"><img src="../assets/ad-diagnosis/campaign-analysis.jpg" alt="Campaign performance report" /></div><figcaption><b>Campaign performance</b> Per-campaign performance with status, ACOS, ROAS, orders, and action labels.</figcaption></figure>
+            </div>
+            <div class="ad-files">
+              <article><b>Consolidated_Report_B0FVXS65LV.md</b><p>Executive view with KPI dashboard, campaign analysis, keyword highlights, search-term highlights, and next steps.</p><span>Final report · Markdown</span></article>
+              <article><b>Campaign_Report_B0FVXS65LV.md</b><p>Per-campaign detail with spend, sales, ACOS, ROAS, CTR, CVR, budget, status, and action.</p><span>Campaign detail · Markdown</span></article>
+              <article><b>Keyword_Report_B0FVXS65LV.md</b><p>All keywords with keep, optimize, observe, or pause labels.</p><span>Keyword detail · Markdown</span></article>
+              <article><b>Search_Term_Report_B0FVXS65LV.md</b><p>Customer search terms with harvest, optimize, observe, and negative-list recommendations.</p><span>Search-term detail · Markdown</span></article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ USE CASES ============================ -->
+      <section class="section">
+        <div class="wrap">
+          <div class="section-head reveal">
+            <div>
+              <p class="section-kicker">Use cases</p>
+              <h2 class="section-title">Where teams put Ad Diagnosis <em>to work</em>.</h2>
+            </div>
+          </div>
+          <div class="ad-num-grid cols-3 reveal-stagger">
+            <article><span>01</span><h3>Monthly store health check</h3><p>Stack consolidated reports into a portfolio view for leadership or client updates.</p></article>
+            <article><span>02</span><h3>High-ACOS firefight</h3><p>Find whether the leak is a campaign, keyword, search term, or budget allocation issue.</p></article>
+            <article><span>03</span><h3>Auto-to-exact migration</h3><p>Identify auto-discovered terms that deserve dedicated exact-match keywords.</p></article>
+            <article><span>04</span><h3>Negative-list build</h3><p>Generate defensible negative keyword drafts with spend and ACOS evidence.</p></article>
+            <article><span>05</span><h3>Budget reallocation</h3><p>Move budget from Problematic campaigns toward Star campaigns that are capped.</p></article>
+            <article><span>06</span><h3>Weekly review automation</h3><p>Drop Markdown-native reports into Notion, Linear, Slack, or agency review workflows.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ COMPARISON ============================ -->
+      <section class="band section">
+        <div class="wrap">
+          <div class="section-head reveal">
+            <div>
+              <p class="section-kicker">Comparison</p>
+              <h2 class="section-title">Why this is not just the <em>Amazon Ads Console</em>.</h2>
+            </div>
+          </div>
+          <div class="ad-compare reveal">
+            <div><b></b><b>Ads Console</b><b>Manual spreadsheet</b><b>Seller tools</b><b>Luckee Ad Diagnosis</b></div>
+            <div><span>Macro view</span><span>Per-campaign only</span><span>Possible, manual</span><span>Dashboard view</span><span>3-tier health classification</span></div>
+            <div><span>Keyword labels</span><span>None</span><span>Manual rules</span><span>Tracker only</span><span>Keep / Optimize / Observe / Pause</span></div>
+            <div><span>Search-term labeling</span><span>None</span><span>Manual</span><span>Partial</span><span>Keep / Optimize / Observe / Negative</span></div>
+            <div><span>Negative drafts</span><span>None</span><span>Manual</span><span>Manual</span><span>Ready-to-copy with rationale</span></div>
+            <div><span>Output</span><span>Web UI only</span><span>Spreadsheet</span><span>Web UI + CSV</span><span>Markdown + JSON</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ FAQ ============================ -->
+      <section class="section">
+        <div class="wrap">
+          <div class="section-head reveal">
+            <div>
+              <p class="section-kicker">Common questions</p>
+              <h2 class="section-title">Before you <em>try it</em>.</h2>
+            </div>
+          </div>
+          <div class="ad-faq reveal-stagger">
+            <article><h3>How often should I run a diagnosis?</h3><p>Weekly for actively managed ASINs and monthly for stable SKUs. Short windows move faster but carry more noise.</p></article>
+            <article><h3>Can I diagnose multiple ASINs?</h3><p>Yes. Run per ASIN, then aggregate JSON summaries into a portfolio-level view.</p></article>
+            <article><h3>Does it work for Auto campaigns?</h3><p>Yes. Auto campaigns get search-term analysis and auto-to-exact migration suggestions when terms show strong ROAS.</p></article>
+            <article><h3>Can thresholds be customized?</h3><p>Yes. Health classification can adapt to category, margin profile, ACOS target, and growth stage.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ FINAL CTA ============================ -->
+      <section class="band-dark grain cta">
+        <div class="wrap reveal">
+          <h2>Stop guessing. <em>Diagnose your ads</em>.</h2>
+          <p>Run Ad Diagnosis on one ASIN and turn Amazon Sponsored Products data into reviewable actions.</p>
+          <a class="btn btn-light btn-lg" href="../products/amazon-ads-workbench.html">Move to execution</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap footer-shell">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <a class="brand" href="../index.html" aria-label="Luckee AI home"><span class="brand-mark up" aria-hidden="true"></span><span>Luckee AI</span></a>
+            <p>Human-agent workbench for Amazon teams. Hire AI cowork teams that plan, prepare, execute, monitor, roll back, and prove complex e-commerce work.</p>
+          </div>
+          <div class="footer-col">
+            <h3>Products</h3>
+            <div class="footer-links">
+              <a href="../products/amazon-operation-assistant.html">Amazon Operation Assistant</a>
+              <a href="../products/amazon-ads-workbench.html">Amazon Ads Workbench</a>
+              <a href="../index.html#pricing">Pricing</a>
+            </div>
+          </div>
+          <div class="footer-col">
+            <h3>Solutions</h3>
+            <div class="footer-links">
+              <a href="../solutions/listing-optimizer.html">Listing Optimizer</a>
+              <a href="../solutions/ads-audit.html">Ads Audit</a>
+              <a href="../solutions/ads-automation.html">Ads Automation</a>
+              <a href="../solutions/image-generation.html">Image Generation</a>
+              <a href="../solutions/review-analysis.html">Review Analysis</a>
+              <a href="../solutions/competition-analysis.html">Competition Analysis</a>
+            </div>
+          </div>
+          <div class="footer-col">
+            <h3>Company</h3>
+            <div class="footer-links">
+              <a href="../solutions.html">Solutions hub</a>
+              <a href="../index.html#resources">Resources</a>
+              <a href="../index.html#company">Company</a>
+              <a href="../index.html#contact">Book a demo</a>
+              <a href="mailto:hello@luckee.ai">hello@luckee.ai</a>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <span>© 2026 Luckee AI. All rights reserved.</span>
+          <span>Built for lean brands, agencies, and human-approved AI operations.</span>
+        </div>
+      </div>
+    </footer>
+    <script src="../app.js"></script>
+  </body>
+</html>

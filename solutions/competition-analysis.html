@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Competition Analysis | Luckee AI Solutions</title>
+    <meta name="description" content="Luckee Competition Analysis tracks competitor pricing, offers, creative changes, keyword moves, review weaknesses, and Amazon category entry windows." />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://luckee.ai/solutions/competition-analysis" />
+    <meta property="og:title" content="Competition Analysis | Luckee AI Solutions" />
+    <meta property="og:description" content="Luckee Competition Analysis tracks competitor pricing, offers, creative changes, keyword moves, review weaknesses, and Amazon category entry windows." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://luckee.ai/solutions/competition-analysis" />
+
+    <!-- ===== Canonical chrome head bits ===== -->
+    <meta name="theme-color" content="#16241D" />
+    <link rel="icon" href="../assets/luckee-logo.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <script>document.documentElement.classList.add("js")</script>
+    <link rel="stylesheet" href="../styles.css" />
+
+    <!-- ===== Page-local styles (built from Luckee 2.0 tokens only) ===== -->
+    <style>
+      /* Dark compact hero — forest mesh + grain, signature look */
+      .ca-hero {
+        position: relative;
+        background: var(--forest-900);
+        color: var(--oat-100);
+        overflow: hidden;
+        padding: 88px 0 76px;
+      }
+      .ca-hero::before {
+        content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: .95;
+        background:
+          radial-gradient(40% 52% at 16% 22%, rgba(120,160,121,.30), transparent 62%),
+          radial-gradient(32% 44% at 84% 8%, rgba(201,168,76,.16), transparent 60%),
+          radial-gradient(50% 64% at 94% 100%, rgba(62,91,63,.55), transparent 66%);
+        filter: blur(2px);
+      }
+      .ca-hero .grain-layer { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+      .ca-hero-grid {
+        position: relative; z-index: 2;
+        display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+        gap: 56px; align-items: center;
+      }
+      .ca-hero .eyebrow { color: var(--forest-300); }
+      .ca-hero h1 {
+        color: var(--oat-100); margin: 20px 0 0; max-width: 18ch;
+        font-size: clamp(2.5rem, 5vw, 4rem); line-height: 1.04; letter-spacing: -.02em;
+      }
+      .ca-hero h1 em { font-family: var(--serif); font-style: italic; font-weight: 400; color: var(--gold-light); }
+      .ca-hero .lead { color: var(--forest-300); margin-top: 22px; max-width: 52ch; }
+      .ca-hero .lead strong { color: var(--oat-100); }
+      .ca-hero .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+
+      /* Floating "watch → openings → response" panel */
+      .ca-panel {
+        position: relative; z-index: 2;
+        background: var(--card); border: 1px solid var(--hair-dark); border-radius: var(--r-sheet);
+        box-shadow: var(--sh-float); padding: 26px;
+        display: flex; flex-direction: column; gap: 14px;
+      }
+      .ca-panel::before {
+        content: ""; position: absolute; inset: -8% -6% -12% -4%; z-index: -1;
+        background: radial-gradient(60% 60% at 70% 24%, rgba(201,168,76,.16), transparent 70%);
+        filter: blur(10px); pointer-events: none;
+      }
+      .work-row {
+        display: flex; align-items: flex-start; gap: 16px;
+        padding: 16px 18px; border-radius: var(--r-card);
+        background: var(--oat-100); border: 1px solid var(--hair);
+        transition: transform .28s var(--ease-out), box-shadow .28s var(--ease-out), border-color .28s var(--ease-out);
+      }
+      .work-row:hover { transform: translateY(-3px); box-shadow: var(--sh-card); border-color: var(--forest-100); }
+      .work-number {
+        flex: 0 0 auto; width: 40px; height: 40px; border-radius: 12px;
+        display: grid; place-items: center;
+        background: linear-gradient(150deg, var(--forest-600), var(--forest-800)); color: var(--oat-100);
+        font-family: var(--serif); font-size: 1.25rem; box-shadow: var(--sh-brand);
+      }
+      .work-row > div { display: flex; flex-direction: column; gap: 3px; }
+      .work-row b { font-family: var(--serif); font-weight: 400; font-size: 1.12rem; color: var(--neutral-900); line-height: 1.2; }
+      .work-row span { font-size: .86rem; color: var(--muted); line-height: 1.5; }
+
+      /* Four-step process strip — keep the connecting line aligned to 4 nodes */
+      .ca-flow-4 { grid-template-columns: repeat(4, 1fr); }
+
+      @media (max-width: 980px) {
+        .ca-hero { padding: 72px 0 60px; }
+        .ca-hero-grid { grid-template-columns: 1fr; gap: 40px; }
+        .ca-flow-4 { grid-template-columns: repeat(2, 1fr); }
+      }
+      @media (max-width: 600px) {
+        .ca-flow-4 { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <nav class="wrap nav" aria-label="Primary navigation">
+        <a class="brand" href="../index.html" aria-label="Luckee AI home">
+          <span class="brand-mark up" aria-hidden="true"></span>
+          <span>Luckee AI</span>
+        </a>
+        <ul class="nav-list">
+          <li class="nav-item">
+            <a class="nav-link" href="../products/amazon-operation-assistant.html">Products</a>
+            <div class="mega" aria-label="Product links">
+              <a href="../products/amazon-operation-assistant.html"><strong>Amazon Operation Assistant</strong><span>Luckee 1.0 for daily Amazon account operations.</span></a>
+              <a href="../products/amazon-ads-workbench.html"><strong>Amazon Ads Workbench</strong><span>Human-approved PPC execution from diagnosis to outcome.</span></a>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="../solutions.html">Solutions</a>
+            <div class="mega" aria-label="Solution links">
+              <a href="../solutions/listing-optimizer.html"><strong>Listing Optimizer</strong><span>Listing copy, A+ content, backend keywords, and answerability.</span></a>
+              <a href="../solutions/ads-audit.html"><strong>Ads Audit</strong><span>PPC diagnosis for TACoS, ROAS, CPC, placement, and waste.</span></a>
+              <a href="../solutions/ads-automation.html"><strong>Ads Automation</strong><span>Human-approved bid, budget, keyword, and negative changes.</span></a>
+              <a href="../solutions/image-generation.html"><strong>E-commerce Image Generation</strong><span>Conversion-focused product, lifestyle, and comparison visuals.</span></a>
+              <a href="../solutions/review-analysis.html"><strong>Review Analysis</strong><span>Complaint themes, buyer language, and product improvement signals.</span></a>
+              <a href="../solutions/competition-analysis.html"><strong>Competition Analysis</strong><span>Competitor pricing, creatives, keywords, reviews, and market moves.</span></a>
+            </div>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="../index.html#pricing">Pricing</a></li>
+          <li class="nav-item"><a class="nav-link" href="../index.html#resources">Resources</a></li>
+          <li class="nav-item"><a class="nav-link" href="../index.html#company">Company</a></li>
+        </ul>
+        <div class="nav-actions">
+          <a class="btn btn-outline btn-sm" href="../solutions.html">See solutions</a>
+          <a class="btn btn-primary btn-sm" href="../index.html#contact">Hire a team</a>
+          <button class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <!-- ===== MOBILE MENU ===== -->
+    <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+      <div class="mobile-menu-panel">
+        <div class="mm-head">
+          <a class="brand" href="../index.html"><span class="brand-mark up" aria-hidden="true"></span><span>Luckee AI</span></a>
+          <button class="mm-close" aria-label="Close menu"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+        </div>
+        <span class="mm-group-label">Products</span>
+        <a href="../products/amazon-operation-assistant.html">Amazon Operation Assistant</a>
+        <a href="../products/amazon-ads-workbench.html">Amazon Ads Workbench</a>
+        <span class="mm-group-label">Solutions</span>
+        <a href="../solutions/listing-optimizer.html">Listing Optimizer</a>
+        <a href="../solutions/ads-audit.html">Ads Audit</a>
+        <a href="../solutions/ads-automation.html">Ads Automation</a>
+        <a href="../solutions/image-generation.html">Image Generation</a>
+        <a href="../solutions/review-analysis.html">Review Analysis</a>
+        <a href="../solutions/competition-analysis.html">Competition Analysis</a>
+        <span class="mm-group-label">Company</span>
+        <a href="../index.html#pricing">Pricing</a>
+        <a href="../index.html#resources">Resources</a>
+        <a href="../index.html#company">Company</a>
+        <div class="mm-actions">
+          <a class="btn btn-outline btn-block" href="../solutions.html">See solutions</a>
+          <a class="btn btn-primary btn-block" href="../index.html#contact">Hire a team</a>
+        </div>
+      </div>
+    </div>
+
+    <main id="main">
+      <!-- ============================ HERO ============================ -->
+      <section class="ca-hero grain">
+        <div class="grain-layer grain"></div>
+        <div class="wrap ca-hero-grid">
+          <div class="reveal">
+            <span class="eyebrow">Solution / Competition Analysis</span>
+            <h1>Track the market moves that change your <em>next decision</em>.</h1>
+            <p class="lead">Luckee monitors competitor pricing, offers, creative changes, review weaknesses, keyword movement, and category shifts, then turns them into entry windows and operating actions.</p>
+            <div class="hero-actions">
+              <a class="btn btn-primary btn-lg" href="../index.html#contact">Track competitors</a>
+              <a class="btn btn-outline btn-lg" href="../solutions.html">Back to solutions</a>
+            </div>
+          </div>
+          <aside class="ca-panel reveal" aria-label="How Luckee analyzes competition">
+            <div class="work-row">
+              <span class="work-number">1</span>
+              <div><b>Watch signals</b><span>Pricing, creative, review, offer, keyword, and rank movement.</span></div>
+            </div>
+            <div class="work-row">
+              <span class="work-number">2</span>
+              <div><b>Find openings</b><span>Identify weak competitors, content gaps, and market timing.</span></div>
+            </div>
+            <div class="work-row">
+              <span class="work-number">3</span>
+              <div><b>Prepare response</b><span>Product, listing, ads, and pricing actions for review.</span></div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- ============================ PROBLEM ============================ -->
+      <section class="band-white">
+        <div class="wrap section">
+          <div class="section-head reveal">
+            <div>
+              <p class="section-kicker">The problem</p>
+              <h2 class="section-title">By the time you spot the move, the <em>window has closed</em>.</h2>
+            </div>
+            <p class="section-copy">Competitors change your best next action every week — a price drop, a fresh image set, a stacked coupon, a keyword push, a swing in reviews. Manual spot-checks are slow, sporadic, and rarely tied to a decision, so the moment to respond passes before anyone notices.</p>
+          </div>
+          <div class="grid-3 reveal-stagger">
+            <article class="tile">
+              <h3>Spot-checks miss the moment</h3>
+              <p>Eyeballing a few competitor pages once in a while catches the change days late — long after the price drop, new A+, or coupon has already moved buyers.</p>
+            </article>
+            <article class="tile">
+              <h3>Signals not tied to action</h3>
+              <p>A screenshot of a rival’s move is not a decision. Without a clear “so what,” observations pile up and nothing changes on your own listings or campaigns.</p>
+            </article>
+            <article class="tile">
+              <h3>Openings close before you react</h3>
+              <p>A competitor stockout or a sudden rating dip is a short-lived opening. By the time it surfaces in a manual review, the gap has usually closed again.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ COMPETITIVE INTELLIGENCE ============================ -->
+      <section class="band">
+        <div class="wrap section">
+          <div class="section-head reveal">
+            <div>
+              <p class="section-kicker">Competitive intelligence</p>
+              <h2 class="section-title">Know when competitors become <em>vulnerable</em>.</h2>
+            </div>
+            <p class="section-copy">Luckee turns market observation into specific actions your team can approve.</p>
+          </div>
+          <div class="grid-3 reveal-stagger">
+            <article class="tile"><h3>Offer tracking</h3><p>Price, coupons, bundles, inventory, and promotion changes.</p></article>
+            <article class="tile"><h3>Creative movement</h3><p>Listing, image, A+ content, and ad creative shifts.</p></article>
+            <article class="tile"><h3>Weakness map</h3><p>Review complaints, content gaps, rating issues, and entry angles.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ HOW IT WORKS ============================ -->
+      <section class="wrap section">
+        <div class="section-head reveal">
+          <div>
+            <p class="section-kicker">How it works</p>
+            <h2 class="section-title">From quiet tracking to a <em>prepared move</em>.</h2>
+          </div>
+          <p class="section-copy">Luckee watches the signals that matter, separates real change from noise, finds where a competitor is exposed, and prepares a concrete response — every move routed to your team for approval before anything ships.</p>
+        </div>
+        <div class="process-strip ca-flow-4 reveal-stagger">
+          <div>
+            <span>01</span>
+            <b>Track signals</b>
+            <p>Monitor price, BSR, images, A+, coupons, keywords, and reviews across your competitor set on a steady schedule.</p>
+          </div>
+          <div>
+            <span>02</span>
+            <b>Detect change</b>
+            <p>Flag material movement and filter out routine noise, so you only see the shifts that change your next action.</p>
+          </div>
+          <div>
+            <span>03</span>
+            <b>Find the opening</b>
+            <p>Pinpoint where a competitor is vulnerable — a stockout, a price gap, a rating dip, or a recurring review complaint.</p>
+          </div>
+          <div>
+            <span>04</span>
+            <b>Prepare exposure</b>
+            <p>Draft a concrete pricing, listing, ad, or timing move with the reasoning behind it — routed to your team for approval.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ USE CASES ============================ -->
+      <section class="band-white">
+        <div class="wrap section">
+          <div class="section-head reveal">
+            <div>
+              <p class="section-kicker">Where teams use it</p>
+              <h2 class="section-title">Read the market, then <em>move first</em>.</h2>
+            </div>
+            <p class="section-copy">The same monitoring feeds three everyday plays — each one a prepared move your team can review and approve.</p>
+          </div>
+          <div class="grid-3 reveal-stagger">
+            <article class="tile">
+              <h3>Catch competitor stockouts &amp; price gaps</h3>
+              <p>Get flagged the moment a rival runs low or opens a price gap, so you can capture demand and protect the buy box while the opening lasts.</p>
+            </article>
+            <article class="tile">
+              <h3>Time promos to competitor moves</h3>
+              <p>See coupon and price changes as they happen and prepare your own promotion at the right moment — instead of reacting a week late or discounting blindly.</p>
+            </article>
+            <article class="tile">
+              <h3>Turn rival review complaints into your USPs</h3>
+              <p>Surface the recurring complaints in competitor reviews and prepare listing, image, and ad angles that make your strengths the obvious answer.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ FAQ ============================ -->
+      <section class="wrap section">
+        <div class="section-head reveal">
+          <div>
+            <p class="section-kicker">Common questions</p>
+            <h2 class="section-title">What to expect from <em>competition tracking</em>.</h2>
+          </div>
+          <p class="section-copy">Calm, scheduled monitoring with your team in control of every decision.</p>
+        </div>
+        <div class="grid-2 reveal-stagger">
+          <article class="tile">
+            <h3>How many competitors can I track?</h3>
+            <p>You define a focused competitor set per ASIN or market — the handful of rivals that actually shape your decisions, not an unbounded list that buries the signal.</p>
+          </article>
+          <article class="tile">
+            <h3>Is it real-time?</h3>
+            <p>Luckee monitors on a schedule and flags material change. You stay ahead of the moves that matter without being drowned in constant, low-value alerts.</p>
+          </article>
+          <article class="tile">
+            <h3>Does it act for me?</h3>
+            <p>No. Luckee prepares the move — the pricing, listing, ad, or timing change with its reasoning — and your team approves before anything goes live.</p>
+          </article>
+          <article class="tile">
+            <h3>What signals does it watch?</h3>
+            <p>Price, BSR, buy-box, images and A+ content, coupons, keyword rank, and review sentiment — the signals that change your best next action.</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- ============================ FINAL CTA ============================ -->
+      <section class="band-dark grain cta">
+        <div class="wrap reveal">
+          <h2>Turn competitor movement into <em>sharper timing</em>.</h2>
+          <p>Luckee helps teams see where to attack, defend, or wait.</p>
+          <a class="btn btn-light btn-lg" href="mailto:hello@luckee.ai">Book a demo</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap footer-shell">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <a class="brand" href="../index.html" aria-label="Luckee AI home"><span class="brand-mark up" aria-hidden="true"></span><span>Luckee AI</span></a>
+            <p>Human-agent workbench for Amazon teams. Hire AI cowork teams that plan, prepare, execute, monitor, roll back, and prove complex e-commerce work.</p>
+          </div>
+          <div class="footer-col">
+            <h3>Products</h3>
+            <div class="footer-links">
+              <a href="../products/amazon-operation-assistant.html">Amazon Operation Assistant</a>
+              <a href="../products/amazon-ads-workbench.html">Amazon Ads Workbench</a>
+              <a href="../index.html#pricing">Pricing</a>
+            </div>
+          </div>
+          <div class="footer-col">
+            <h3>Solutions</h3>
+            <div class="footer-links">
+              <a href="../solutions/listing-optimizer.html">Listing Optimizer</a>
+              <a href="../solutions/ads-audit.html">Ads Audit</a>
+              <a href="../solutions/ads-automation.html">Ads Automation</a>
+              <a href="../solutions/image-generation.html">Image Generation</a>
+              <a href="../solutions/review-analysis.html">Review Analysis</a>
+              <a href="../solutions/competition-analysis.html">Competition Analysis</a>
+            </div>
+          </div>
+          <div class="footer-col">
+            <h3>Company</h3>
+            <div class="footer-links">
+              <a href="../solutions.html">Solutions hub</a>
+              <a href="../index.html#resources">Resources</a>
+              <a href="../index.html#company">Company</a>
+              <a href="../index.html#contact">Book a demo</a>
+              <a href="mailto:hello@luckee.ai">hello@luckee.ai</a>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <span>© 2026 Luckee AI. All rights reserved.</span>
+          <span>Built for lean brands, agencies, and human-approved AI operations.</span>
+        </div>
+      </div>
+    </footer>
+    <script src="../app.js"></script>
+  </body>
+</html>

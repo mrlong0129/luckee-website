@@ -1,0 +1,512 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Amazon Operation Assistant | Luckee AI</title>
+    <meta
+      name="description"
+      content="Luckee Amazon Operation Assistant is a full-chain self-evolving AI growth engine for Amazon sellers, connecting AI traffic, insight, market data, and advertising into an automated growth loop."
+    />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://luckee.ai/products/amazon-operation-assistant" />
+
+    <!-- ===== Canonical chrome head bits ===== -->
+    <meta name="theme-color" content="#16241D" />
+    <link rel="icon" href="../assets/luckee-logo.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <script>document.documentElement.classList.add("js")</script>
+    <link rel="stylesheet" href="../styles.css" />
+
+    <!-- ===== Page-local styles (Luckee 2.0 tokens only) ===== -->
+    <style>
+      /* ---- Dark forest product hero ---- */
+      .oa-hero {
+        position: relative;
+        background: var(--forest-900);
+        color: var(--oat-100);
+        overflow: hidden;
+        padding: 96px 0 0;
+      }
+      .oa-hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        opacity: .95;
+        background:
+          radial-gradient(40% 52% at 18% 24%, rgba(120,160,121,.30), transparent 62%),
+          radial-gradient(32% 44% at 84% 8%, rgba(201,168,76,.16), transparent 60%),
+          radial-gradient(50% 64% at 92% 100%, rgba(62,91,63,.55), transparent 66%);
+        filter: blur(2px);
+      }
+      .oa-hero > .grain-layer {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        pointer-events: none;
+      }
+      .oa-hero > .wrap,
+      .oa-hero > .oa-product-stage { position: relative; z-index: 2; }
+
+      .oa-hero-copy {
+        display: grid;
+        grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr);
+        gap: 32px 56px;
+        align-items: end;
+      }
+      .oa-hero .eyebrow { color: var(--forest-300); }
+      .oa-hero h1 {
+        color: var(--oat-100);
+        margin: 22px 0 0;
+        max-width: 16ch;
+        font-size: clamp(2.7rem, 5.2vw, 4.4rem);
+        line-height: 1.02;
+        letter-spacing: -.02em;
+      }
+      .oa-hero h1 em {
+        font-family: var(--serif);
+        font-style: italic;
+        font-weight: 400;
+        color: var(--gold-light);
+      }
+      .oa-hero .lead {
+        color: var(--forest-300);
+        font-size: 1.18rem;
+        line-height: 1.64;
+        max-width: 52ch;
+        margin: 24px 0 0;
+      }
+      .oa-copy-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-self: end;
+        padding-bottom: 4px;
+      }
+
+      /* ---- Product screenshot stage ---- */
+      .oa-product-stage {
+        position: relative;
+        width: min(var(--maxw), calc(100% - 48px));
+        margin: 56px auto 0;
+      }
+      .oa-screen-frame {
+        position: relative;
+        z-index: 2;
+        border: 1px solid var(--hair-dark);
+        border-radius: var(--r-sheet);
+        box-shadow: var(--sh-float);
+        overflow: hidden;
+        background: var(--forest-850);
+      }
+      .oa-screen-frame img { width: 100%; height: auto; display: block; }
+      .oa-hero-bg-back,
+      .oa-hero-bg-front {
+        position: absolute;
+        z-index: 1;
+        pointer-events: none;
+        opacity: .6;
+        filter: blur(2px);
+      }
+      .oa-hero-bg-back { inset: -10% -8% auto -8%; }
+      .oa-hero-bg-front { inset: auto -6% -16% -6%; opacity: .5; }
+
+      /* ---- Proof row (reuses .proof token styling) ---- */
+      .oa-proof {
+        position: relative;
+        z-index: 2;
+        padding: 40px 0 88px;
+      }
+      .oa-proof .proof-row { justify-content: center; margin-top: 0; }
+      .oa-proof .proof {
+        font-size: .82rem;
+        font-weight: 600;
+        color: var(--forest-300);
+        background: rgba(217, 232, 218, .07);
+        border: 1px solid var(--hair-dark);
+        padding: 8px 14px;
+        border-radius: var(--r-pill);
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .oa-proof .proof::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--gold-light);
+        flex-shrink: 0;
+      }
+
+      @media (max-width: 980px) {
+        .oa-hero { padding-top: 76px; }
+        .oa-hero-copy { grid-template-columns: 1fr; gap: 24px; align-items: start; }
+        .oa-copy-actions { align-self: start; }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <nav class="wrap nav" aria-label="Primary navigation">
+        <a class="brand" href="../index.html" aria-label="Luckee AI home">
+          <span class="brand-mark up" aria-hidden="true"></span>
+          <span>Luckee AI</span>
+        </a>
+        <ul class="nav-list">
+          <li class="nav-item">
+            <a class="nav-link" href="../products/amazon-operation-assistant.html">Products</a>
+            <div class="mega" aria-label="Product links">
+              <a href="../products/amazon-operation-assistant.html"><strong>Amazon Operation Assistant</strong><span>Luckee 1.0 for daily Amazon account operations.</span></a>
+              <a href="../products/amazon-ads-workbench.html"><strong>Amazon Ads Workbench</strong><span>Human-approved PPC execution from diagnosis to outcome.</span></a>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="../solutions.html">Solutions</a>
+            <div class="mega" aria-label="Solution links">
+              <a href="../solutions/listing-optimizer.html"><strong>Listing Optimizer</strong><span>Listing copy, A+ content, backend keywords, and answerability.</span></a>
+              <a href="../solutions/ads-audit.html"><strong>Ads Audit</strong><span>PPC diagnosis for TACoS, ROAS, CPC, placement, and waste.</span></a>
+              <a href="../solutions/ads-automation.html"><strong>Ads Automation</strong><span>Human-approved bid, budget, keyword, and negative changes.</span></a>
+              <a href="../solutions/image-generation.html"><strong>E-commerce Image Generation</strong><span>Conversion-focused product, lifestyle, and comparison visuals.</span></a>
+              <a href="../solutions/review-analysis.html"><strong>Review Analysis</strong><span>Complaint themes, buyer language, and product improvement signals.</span></a>
+              <a href="../solutions/competition-analysis.html"><strong>Competition Analysis</strong><span>Competitor pricing, creatives, keywords, reviews, and market moves.</span></a>
+            </div>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="../index.html#pricing">Pricing</a></li>
+          <li class="nav-item"><a class="nav-link" href="../index.html#resources">Resources</a></li>
+          <li class="nav-item"><a class="nav-link" href="../index.html#company">Company</a></li>
+        </ul>
+        <div class="nav-actions">
+          <a class="btn btn-outline btn-sm" href="../solutions.html">See solutions</a>
+          <a class="btn btn-primary btn-sm" href="../index.html#contact">Hire a team</a>
+          <button class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <!-- ===== MOBILE MENU ===== -->
+    <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+      <div class="mobile-menu-panel">
+        <div class="mm-head">
+          <a class="brand" href="../index.html"><span class="brand-mark up" aria-hidden="true"></span><span>Luckee AI</span></a>
+          <button class="mm-close" aria-label="Close menu"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+        </div>
+        <span class="mm-group-label">Products</span>
+        <a href="../products/amazon-operation-assistant.html">Amazon Operation Assistant</a>
+        <a href="../products/amazon-ads-workbench.html">Amazon Ads Workbench</a>
+        <span class="mm-group-label">Solutions</span>
+        <a href="../solutions/listing-optimizer.html">Listing Optimizer</a>
+        <a href="../solutions/ads-audit.html">Ads Audit</a>
+        <a href="../solutions/ads-automation.html">Ads Automation</a>
+        <a href="../solutions/image-generation.html">Image Generation</a>
+        <a href="../solutions/review-analysis.html">Review Analysis</a>
+        <a href="../solutions/competition-analysis.html">Competition Analysis</a>
+        <span class="mm-group-label">Company</span>
+        <a href="../index.html#pricing">Pricing</a>
+        <a href="../index.html#resources">Resources</a>
+        <a href="../index.html#company">Company</a>
+        <div class="mm-actions">
+          <a class="btn btn-outline btn-block" href="../solutions.html">See solutions</a>
+          <a class="btn btn-primary btn-block" href="../index.html#contact">Hire a team</a>
+        </div>
+      </div>
+    </div>
+
+    <main id="main">
+      <!-- ============================ HERO ============================ -->
+      <section class="oa-hero">
+        <div class="grain-layer grain"></div>
+        <div class="wrap oa-hero-copy">
+          <div class="reveal">
+            <span class="eyebrow">Product / Luckee 1.0</span>
+            <h1>Hire your <em>AI employee</em>. For Amazon.</h1>
+            <p class="lead">
+              Luckee deeply combines LLM business reasoning with full-domain Amazon data, connecting
+              insight, AI traffic, market intelligence, and advertising into a self-evolving growth
+              engine. It brings AI into every operating node so teams can move from data to profit
+              with a closed-loop system.
+            </p>
+          </div>
+          <div class="oa-copy-actions reveal">
+            <a class="btn btn-primary btn-lg" href="../index.html#contact">Get Started</a>
+            <a class="btn btn-outline btn-lg" href="#departments">Explore AI departments</a>
+          </div>
+        </div>
+
+        <div class="oa-product-stage reveal" aria-label="Luckee AI workspace preview">
+          <div class="oa-screen-frame">
+            <img src="../assets/luckee-home/hero-product.png" alt="Luckee AI Amazon operation workspace" />
+          </div>
+          <img class="oa-hero-bg-back" src="../assets/luckee-home/hero-back-bg.png" alt="" aria-hidden="true" />
+          <img class="oa-hero-bg-front" src="../assets/luckee-home/hero-bg.png" alt="" aria-hidden="true" />
+        </div>
+
+        <div class="wrap oa-proof">
+          <div class="proof-row" aria-label="Luckee 1.0 proof points">
+            <span class="proof">No credit card required</span>
+            <span class="proof">10-minute setup</span>
+            <span class="proof">First analysis within 24 hours</span>
+            <span class="proof">Cancel anytime</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ FOUR AI DEPARTMENTS ============================ -->
+      <section id="departments" class="band">
+        <div class="wrap section">
+          <div class="section-head reveal">
+            <div>
+              <p class="section-kicker">Four AI business departments</p>
+              <h2 class="section-title">Each department owns one part of the <em>Amazon growth loop</em>.</h2>
+            </div>
+            <p class="section-copy">
+              Luckee breaks Amazon operations into four AI departments: traffic, insight, market
+              data, and advertising. Together they create a loop that continuously finds signals,
+              explains what they mean, prepares the next move, and helps the team execute with focus.
+            </p>
+          </div>
+          <div class="grid-4 reveal-stagger">
+            <article class="tile">
+              <span class="tag">Alexa & GEO</span>
+              <h3>AI Traffic Department</h3>
+              <p>Prepares Amazon listings for generative shopping discovery, Alexa-style recommendations, and COSMO-driven intent matching.</p>
+            </article>
+            <article class="tile">
+              <span class="tag">VOC & LLM</span>
+              <h3>AI Insight Department</h3>
+              <p>Collects Amazon and off-platform feedback, then uses e-commerce-specific LLM reasoning to turn customer language into business insight.</p>
+            </article>
+            <article class="tile">
+              <span class="tag">Blue-ocean discovery</span>
+              <h3>AI Data Department</h3>
+              <p>Monitors category movement, competitor changes, and opportunity scores to identify the next high-conviction growth lane.</p>
+            </article>
+            <article class="tile">
+              <span class="tag">Profit oriented</span>
+              <h3>AI Ads Department</h3>
+              <p>Tracks ad signals and recommends when to push ranking, protect margin, expand keywords, or reduce inefficient spend.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ FEATURE 01 · AI TRAFFIC ============================ -->
+      <section id="rufus" class="section">
+        <div class="wrap">
+          <div class="section-head reveal">
+            <div>
+              <p class="section-kicker">Feature 01 · AI Traffic Department</p>
+              <h2 class="section-title">Win the shift from keyword search to <em>intent search</em>.</h2>
+            </div>
+            <p class="section-copy">
+              Amazon search is moving from keyword matching toward intent matching. Luckee helps teams
+              structure listings and content so AI shopping systems can understand the buyer fit and
+              recommend products with confidence.
+            </p>
+          </div>
+          <div class="grid-3 reveal-stagger">
+            <article class="tile"><h3>Intent alignment</h3><p>Analyze shopper intent and rebuild listing structure so the product becomes easier for AI systems to select.</p></article>
+            <article class="tile"><h3>Generative content layout</h3><p>Shape listing modules around how AI assistants parse, retrieve, and answer product questions.</p></article>
+            <article class="tile"><h3>Traffic path monitoring</h3><p>Track AI-driven traffic contribution and measure whether content changes create real incremental exposure.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ FEATURE 02 · AI INSIGHT ============================ -->
+      <section id="voc" class="band">
+        <div class="wrap section">
+          <div class="section-head reveal">
+            <div>
+              <p class="section-kicker">Feature 02 · AI Insight Department</p>
+              <h2 class="section-title">Deep customer <em>review intelligence</em>.</h2>
+            </div>
+            <p class="section-copy">
+              Better data collection and stronger AI interpretation. Luckee goes beyond traditional
+              dashboards by reading Amazon reviews and relevant community feedback to reveal what
+              customers actually value, dislike, compare, and request.
+            </p>
+          </div>
+          <div class="grid-2 reveal-stagger">
+            <article class="tile"><h3>Full-scale feedback collection</h3><p>Cover Amazon, Reddit, YouTube, and community signals so insight is based on broader customer evidence.</p></article>
+            <article class="tile"><h3>E-commerce-specific LLM analysis</h3><p>Understand nuanced language, hidden demand, and commercial implications like an expert operator.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ FEATURE 03 · AI DATA ============================ -->
+      <section id="market" class="section">
+        <div class="wrap">
+          <div class="section-head reveal">
+            <div>
+              <p class="section-kicker">Feature 03 · AI Data Department</p>
+              <h2 class="section-title">A market-wide view of <em>growth opportunities</em>.</h2>
+            </div>
+            <p class="section-copy">
+              Use full-domain data to define where growth is most likely. Luckee watches category
+              movement, competitor behavior, and opportunity quality so teams can choose better bets.
+            </p>
+          </div>
+          <div class="grid-3 reveal-stagger">
+            <article class="tile"><h3>Category trend prediction</h3><p>Scan niche category movement and use predictive signals to identify emerging product lanes earlier.</p></article>
+            <article class="tile"><h3>360-degree competitor monitoring</h3><p>Track competitor price, rank, listing changes, promotions, and offer movement with timely alerts.</p></article>
+            <article class="tile"><h3>Business scoring model</h3><p>Score opportunities using profit space, competition intensity, operational feasibility, and ranking path.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ FEATURE 04 · AI ADS ============================ -->
+      <section id="ads" class="band">
+        <div class="wrap section">
+          <div class="section-head reveal">
+            <div>
+              <p class="section-kicker">Feature 04 · AI Ads Department</p>
+              <h2 class="section-title">Profit-oriented <em>advertising intelligence</em>.</h2>
+            </div>
+            <p class="section-copy">
+              Luckee monitors advertising performance, ranking movement, competitor shifts, and
+              category conditions around your profit goal. It recommends when to accelerate growth
+              and when to protect margin.
+            </p>
+          </div>
+          <div class="grid-3 reveal-stagger">
+            <article class="tile"><h3>Strategy switching</h3><p>Use live conversion, CPC, and rank signals to recommend the right mix of growth mode and profit protection.</p></article>
+            <article class="tile"><h3>Keyword expansion and negatives</h3><p>Find high-converting long-tail terms and block inefficient clicks to improve traffic quality.</p></article>
+            <article class="tile"><h3>Rank and profit guardrails</h3><p>Support ranking progress while protecting the margin threshold that makes growth commercially useful.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ PRICING ============================ -->
+      <section id="pricing" class="section">
+        <div class="wrap">
+          <div class="section-head reveal">
+            <div>
+              <p class="section-kicker">Pricing</p>
+              <h2 class="section-title">Simple pricing for different stages of <em>Amazon growth</em>.</h2>
+            </div>
+            <p class="section-copy">Start without a credit card, connect quickly, and expand as the operating loop becomes part of the team workflow.</p>
+          </div>
+          <div class="price-grid reveal-stagger">
+            <article class="tile price-card">
+              <span class="tag">Starter</span>
+              <h3>For early brands starting AI-assisted growth</h3>
+              <strong>$299/mo</strong>
+              <ul class="list">
+                <li><span class="check">✓</span>1 Amazon marketplace</li>
+                <li><span class="check">✓</span>AI ad optimization brief</li>
+                <li><span class="check">✓</span>Basic review insight</li>
+                <li><span class="check">✓</span>Blue-ocean opportunity scan</li>
+              </ul>
+            </article>
+            <article class="tile price-card featured">
+              <span class="tag">Growth</span>
+              <h3>For growing brands using the full AI loop</h3>
+              <strong>$599/mo</strong>
+              <ul class="list">
+                <li><span class="check">✓</span>3 Amazon marketplaces</li>
+                <li><span class="check">✓</span>AI ad strategy automation</li>
+                <li><span class="check">✓</span>Deep review intelligence</li>
+                <li><span class="check">✓</span>Alexa and GEO optimization</li>
+                <li><span class="check">✓</span>360-degree competitor monitoring</li>
+              </ul>
+            </article>
+            <article class="tile price-card">
+              <span class="tag">Enterprise</span>
+              <h3>For larger operators that need custom AI systems</h3>
+              <strong>Custom</strong>
+              <ul class="list">
+                <li><span class="check">✓</span>Unlimited marketplace scope</li>
+                <li><span class="check">✓</span>Custom ad strategy rules</li>
+                <li><span class="check">✓</span>Global category scanning</li>
+                <li><span class="check">✓</span>Dedicated success support and SLA</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ FAQ ============================ -->
+      <section id="faq" class="band">
+        <div class="wrap section">
+          <div class="section-head reveal">
+            <div>
+              <p class="section-kicker">FAQ</p>
+              <h2 class="section-title">Common questions about <em>Luckee 1.0</em>.</h2>
+            </div>
+            <p class="section-copy">Based on the original Luckee homepage concept, rewritten in English for this standalone product landing page.</p>
+          </div>
+          <div class="grid-2 reveal-stagger">
+            <article class="tile"><h3>What seller size is Luckee built for?</h3><p>Luckee is best for Amazon brands with more than $100K in annual sales, including single-brand sellers, multi-brand operators, and agencies.</p></article>
+            <article class="tile"><h3>How long does onboarding take?</h3><p>Connect through secure Amazon OAuth. No password sharing is required. Setup takes about 10 minutes, and the first analysis can be completed within 24 hours.</p></article>
+            <article class="tile"><h3>How does Luckee improve Alexa-style recommendations?</h3><p>Luckee analyzes shopper intent paths and listing semantics, then helps restructure content so AI recommendation engines can understand product fit more clearly.</p></article>
+            <article class="tile"><h3>How does ad strategy switching work?</h3><p>Luckee monitors ad data, competitor changes, CPC movement, and category conditions, then recommends when to use growth mode or profit-protection mode.</p></article>
+            <article class="tile"><h3>Is seller data safe?</h3><p>Luckee uses Amazon OAuth access. Credentials remain with Amazon, and data transmission and storage are designed around encrypted access patterns.</p></article>
+            <article class="tile"><h3>How is this different from traditional Amazon tools?</h3><p>Traditional tools show dashboards and expect the team to analyze everything manually. Luckee enters the operating loop and helps connect data, insight, strategy, and action.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ FINAL CTA ============================ -->
+      <section class="band-dark grain cta">
+        <div class="wrap reveal">
+          <h2>Stop waiting for another dashboard. Let AI drive the <em>next Amazon growth loop</em>.</h2>
+          <p>Connect in minutes, get the first analysis within 24 hours, and let Luckee turn signals into a clearer operating plan.</p>
+          <a class="btn btn-light btn-lg" href="../index.html#contact">Get Started</a>
+        </div>
+      </section>
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="site-footer">
+      <div class="wrap footer-shell">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <a class="brand" href="../index.html" aria-label="Luckee AI home"><span class="brand-mark up" aria-hidden="true"></span><span>Luckee AI</span></a>
+            <p>Human-agent workbench for Amazon teams. Hire AI cowork teams that plan, prepare, execute, monitor, roll back, and prove complex e-commerce work.</p>
+          </div>
+          <div class="footer-col">
+            <h3>Products</h3>
+            <div class="footer-links">
+              <a href="../products/amazon-operation-assistant.html">Amazon Operation Assistant</a>
+              <a href="../products/amazon-ads-workbench.html">Amazon Ads Workbench</a>
+              <a href="../index.html#pricing">Pricing</a>
+            </div>
+          </div>
+          <div class="footer-col">
+            <h3>Solutions</h3>
+            <div class="footer-links">
+              <a href="../solutions/listing-optimizer.html">Listing Optimizer</a>
+              <a href="../solutions/ads-audit.html">Ads Audit</a>
+              <a href="../solutions/ads-automation.html">Ads Automation</a>
+              <a href="../solutions/image-generation.html">Image Generation</a>
+              <a href="../solutions/review-analysis.html">Review Analysis</a>
+              <a href="../solutions/competition-analysis.html">Competition Analysis</a>
+            </div>
+          </div>
+          <div class="footer-col">
+            <h3>Company</h3>
+            <div class="footer-links">
+              <a href="../solutions.html">Solutions hub</a>
+              <a href="../index.html#resources">Resources</a>
+              <a href="../index.html#company">Company</a>
+              <a href="../index.html#contact">Book a demo</a>
+              <a href="mailto:hello@luckee.ai">hello@luckee.ai</a>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <span>© 2026 Luckee AI. All rights reserved.</span>
+          <span>Built for lean brands, agencies, and human-approved AI operations.</span>
+        </div>
+      </div>
+    </footer>
+
+    <script src="../app.js"></script>
+  </body>
+</html>

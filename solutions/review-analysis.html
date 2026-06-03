@@ -1,0 +1,575 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Review Analysis | Luckee AI Solutions</title>
+    <meta name="description" content="Luckee Review Analysis turns Amazon reviews into complaint clusters, buyer language, product improvement priorities, content gaps, and support actions." />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://luckee.ai/solutions/review-analysis" />
+    <meta property="og:title" content="Review Analysis | Luckee AI Solutions" />
+    <meta property="og:description" content="Luckee Review Analysis turns Amazon reviews into complaint clusters, buyer language, product improvement priorities, content gaps, and support actions." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://luckee.ai/solutions/review-analysis" />
+    <meta name="theme-color" content="#16241D" />
+    <link rel="icon" href="../assets/luckee-logo.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <script>document.documentElement.classList.add("js")</script>
+    <link rel="stylesheet" href="../styles.css" />
+
+    <!-- ===== Page-local styles (Review Analysis) — built entirely from Luckee 2.0 tokens ===== -->
+    <style>
+      /* ---- Value strip (3 promises under hero) ---- */
+      .review-value-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+      .review-value-grid article {
+        background: var(--card); border: 1px solid var(--hair); border-radius: var(--r-card);
+        box-shadow: var(--sh-card); padding: 28px 26px;
+        transition: transform .32s var(--ease-out), box-shadow .32s var(--ease-out), border-color .32s var(--ease-out);
+      }
+      .review-value-grid article:hover { transform: translateY(-4px); box-shadow: var(--sh-card-hover); border-color: rgba(62,91,63,.22); }
+      .review-value-grid h3 { font-size: 1.3rem; margin: 0 0 10px; }
+      .review-value-grid h3 em { font-family: var(--serif); font-style: italic; color: var(--forest-600); }
+      .review-value-grid p { color: var(--muted); font-size: .95rem; line-height: 1.62; margin: 0; }
+
+      /* ---- Soft framed product screenshot ---- */
+      .review-frame {
+        border: 1px solid var(--hair); border-radius: var(--r-frame); overflow: hidden;
+        box-shadow: var(--sh-card); background: var(--card);
+      }
+      .review-frame img { display: block; width: 100%; }
+
+      /* ---- Numbered pain / use-case grids ---- */
+      .review-num-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
+      .review-num-grid.three { grid-template-columns: repeat(3, 1fr); }
+      .review-num-grid article {
+        background: var(--card); border: 1px solid var(--hair); border-radius: var(--r-card);
+        box-shadow: var(--sh-card); padding: 28px 26px; position: relative;
+        transition: transform .32s var(--ease-out), box-shadow .32s var(--ease-out), border-color .32s var(--ease-out);
+      }
+      .review-num-grid article:hover { transform: translateY(-4px); box-shadow: var(--sh-card-hover); border-color: rgba(62,91,63,.22); }
+      .review-num-grid article > span {
+        display: inline-flex; align-items: center; justify-content: center;
+        font-family: var(--mono); font-size: .78rem; font-weight: 600; letter-spacing: .04em;
+        color: var(--forest-600); background: var(--forest-050); border: 1px solid var(--forest-100);
+        border-radius: var(--r-pill); height: 26px; min-width: 34px; padding: 0 10px; margin-bottom: 16px;
+      }
+      .review-num-grid h3 { font-size: 1.2rem; margin: 0 0 8px; }
+      .review-num-grid p { color: var(--muted); font-size: .92rem; line-height: 1.6; margin: 0; }
+
+      /* ---- Alternating capability blocks ---- */
+      .review-capability {
+        display: grid; grid-template-columns: 1.05fr 1fr; gap: 52px; align-items: center;
+        margin-top: 48px;
+      }
+      .review-capability:first-of-type { margin-top: 8px; }
+      .review-capability.reverse > div:first-child { order: 2; }
+      .review-label {
+        display: inline-flex; align-items: center; gap: 9px; margin: 0 0 16px;
+        font-family: var(--sans); font-weight: 600; font-size: .72rem; letter-spacing: .16em;
+        text-transform: uppercase; color: var(--forest-600);
+      }
+      .review-label::before { content: ""; width: 22px; height: 1px; background: currentColor; opacity: .55; display: inline-block; }
+      .band-dark .review-label { color: var(--forest-300); }
+      .review-capability h3 { font-size: clamp(1.5rem, 2.6vw, 2rem); margin: 0 0 22px; }
+      .review-capability h3 em { font-family: var(--serif); font-style: italic; color: var(--forest-600); }
+      .band-dark .review-capability h3 em { color: var(--gold-light); }
+      .review-capability ul { list-style: none; display: flex; flex-direction: column; gap: 16px; }
+      .review-capability ul li {
+        display: flex; flex-direction: column; gap: 3px; padding-left: 20px; position: relative;
+        color: var(--neutral-700); line-height: 1.55;
+      }
+      .review-capability ul li::before {
+        content: ""; position: absolute; left: 0; top: 9px; width: 8px; height: 8px; border-radius: 50%;
+        background: var(--gold); box-shadow: 0 0 0 4px rgba(201,168,76,.14);
+      }
+      .review-capability ul li b { font-weight: 600; color: var(--neutral-900); font-size: .98rem; }
+      .band-dark .review-capability ul li b { color: var(--oat-100); }
+      .review-capability ul li span { color: var(--muted); font-size: .9rem; }
+      .band-dark .review-capability ul li { color: var(--forest-300); }
+      .band-dark .review-capability ul li span { color: var(--forest-300); }
+      .review-capability figure {
+        margin: 0; border: 1px solid var(--hair); overflow: hidden;
+        box-shadow: var(--sh-card); background: var(--card); border-radius: var(--r-frame);
+      }
+      .band-dark .review-capability figure { border-color: var(--hair-dark); }
+      .review-capability figure img { display: block; width: 100%; }
+
+      /* ---- Compliance module card (replaces an image slot) ---- */
+      .review-compliance-card {
+        display: flex; flex-direction: column; gap: 8px; justify-content: center;
+        background: linear-gradient(160deg, var(--forest-800), var(--forest-900));
+        border: 1px solid var(--hair-dark); border-radius: var(--r-frame);
+        box-shadow: var(--sh-card); padding: 38px 34px; min-height: 220px;
+        position: relative; overflow: hidden;
+      }
+      .review-compliance-card::before {
+        content: ""; position: absolute; inset: 0; pointer-events: none;
+        background: radial-gradient(60% 70% at 100% 0%, rgba(201,168,76,.18), transparent 60%);
+      }
+      .review-compliance-card strong {
+        position: relative; font-family: var(--serif); font-weight: 400; font-size: 1.6rem; color: var(--oat-100);
+      }
+      .review-compliance-card > span {
+        position: relative; font-family: var(--mono); font-size: .82rem; letter-spacing: .02em; color: var(--gold-light);
+      }
+      .review-compliance-card p { position: relative; color: var(--forest-300); font-size: .92rem; line-height: 1.6; margin: 6px 0 0; }
+
+      /* ---- Live example showcase ---- */
+      .review-showcase {
+        background: var(--card); border: 1px solid var(--hair); border-radius: var(--r-sheet);
+        box-shadow: var(--sh-card); padding: 32px; margin-top: 12px;
+      }
+      .review-showcase-head {
+        display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap;
+        padding-bottom: 24px; margin-bottom: 24px; border-bottom: 1px solid var(--hair);
+      }
+      .review-showcase-head h3 { font-size: 1.5rem; margin: 0; }
+      .review-showcase-head p { color: var(--muted); font-size: .92rem; margin: 6px 0 0; }
+      .review-showcase-head > span {
+        font-family: var(--mono); font-size: .85rem; font-weight: 600; color: var(--forest-700);
+        background: var(--forest-050); border: 1px solid var(--forest-100); border-radius: var(--r-pill);
+        padding: 7px 16px;
+      }
+      .review-showcase-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
+      .review-showcase-grid figure { margin: 0; }
+      .review-showcase-grid figure img {
+        display: block; width: 100%; border: 1px solid var(--hair); border-radius: var(--r-frame);
+        box-shadow: var(--sh-sm); background: var(--oat-100);
+      }
+      .review-showcase-grid figcaption { color: var(--muted); font-size: .88rem; line-height: 1.6; margin-top: 12px; }
+      .review-showcase-grid figcaption b { color: var(--neutral-900); font-weight: 600; display: inline; margin-right: 4px; }
+      .review-files { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin-top: 24px; }
+      .review-files article {
+        background: var(--oat-100); border: 1px solid var(--hair); border-radius: var(--r-card); padding: 22px 24px;
+      }
+      .review-files article b { font-family: var(--mono); font-size: .95rem; color: var(--forest-700); display: block; margin-bottom: 8px; }
+      .review-files article p { color: var(--muted); font-size: .9rem; line-height: 1.6; margin: 0 0 12px; }
+      .review-files article span {
+        font-family: var(--sans); font-size: .72rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+        color: var(--forest-600);
+      }
+
+      /* ---- Comparison table ---- */
+      .review-compare {
+        margin-top: 12px; border: 1px solid var(--hair); border-radius: var(--r-card); overflow: hidden;
+        box-shadow: var(--sh-card); background: var(--card);
+      }
+      .review-compare > div { display: grid; grid-template-columns: 1.1fr 1fr 1fr 1.2fr; }
+      .review-compare > div:not(:last-child) { border-bottom: 1px solid var(--hair); }
+      .review-compare > div:first-child { background: var(--forest-050); }
+      .review-compare > div:first-child b {
+        font-family: var(--serif); font-weight: 400; font-size: 1.05rem; color: var(--forest-800);
+        padding: 18px 22px;
+      }
+      .review-compare > div:first-child b:last-child { color: var(--forest-700); }
+      .review-compare > div span { padding: 16px 22px; font-size: .92rem; color: var(--neutral-700); display: flex; align-items: center; }
+      .review-compare > div span:first-child { font-weight: 600; color: var(--neutral-900); background: var(--oat-100); }
+      .review-compare > div span:last-child {
+        font-weight: 600; color: var(--forest-700); background: rgba(201,168,76,.06);
+        border-left: 1px solid var(--hair);
+      }
+
+      /* ---- FAQ ---- */
+      .review-faq { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
+      .review-faq article {
+        background: var(--card); border: 1px solid var(--hair); border-radius: var(--r-card);
+        box-shadow: var(--sh-card); padding: 28px 26px;
+        transition: transform .32s var(--ease-out), box-shadow .32s var(--ease-out), border-color .32s var(--ease-out);
+      }
+      .review-faq article:hover { transform: translateY(-4px); box-shadow: var(--sh-card-hover); border-color: rgba(62,91,63,.22); }
+      .review-faq h3 { font-size: 1.2rem; margin: 0 0 10px; }
+      .review-faq p { color: var(--muted); font-size: .94rem; line-height: 1.65; margin: 0; }
+
+      /* ---- Hero visual badge ---- */
+      .review-hero-visual { position: relative; }
+      .review-hero-visual .review-frame { position: relative; }
+      .live-badge {
+        position: absolute; top: 16px; left: 16px; z-index: 2;
+        display: inline-flex; align-items: center; gap: 7px;
+        font-size: .72rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
+        color: var(--success-600); background: var(--success-bg);
+        border: 1px solid rgba(5,148,103,.2); border-radius: var(--r-pill); padding: 6px 12px;
+      }
+      .live-badge i { width: 7px; height: 7px; border-radius: 50%; background: var(--success-600); animation: pulseDot 1.2s infinite var(--ease); }
+
+      /* ---- Responsive ---- */
+      @media (max-width: 980px) {
+        .review-value-grid { grid-template-columns: 1fr; }
+        .review-num-grid, .review-num-grid.three { grid-template-columns: repeat(2, 1fr); }
+        .review-capability { grid-template-columns: 1fr; gap: 32px; }
+        .review-capability.reverse > div:first-child { order: 0; }
+        .review-showcase-grid { grid-template-columns: 1fr; }
+        .review-compare { overflow-x: auto; }
+        .review-compare > div { min-width: 640px; }
+      }
+      @media (max-width: 760px) {
+        .review-num-grid, .review-num-grid.three { grid-template-columns: 1fr; }
+        .review-files { grid-template-columns: 1fr; }
+        .review-faq { grid-template-columns: 1fr; }
+        .review-showcase { padding: 22px; }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <nav class="wrap nav" aria-label="Primary navigation">
+        <a class="brand" href="../index.html" aria-label="Luckee AI home">
+          <span class="brand-mark up" aria-hidden="true"></span>
+          <span>Luckee AI</span>
+        </a>
+        <ul class="nav-list">
+          <li class="nav-item">
+            <a class="nav-link" href="../products/amazon-operation-assistant.html">Products</a>
+            <div class="mega" aria-label="Product links">
+              <a href="../products/amazon-operation-assistant.html"><strong>Amazon Operation Assistant</strong><span>Luckee 1.0 for daily Amazon account operations.</span></a>
+              <a href="../products/amazon-ads-workbench.html"><strong>Amazon Ads Workbench</strong><span>Human-approved PPC execution from diagnosis to outcome.</span></a>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="../solutions.html">Solutions</a>
+            <div class="mega" aria-label="Solution links">
+              <a href="../solutions/listing-optimizer.html"><strong>Listing Optimizer</strong><span>Listing copy, A+ content, backend keywords, and answerability.</span></a>
+              <a href="../solutions/ads-audit.html"><strong>Ads Audit</strong><span>PPC diagnosis for TACoS, ROAS, CPC, placement, and waste.</span></a>
+              <a href="../solutions/ads-automation.html"><strong>Ads Automation</strong><span>Human-approved bid, budget, keyword, and negative changes.</span></a>
+              <a href="../solutions/image-generation.html"><strong>E-commerce Image Generation</strong><span>Conversion-focused product, lifestyle, and comparison visuals.</span></a>
+              <a href="../solutions/review-analysis.html"><strong>Review Analysis</strong><span>Complaint themes, buyer language, and product improvement signals.</span></a>
+              <a href="../solutions/competition-analysis.html"><strong>Competition Analysis</strong><span>Competitor pricing, creatives, keywords, reviews, and market moves.</span></a>
+            </div>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="../index.html#pricing">Pricing</a></li>
+          <li class="nav-item"><a class="nav-link" href="../index.html#resources">Resources</a></li>
+          <li class="nav-item"><a class="nav-link" href="../index.html#company">Company</a></li>
+        </ul>
+        <div class="nav-actions">
+          <a class="btn btn-outline btn-sm" href="../solutions.html">See solutions</a>
+          <a class="btn btn-primary btn-sm" href="../index.html#contact">Hire a team</a>
+          <button class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <!-- ===== MOBILE MENU (right after </header>) ===== -->
+    <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+      <div class="mobile-menu-panel">
+        <div class="mm-head">
+          <a class="brand" href="../index.html"><span class="brand-mark up" aria-hidden="true"></span><span>Luckee AI</span></a>
+          <button class="mm-close" aria-label="Close menu"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+        </div>
+        <span class="mm-group-label">Products</span>
+        <a href="../products/amazon-operation-assistant.html">Amazon Operation Assistant</a>
+        <a href="../products/amazon-ads-workbench.html">Amazon Ads Workbench</a>
+        <span class="mm-group-label">Solutions</span>
+        <a href="../solutions/listing-optimizer.html">Listing Optimizer</a>
+        <a href="../solutions/ads-audit.html">Ads Audit</a>
+        <a href="../solutions/ads-automation.html">Ads Automation</a>
+        <a href="../solutions/image-generation.html">Image Generation</a>
+        <a href="../solutions/review-analysis.html">Review Analysis</a>
+        <a href="../solutions/competition-analysis.html">Competition Analysis</a>
+        <span class="mm-group-label">Company</span>
+        <a href="../index.html#pricing">Pricing</a>
+        <a href="../index.html#resources">Resources</a>
+        <a href="../index.html#company">Company</a>
+        <div class="mm-actions">
+          <a class="btn btn-outline btn-block" href="../solutions.html">See solutions</a>
+          <a class="btn btn-primary btn-block" href="../index.html#contact">Hire a team</a>
+        </div>
+      </div>
+    </div>
+
+    <main id="main">
+      <!-- ============================ HERO ============================ -->
+      <section class="page-hero band-dark grain">
+        <div class="wrap home-hero-grid">
+          <div>
+            <span class="eyebrow reveal">Review Analysis</span>
+            <h1 class="reveal">Amazon review intelligence at <em>AI speed</em>.</h1>
+            <p class="lead reveal">
+              Cluster thousands of Amazon reviews into semantic themes, surface friction points,
+              detect time-based risk windows, and turn voice-of-customer into product roadmap,
+              listing, support, and competitive decisions.
+            </p>
+            <div class="hero-actions reveal">
+              <a class="btn btn-light btn-lg" href="mailto:hello@luckee.ai">Run a free ASIN</a>
+              <a class="btn btn-outline btn-lg" href="#example">See example report</a>
+            </div>
+          </div>
+          <div class="review-hero-visual reveal" aria-label="Review Analysis report preview">
+            <div class="review-frame">
+              <span class="live-badge"><i></i> Live analysis</span>
+              <img src="../assets/review-analysis/summary.png" alt="Luckee Review Analysis summary dashboard" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ VALUE STRIP ============================ -->
+      <section class="section">
+        <div class="wrap">
+          <div class="review-value-grid reveal-stagger">
+            <article>
+              <h3>Collect the <em>full voice</em>.</h3>
+              <p>Dual-source scraping captures written reviews with metadata, variants, verified purchase status, helpful votes, and marketplace context.</p>
+            </article>
+            <article>
+              <h3>Understand the <em>real themes</em>.</h3>
+              <p>AI groups similar complaints across language and wording, so “handle wobbles” and “handle broke” become one actionable durability signal.</p>
+            </article>
+            <article>
+              <h3>Move from insight to <em>action</em>.</h3>
+              <p>Outputs are structured as reviewable Markdown deliverables with P0-P3 recommendations tied back to evidence.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ WHERE TEAMS GET STUCK ============================ -->
+      <section class="band">
+        <div class="wrap section">
+          <div class="section-head reveal">
+            <div>
+              <p class="section-kicker">Where teams get stuck</p>
+              <h2 class="section-title">Manual review work hides the <em>signal you need most</em>.</h2>
+            </div>
+            <p class="section-copy">Luckee is designed for operators who need decisions, not another raw export.</p>
+          </div>
+          <div class="review-num-grid reveal-stagger">
+            <article><span>01</span><h3>Review volume is too high</h3><p>Hundreds of reviews across competitors become hours of copy-paste and inconsistent notes.</p></article>
+            <article><span>02</span><h3>Keyword counts miss meaning</h3><p>Different phrases can describe the same defect, fear, or buying motivation.</p></article>
+            <article><span>03</span><h3>Time trends are buried</h3><p>Batch defects, recovery windows, and launch-period issues rarely show up in simple sentiment scores.</p></article>
+            <article><span>04</span><h3>Reports stop before action</h3><p>Teams still need to decide what changes in product, listing, images, ads, or support.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ CORE CAPABILITIES ============================ -->
+      <section class="band-white">
+        <div class="wrap section">
+          <div class="section-head reveal">
+            <div>
+              <p class="section-kicker">Core capabilities</p>
+              <h2 class="section-title">From ASIN to <em>action-ready evidence</em>.</h2>
+            </div>
+            <p class="section-copy">The local page follows the reference design: alternating capability blocks, product screenshots, and crisp operator-focused copy.</p>
+          </div>
+
+          <div class="review-capability reveal">
+            <div>
+              <span class="review-label">Your data collection</span>
+              <h3>Dual-source scraping. Marketplace-aware review capture.</h3>
+              <ul>
+                <li><b>Dual-source coverage</b><span>Primary and secondary sources are deduplicated, normalized, and merged into one review corpus.</span></li>
+                <li><b>Marketplace context</b><span>US, UK, DE, FR, JP and other Amazon markets can be analyzed with language-aware clustering.</span></li>
+                <li><b>Metadata included</b><span>Date, variant, verified purchase, helpful votes, media flags, and review text remain audit-ready.</span></li>
+              </ul>
+            </div>
+            <figure><img src="../assets/review-analysis/execution-plan.png" alt="Review Analysis execution plan" /></figure>
+          </div>
+
+          <div class="review-capability reverse reveal">
+            <div>
+              <span class="review-label">Your AI analysis</span>
+              <h3>Semantic clustering, not keyword search.</h3>
+              <ul>
+                <li><b>Theme clustering</b><span>Positive and negative themes are ranked by frequency, severity, and commercial relevance.</span></li>
+                <li><b>3-star signal analysis</b><span>Mixed reviews often reveal the most useful structural concerns and conversion blockers.</span></li>
+                <li><b>Representative quotes</b><span>Each theme keeps evidence attached, so decisions do not drift away from customer language.</span></li>
+              </ul>
+            </div>
+            <figure><img src="../assets/review-analysis/summary.png" alt="Review Analysis theme summary" /></figure>
+          </div>
+
+          <div class="review-capability reveal">
+            <div>
+              <span class="review-label">Your reports</span>
+              <h3>Two documents. Decisions, not exports.</h3>
+              <ul>
+                <li><b>reviews-data.md</b><span>Full corpus organized by rating, date, variant, VP status, and original review text.</span></li>
+                <li><b>reviews-summary.md</b><span>Theme tables, time trends, key findings, and P0-P3 action recommendations.</span></li>
+                <li><b>Time trend detection</b><span>Auto-flags crisis windows, recovery periods, and repeated quality changes.</span></li>
+              </ul>
+            </div>
+            <figure><img src="../assets/review-analysis/themes-trends.png" alt="Review Analysis themes and time trend report" /></figure>
+          </div>
+
+          <div class="review-capability reverse reveal">
+            <div>
+              <span class="review-label">Your enforcement</span>
+              <h3>Catch competitor review fraud with evidence.</h3>
+              <ul>
+                <li><b>Multi-signal cross-check</b><span>Review rate spikes, concentration windows, 5-star anomalies, VP ratio drops, and content similarity.</span></li>
+                <li><b>RED / AMBER / GREEN verdict</b><span>Know whether an ASIN is report-ready, worth monitoring, or clean.</span></li>
+                <li><b>Complaint letter draft</b><span>Generate an Amazon-format evidence letter that your team can review and submit.</span></li>
+              </ul>
+            </div>
+            <div class="review-compliance-card">
+              <strong>Compliance Module</strong>
+              <span>15-signal review anomaly scan</span>
+              <p>Enabled per ASIN when competitor review behavior looks suspicious.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ HOW IT WORKS ============================ -->
+      <section class="section">
+        <div class="wrap">
+          <div class="section-head reveal">
+            <div>
+              <p class="section-kicker">How it works</p>
+              <h2 class="section-title">From ASIN to decision in <em>5 steps</em>.</h2>
+            </div>
+          </div>
+          <div class="process-strip reveal-stagger">
+            <div><span>01</span><b>Primary API</b><p>Scrape the main review source with the selected depth mode.</p></div>
+            <div><span>02</span><b>Secondary API</b><p>Cross-check marketplace coverage and fill missing review data.</p></div>
+            <div><span>03</span><b>Dedup &amp; merge</b><p>Normalize metadata and remove duplicates across sources.</p></div>
+            <div><span>04</span><b>Generate data</b><p>Create the full review corpus deliverable for audit and reference.</p></div>
+            <div><span>05</span><b>Generate summary</b><p>Produce themes, trends, findings, and action recommendations.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ LIVE EXAMPLE ============================ -->
+      <section id="example" class="band">
+        <div class="wrap section">
+          <div class="section-head reveal">
+            <div>
+              <p class="section-kicker">Live example</p>
+              <h2 class="section-title">See it on a <em>real ASIN</em>.</h2>
+            </div>
+            <p class="section-copy">A standing desk launched in 2023. Written reviews collected, a motor failure window surfaced, and recovery evidence confirmed.</p>
+          </div>
+          <div class="review-showcase reveal">
+            <div class="review-showcase-head">
+              <div><h3>Standing Desk Analysis</h3><p>37 written reviews · US Marketplace · Dual-source coverage</p></div>
+              <span>B0BLCBRBVZ</span>
+            </div>
+            <div class="review-showcase-grid">
+              <figure><img src="../assets/review-analysis/summary.png" alt="Review summary card" /><figcaption><b>Summary card</b> Star distribution plus top positive and negative themes.</figcaption></figure>
+              <figure><img src="../assets/review-analysis/themes-trends.png" alt="Negative themes and time trend alert" /><figcaption><b>Trend detail</b> Negative themes plus auto-detected crisis and recovery windows.</figcaption></figure>
+            </div>
+            <div class="review-files">
+              <article><b>reviews-data.md</b><p>Full review corpus with date, variant, VP status, helpful votes, and original text.</p><span>Deliverable 1 · Markdown</span></article>
+              <article><b>reviews-summary.md</b><p>Theme tables, 3-star signals, key findings, and P0-P3 recommendations.</p><span>Deliverable 2 · Markdown</span></article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ USE CASES ============================ -->
+      <section class="section">
+        <div class="wrap">
+          <div class="section-head reveal">
+            <div>
+              <p class="section-kicker">Use cases</p>
+              <h2 class="section-title">Where teams put Review Analysis <em>to work</em>.</h2>
+            </div>
+          </div>
+          <div class="review-num-grid three reveal-stagger">
+            <article><span>01</span><h3>Competitor full-corpus scrape</h3><p>Run multiple ASINs and build a deduplicated, star-grouped corpus in minutes.</p></article>
+            <article><span>02</span><h3>Negative-theme prioritization</h3><p>Rank product defects by frequency, severity, and whether the issue is category-wide.</p></article>
+            <article><span>03</span><h3>Multi-marketplace pre-launch</h3><p>Analyze German, Japanese, French, or US feedback before entering a new market.</p></article>
+            <article><span>04</span><h3>Reviews to action gap</h3><p>Convert VOC evidence into listing, image, product, support, and ad recommendations.</p></article>
+            <article><span>05</span><h3>Review fraud suspicion</h3><p>Quantify review-rate spikes and generate an evidence-backed complaint draft.</p></article>
+            <article><span>06</span><h3>Opportunity scouting</h3><p>Find persistent category complaints that can become product differentiation.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ COMPARISON ============================ -->
+      <section class="band-white">
+        <div class="wrap section">
+          <div class="section-head reveal">
+            <div>
+              <p class="section-kicker">Comparison</p>
+              <h2 class="section-title">Why this is more than a <em>seller-tool export</em>.</h2>
+            </div>
+          </div>
+          <div class="review-compare reveal">
+            <div><b></b><b>Manual scraping</b><b>Seller tools</b><b>Luckee Review Analysis</b></div>
+            <div><span>Coverage</span><span>Low and inconsistent</span><span>Export-limited</span><span>Dual-source corpus</span></div>
+            <div><span>Theme quality</span><span>Manual highlights</span><span>Keyword frequency</span><span>Semantic clustering</span></div>
+            <div><span>Trend detection</span><span>Easy to miss</span><span>Basic charts</span><span>Crisis and recovery windows</span></div>
+            <div><span>Action output</span><span>Notes only</span><span>Dashboard interpretation</span><span>P0-P3 evidence map</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ FAQ ============================ -->
+      <section class="section">
+        <div class="wrap">
+          <div class="section-head reveal">
+            <div>
+              <p class="section-kicker">Common questions</p>
+              <h2 class="section-title">Before you <em>try it</em>.</h2>
+            </div>
+          </div>
+          <div class="review-faq reveal-stagger">
+            <article><h3>What review coverage can I expect?</h3><p>Coverage depends on marketplace and available written reviews. Luckee focuses on written review text because star-only votes cannot be interpreted as customer evidence.</p></article>
+            <article><h3>Does it support multiple languages?</h3><p>Yes. The analysis is designed to cluster themes across different source languages and normalize them into operator-friendly findings.</p></article>
+            <article><h3>What gets delivered?</h3><p>A review corpus and a summary report with themes, quotes, time trends, findings, and action recommendations.</p></article>
+            <article><h3>Can the output go into our workflow?</h3><p>Yes. Markdown deliverables can move into Notion, Linear, Slack, docs, or any operating workspace your team already uses.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ FINAL CTA ============================ -->
+      <section class="band-dark grain cta">
+        <div class="wrap reveal">
+          <h2>Stop reading reviews. <em>Start acting on them.</em></h2>
+          <p>Run Review Analysis on one ASIN and see what customer evidence says your team should fix next.</p>
+          <a class="btn btn-light btn-lg" href="mailto:hello@luckee.ai">Get Started Free</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap footer-shell">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <a class="brand" href="../index.html" aria-label="Luckee AI home"><span class="brand-mark up" aria-hidden="true"></span><span>Luckee AI</span></a>
+            <p>Human-agent workbench for Amazon teams. Hire AI cowork teams that plan, prepare, execute, monitor, roll back, and prove complex e-commerce work.</p>
+          </div>
+          <div class="footer-col">
+            <h3>Products</h3>
+            <div class="footer-links">
+              <a href="../products/amazon-operation-assistant.html">Amazon Operation Assistant</a>
+              <a href="../products/amazon-ads-workbench.html">Amazon Ads Workbench</a>
+              <a href="../index.html#pricing">Pricing</a>
+            </div>
+          </div>
+          <div class="footer-col">
+            <h3>Solutions</h3>
+            <div class="footer-links">
+              <a href="../solutions/listing-optimizer.html">Listing Optimizer</a>
+              <a href="../solutions/ads-audit.html">Ads Audit</a>
+              <a href="../solutions/ads-automation.html">Ads Automation</a>
+              <a href="../solutions/image-generation.html">Image Generation</a>
+              <a href="../solutions/review-analysis.html">Review Analysis</a>
+              <a href="../solutions/competition-analysis.html">Competition Analysis</a>
+            </div>
+          </div>
+          <div class="footer-col">
+            <h3>Company</h3>
+            <div class="footer-links">
+              <a href="../solutions.html">Solutions hub</a>
+              <a href="../index.html#resources">Resources</a>
+              <a href="../index.html#company">Company</a>
+              <a href="../index.html#contact">Book a demo</a>
+              <a href="mailto:hello@luckee.ai">hello@luckee.ai</a>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <span>© 2026 Luckee AI. All rights reserved.</span>
+          <span>Built for lean brands, agencies, and human-approved AI operations.</span>
+        </div>
+      </div>
+    </footer>
+    <script src="../app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Solutions | Luckee AI</title>
+    <meta
+      name="description"
+      content="Luckee AI solutions for listing optimization, ads audit, ads automation, e-commerce image generation, review analysis, and competition analysis."
+    />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://luckee.ai/solutions" />
+    <meta name="theme-color" content="#16241D" />
+    <link rel="icon" href="assets/luckee-logo.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <script>document.documentElement.classList.add("js")</script>
+    <link rel="stylesheet" href="styles.css" />
+
+    <!-- ===== Page-local styles · Luckee 2.0 tokens only ===== -->
+    <style>
+      /* Hero layout: copy + solution-model panel */
+      .solutions-hero {
+        display: grid;
+        grid-template-columns: 1.15fr .85fr;
+        gap: 28px 56px;
+        align-items: end;
+      }
+      .solutions-hero > div { max-width: 30ch; }
+
+      /* Solution-model panel (page-unique aside) */
+      .panel {
+        background: var(--card);
+        border: 1px solid var(--hair);
+        border-radius: var(--r-card);
+        box-shadow: var(--sh-card);
+        padding: 28px 30px;
+        position: relative;
+        overflow: hidden;
+      }
+      .panel::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background: radial-gradient(80% 70% at 100% 0%, rgba(201,168,76,.08), transparent 60%);
+      }
+      .panel h3 {
+        font-size: 1.25rem;
+        margin: 0 0 10px;
+        position: relative;
+      }
+      .panel p {
+        margin: 0;
+        color: var(--muted);
+        font-size: .95rem;
+        line-height: 1.66;
+        position: relative;
+      }
+
+      /* Solution tile letter-icon */
+      .tile.solution {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .solution-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 14px;
+        display: grid;
+        place-items: center;
+        margin-bottom: 8px;
+        background: linear-gradient(150deg, var(--forest-600), var(--forest-800));
+        color: var(--oat-100);
+        font-family: var(--serif);
+        font-size: 1.5rem;
+        box-shadow: var(--sh-brand);
+        transition: transform .32s var(--ease-out);
+      }
+      .tile.solution:hover .solution-icon { transform: translateY(-2px) rotate(-3deg); }
+      .tile.solution::after {
+        content: "→";
+        position: absolute;
+        top: 30px;
+        right: 30px;
+        font-family: var(--serif);
+        font-size: 1.4rem;
+        color: var(--forest-300);
+        transition: transform .25s var(--ease-out), color .25s var(--ease-out);
+      }
+      .tile.solution:hover::after { transform: translate(4px, -2px); color: var(--forest-600); }
+
+      /* Workflow table (page-unique) */
+      .workflow-table {
+        border: 1px solid var(--hair);
+        border-radius: var(--r-card);
+        background: var(--card);
+        box-shadow: var(--sh-card);
+        overflow: hidden;
+      }
+      .workflow-row {
+        display: grid;
+        grid-template-columns: 1fr 1.5fr 1.2fr;
+        gap: 24px;
+        padding: 18px 26px;
+        align-items: center;
+        border-top: 1px solid var(--hair);
+        font-size: .95rem;
+      }
+      .workflow-row:first-child {
+        border-top: 0;
+        background: var(--oat-200);
+      }
+      .workflow-row:first-child b {
+        font-family: var(--sans);
+        font-weight: 700;
+        font-size: .72rem;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+        color: var(--forest-600);
+      }
+      .workflow-row span:first-child {
+        font-family: var(--serif);
+        font-size: 1.18rem;
+        color: var(--forest-700);
+        line-height: 1.2;
+      }
+      .workflow-row span {
+        color: var(--neutral-700);
+        line-height: 1.55;
+      }
+      .workflow-row span:last-child { color: var(--muted); }
+
+      @media (max-width: 980px) {
+        .solutions-hero { grid-template-columns: 1fr; gap: 28px; }
+        .solutions-hero > div { max-width: none; }
+      }
+      @media (max-width: 760px) {
+        .workflow-row {
+          grid-template-columns: 1fr;
+          gap: 6px;
+          padding: 16px 20px;
+        }
+        .workflow-row:first-child { display: none; }
+        .workflow-row span:first-child { margin-bottom: 4px; }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <nav class="wrap nav" aria-label="Primary navigation">
+        <a class="brand" href="index.html" aria-label="Luckee AI home">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <span>Luckee AI</span>
+        </a>
+        <ul class="nav-list">
+          <li class="nav-item">
+            <a class="nav-link" href="products/amazon-operation-assistant.html">Products</a>
+            <div class="mega" aria-label="Product links">
+              <a href="products/amazon-operation-assistant.html"><strong>Amazon Operation Assistant</strong><span>Luckee 1.0 for daily Amazon account operations.</span></a>
+              <a href="products/amazon-ads-workbench.html"><strong>Amazon Ads Workbench</strong><span>Human-approved PPC execution from diagnosis to outcome.</span></a>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="solutions.html">Solutions</a>
+            <div class="mega" aria-label="Solution links">
+              <a href="solutions/listing-optimizer.html"><strong>Listing Optimizer</strong><span>Listing copy, A+ content, backend keywords, and answerability.</span></a>
+              <a href="solutions/ads-audit.html"><strong>Ads Audit</strong><span>PPC diagnosis for TACoS, ROAS, CPC, placement, and waste.</span></a>
+              <a href="solutions/ads-automation.html"><strong>Ads Automation</strong><span>Human-approved bid, budget, keyword, and negative changes.</span></a>
+              <a href="solutions/image-generation.html"><strong>E-commerce Image Generation</strong><span>Conversion-focused product, lifestyle, and comparison visuals.</span></a>
+              <a href="solutions/review-analysis.html"><strong>Review Analysis</strong><span>Complaint themes, buyer language, and product improvement signals.</span></a>
+              <a href="solutions/competition-analysis.html"><strong>Competition Analysis</strong><span>Competitor pricing, creatives, keywords, reviews, and market moves.</span></a>
+            </div>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="index.html#pricing">Pricing</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html#resources">Resources</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html#company">Company</a></li>
+        </ul>
+        <div class="nav-actions">
+          <a class="btn btn-outline btn-sm" href="solutions.html">See solutions</a>
+          <a class="btn btn-primary btn-sm" href="index.html#contact">Hire a team</a>
+          <button class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <!-- ===== MOBILE MENU (right after </header>) ===== -->
+    <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+      <div class="mobile-menu-panel">
+        <div class="mm-head">
+          <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"></span><span>Luckee AI</span></a>
+          <button class="mm-close" aria-label="Close menu"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+        </div>
+        <span class="mm-group-label">Products</span>
+        <a href="products/amazon-operation-assistant.html">Amazon Operation Assistant</a>
+        <a href="products/amazon-ads-workbench.html">Amazon Ads Workbench</a>
+        <span class="mm-group-label">Solutions</span>
+        <a href="solutions/listing-optimizer.html">Listing Optimizer</a>
+        <a href="solutions/ads-audit.html">Ads Audit</a>
+        <a href="solutions/ads-automation.html">Ads Automation</a>
+        <a href="solutions/image-generation.html">Image Generation</a>
+        <a href="solutions/review-analysis.html">Review Analysis</a>
+        <a href="solutions/competition-analysis.html">Competition Analysis</a>
+        <span class="mm-group-label">Company</span>
+        <a href="index.html#pricing">Pricing</a>
+        <a href="index.html#resources">Resources</a>
+        <a href="index.html#company">Company</a>
+        <div class="mm-actions">
+          <a class="btn btn-outline btn-block" href="solutions.html">See solutions</a>
+          <a class="btn btn-primary btn-block" href="index.html#contact">Hire a team</a>
+        </div>
+      </div>
+    </div>
+
+    <main id="main">
+      <section class="wrap page-hero compact">
+        <div class="solutions-hero reveal">
+          <div>
+            <span class="eyebrow">Solutions</span>
+            <h1>Focused agents for the work e-commerce teams <em>repeat</em> every week.</h1>
+            <p class="lead">
+              Solutions are feature-level workflows. Each one can run as a standalone cowork agent or
+              connect into a larger human-approved operating loop.
+            </p>
+          </div>
+          <aside class="panel">
+            <h3>Solution model</h3>
+            <p>Analyze signals, prepare actions, route decisions, and return proof. This page is intentionally separate from the homepage and product landing pages.</p>
+          </aside>
+        </div>
+      </section>
+
+      <section class="wrap section">
+        <div class="grid-3 reveal-stagger">
+          <a id="listing-optimizer" class="tile solution" href="solutions/listing-optimizer.html">
+            <span class="solution-icon">L</span>
+            <h3>Listing Optimizer</h3>
+            <p>Improve titles, bullets, A+ modules, backend keywords, and AI-shopping answerability while preserving source facts.</p>
+          </a>
+          <a id="ads-audit" class="tile solution" href="solutions/ads-audit.html">
+            <span class="solution-icon">A</span>
+            <h3>Ads Audit</h3>
+            <p>Diagnose TACoS, ROAS, CPC, placement, query waste, structure issues, and budget leakage by expected impact.</p>
+          </a>
+          <a id="ads-automation" class="tile solution" href="solutions/ads-automation.html">
+            <span class="solution-icon">P</span>
+            <h3>Ads Automation</h3>
+            <p>Prepare bid changes, budget adjustments, keyword harvesting, negatives, and waste reduction actions with guardrails.</p>
+          </a>
+          <a id="image-generation" class="tile solution" href="solutions/image-generation.html">
+            <span class="solution-icon">I</span>
+            <h3>E-commerce Image Generation</h3>
+            <p>Create scenario images, comparison frames, use-case visuals, and conversion-focused creative briefs.</p>
+          </a>
+          <a id="review-analysis" class="tile solution" href="solutions/review-analysis.html">
+            <span class="solution-icon">R</span>
+            <h3>Review Analysis</h3>
+            <p>Extract complaint clusters, buyer language, product improvement points, content gaps, and support patterns.</p>
+          </a>
+          <a id="competition-analysis" class="tile solution" href="solutions/competition-analysis.html">
+            <span class="solution-icon">C</span>
+            <h3>Competition Analysis</h3>
+            <p>Track competitor pricing, creatives, keyword moves, review weaknesses, offer changes, and market entry windows.</p>
+          </a>
+        </div>
+      </section>
+
+      <section class="band">
+        <div class="wrap section">
+          <div class="section-head reveal">
+            <div>
+              <p class="section-kicker">How solutions run</p>
+              <h2 class="section-title">Each feature is a <em>reviewable</em> workflow, not a one-off prompt.</h2>
+            </div>
+            <p class="section-copy">
+              Luckee solutions are built to produce reusable operating outputs: findings, prepared
+              actions, approvals, execution logs, and outcome summaries.
+            </p>
+          </div>
+          <div class="workflow-table reveal">
+            <div class="workflow-row"><b>Feature</b><b>Prepared output</b><b>Control layer</b></div>
+            <div class="workflow-row"><span>Listing Optimizer</span><span>Rewritten assets, gap analysis, image/A+ briefs</span><span>Fact preservation review</span></div>
+            <div class="workflow-row"><span>Ads Audit</span><span>Root causes, ranked fixes, waste report</span><span>Impact and confidence scoring</span></div>
+            <div class="workflow-row"><span>Ads Automation</span><span>Bid, budget, keyword, and negative diffs</span><span>Human approval gates</span></div>
+            <div class="workflow-row"><span>Review Analysis</span><span>Complaint themes and improvement priorities</span><span>Evidence from real reviews</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="wrap cta reveal">
+        <h2>Choose a solution when you know the workflow you want to <em>improve</em>.</h2>
+        <p>Choose a product landing page when you want a packaged operating system for Amazon operations or PPC execution.</p>
+        <a class="btn btn-primary btn-lg" href="products/amazon-ads-workbench.html">View Amazon Ads Workbench</a>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap footer-shell">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <a class="brand" href="index.html" aria-label="Luckee AI home"><span class="brand-mark" aria-hidden="true"></span><span>Luckee AI</span></a>
+            <p>Human-agent workbench for Amazon teams. Hire AI cowork teams that plan, prepare, execute, monitor, roll back, and prove complex e-commerce work.</p>
+          </div>
+          <div class="footer-col">
+            <h3>Products</h3>
+            <div class="footer-links">
+              <a href="products/amazon-operation-assistant.html">Amazon Operation Assistant</a>
+              <a href="products/amazon-ads-workbench.html">Amazon Ads Workbench</a>
+              <a href="index.html#pricing">Pricing</a>
+            </div>
+          </div>
+          <div class="footer-col">
+            <h3>Solutions</h3>
+            <div class="footer-links">
+              <a href="solutions/listing-optimizer.html">Listing Optimizer</a>
+              <a href="solutions/ads-audit.html">Ads Audit</a>
+              <a href="solutions/ads-automation.html">Ads Automation</a>
+              <a href="solutions/image-generation.html">Image Generation</a>
+              <a href="solutions/review-analysis.html">Review Analysis</a>
+              <a href="solutions/competition-analysis.html">Competition Analysis</a>
+            </div>
+          </div>
+          <div class="footer-col">
+            <h3>Company</h3>
+            <div class="footer-links">
+              <a href="solutions.html">Solutions hub</a>
+              <a href="index.html#resources">Resources</a>
+              <a href="index.html#company">Company</a>
+              <a href="index.html#contact">Book a demo</a>
+              <a href="mailto:hello@luckee.ai">hello@luckee.ai</a>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <span>© 2026 Luckee AI. All rights reserved.</span>
+          <span>Built for lean brands, agencies, and human-approved AI operations.</span>
+        </div>
+      </div>
+    </footer>
+    <script src="app.js"></script>
+  </body>
+</html>

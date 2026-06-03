@@ -1,0 +1,19 @@
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="128" height="128" rx="28" fill="#10231D"/>
+  <circle cx="64" cy="64" r="51" fill="url(#halo)" opacity="0.55"/>
+  <g stroke="#10231D" stroke-width="6" stroke-linejoin="round">
+    <path d="M64 62C53 52 43 45 43 34C43 24 52 20 60 27C62 29 63 31 64 34C65 31 66 29 68 27C76 20 85 24 85 34C85 45 75 52 64 62Z" fill="#F8FBF2"/>
+    <path d="M64 62C53 52 43 45 43 34C43 24 52 20 60 27C62 29 63 31 64 34C65 31 66 29 68 27C76 20 85 24 85 34C85 45 75 52 64 62Z" fill="#F8FBF2" transform="rotate(90 64 64)"/>
+    <path d="M64 62C53 52 43 45 43 34C43 24 52 20 60 27C62 29 63 31 64 34C65 31 66 29 68 27C76 20 85 24 85 34C85 45 75 52 64 62Z" fill="#F8FBF2" transform="rotate(180 64 64)"/>
+    <path d="M64 62C53 52 43 45 43 34C43 24 52 20 60 27C62 29 63 31 64 34C65 31 66 29 68 27C76 20 85 24 85 34C85 45 75 52 64 62Z" fill="#F8FBF2" transform="rotate(270 64 64)"/>
+  </g>
+  <path d="M43 83C54 75 59 66 66 61C73 56 78 49 86 39" stroke="#F2BD45" stroke-width="7" stroke-linecap="round"/>
+  <path d="M76 40H87V51" stroke="#F2BD45" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <defs>
+    <radialGradient id="halo" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(36 30) rotate(47) scale(86)">
+      <stop stop-color="#EAF7DA"/>
+      <stop offset="0.56" stop-color="#1B7F63" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#10231D" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+</svg>

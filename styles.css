@@ -526,7 +526,7 @@ a:focus:not(:focus-visible), button:focus:not(:focus-visible) { outline: none; }
 .workspace-grid article strong { font-family: var(--serif); font-size: 1rem; color: var(--forest-700); line-height: 1; }
 .workspace-grid article strong small { font-family: var(--sans); font-size: .56rem; font-weight: 600; color: var(--muted); margin-left: 4px; }
 .workspace-grid article p { font-size: .64rem; color: var(--muted); margin: 0; line-height: 1.35; }
-.dash-bottom { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.dash-bottom { display: grid; grid-template-columns: 1fr; gap: 10px; }
 .dash-bottom section h3 { font-size: .8rem; margin-bottom: 6px; }
 .task-row, .outcome-row {
   background: var(--oat-100); border: 1px solid var(--hair); border-radius: 11px; padding: 8px 10px;

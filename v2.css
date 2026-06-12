@@ -103,7 +103,8 @@
 .copilot-strip p { color: var(--muted); font-size: .92rem; line-height: 1.6; margin: 0; max-width: 64ch; }
 
 /* ---- Operator Kernel ---- */
-.kernel-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.kernel-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+.kernel-cell { flex: 0 0 calc(25% - 9px); }
 .kernel-cell {
   background: rgba(217,232,218,.05); border: 1px solid var(--hair-dark); border-radius: 14px;
   padding: 18px 18px 16px; display: flex; flex-direction: column; gap: 6px;
@@ -286,7 +287,7 @@
   .vision-band .section { padding-bottom: 240px; }
   .wb-body { grid-template-columns: 1fr; }
   .wb-queue { border-right: 0; border-bottom: 1px solid var(--hair); }
-  .kernel-grid { grid-template-columns: repeat(2, 1fr); }
+  .kernel-cell { flex-basis: calc(50% - 6px); }
   .slack-float { left: 8px; bottom: -28px; }
   .copilot-strip { grid-template-columns: 1fr; }
 }

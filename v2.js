@@ -44,7 +44,7 @@
   }
 
   /* ================= Hero workbench ================= */
-  var WB_DETAILS = ["<div class=\"wb-detail wb-detail-swap\"><div class=\"wb-sku\"><b>ChefEdge 15pc · BOKNF7O011</b><span class=\"wb-goal\">Goal: ACOS ≤ 8%</span></div><div class=\"wb-action\"><em>Recommended action</em><p>Reduce bids on 14 search terms with zero conversions across 6,400 clicks in 90 days.</p></div><div class=\"wb-rows\"><div class=\"wb-row\"><b>Expected impact</b><span><span><strong>$412/mo saved</strong> · ACOS −1.8 pts</span></span></div><div class=\"wb-row\"><b>Evidence</b><span>90-day search term report · placement analysis</span></div><div class=\"wb-row\"><b>Risk boundary</b><span>Max −20% bid change · auto-rollback if ACOS +2 pts</span></div><div class=\"wb-row\"><b>Outcome review</b><span>Scheduled after approval</span></div></div><div class=\"wb-cta\"><button class=\"wb-approve\">Approve action</button><button class=\"wb-evidence\">See evidence</button></div></div>","<div class=\"wb-detail wb-detail-swap\"><div class=\"wb-sku\"><b>PureAir 500 · BOAIR9O011</b><span class=\"wb-goal\">Goal: GMV +15%</span></div><div class=\"wb-action\"><em>Recommended action</em><p>Shift $30/day from brand defense to exact-match winners with 4.1× ROAS.</p></div><div class=\"wb-rows\"><div class=\"wb-row\"><b>Expected impact</b><span><span><strong>+$1,080/mo GMV</strong> · ROAS +0.6</span></span></div><div class=\"wb-row\"><b>Evidence</b><span>Placement report · 30-day conversion paths</span></div><div class=\"wb-row\"><b>Risk boundary</b><span>Budget cap unchanged · revert if ROAS −10%</span></div><div class=\"wb-row\"><b>Outcome review</b><span>Scheduled after approval</span></div></div><div class=\"wb-cta\"><button class=\"wb-approve\">Approve action</button><button class=\"wb-evidence\">See evidence</button></div></div>","<div class=\"wb-detail wb-detail-swap\"><div class=\"wb-sku\"><b>Kitchen rack · BOKRA2O044</b><span class=\"wb-goal\">Goal: Rufus ready</span></div><div class=\"wb-action\"><em>Recommended action</em><p>Rewrite backend keywords around 9 buyer questions Rufus answers for this category.</p></div><div class=\"wb-rows\"><div class=\"wb-row\"><b>Expected impact</b><span><span><strong>+9 answerable queries</strong> · indexable</span></span></div><div class=\"wb-row\"><b>Evidence</b><span>Rufus query sample · competitor term gap</span></div><div class=\"wb-row\"><b>Risk boundary</b><span>Listing copy untouched · backend fields only</span></div><div class=\"wb-row\"><b>Outcome review</b><span>Scheduled after approval</span></div></div><div class=\"wb-cta\"><button class=\"wb-approve\">Approve action</button><button class=\"wb-evidence\">See evidence</button></div></div>"];
+  var WB_DETAILS = ["<div class=\"wb-detail wb-detail-swap\"><div class=\"wb-sku\"><b>ChefEdge 15pc · BOKNF7O011</b><span class=\"wb-goal\">Goal: ACOS ≤ 8%</span></div><div class=\"wb-action\"><em>Recommended action</em><p>Reduce bids on 14 search terms with zero conversions across 6,400 clicks in 90 days.</p></div><div class=\"wb-rows\"><div class=\"wb-row\"><b>Expected impact</b><span><span><strong>$412/mo saved</strong> · ACOS −1.8 pts</span></span></div><div class=\"wb-row\"><b>Evidence</b><span>90-day search term report · placement analysis</span></div><div class=\"wb-row\"><b>Risk boundary</b><span>Max −20% bid change · auto-rollback if ACOS +2 pts</span></div><div class=\"wb-row\"><b>Outcome review</b><span>Scheduled after approval</span></div></div><div class=\"wb-cta\"><button class=\"wb-approve\">Approve action</button><button class=\"wb-evidence\">See evidence</button></div></div>","<div class=\"wb-detail wb-detail-swap\"><div class=\"wb-sku\"><b>PureAir 500 · BOAIR9O011</b><span class=\"wb-goal\">Goal: GMV +15%</span></div><div class=\"wb-action\"><em>Recommended action</em><p>Shift $30/day from brand defense to exact-match winners with 4.1× ROAS.</p></div><div class=\"wb-rows\"><div class=\"wb-row\"><b>Expected impact</b><span><span><strong>+$1,080/mo GMV</strong> · ROAS +0.6</span></span></div><div class=\"wb-row\"><b>Evidence</b><span>Placement report · 30-day conversion paths</span></div><div class=\"wb-row\"><b>Risk boundary</b><span>Budget cap unchanged · revert if ROAS −10%</span></div><div class=\"wb-row\"><b>Outcome review</b><span>Scheduled after approval</span></div></div><div class=\"wb-cta\"><button class=\"wb-approve\">Approve action</button><button class=\"wb-evidence\">See evidence</button></div></div>","<div class=\"wb-detail wb-detail-swap\"><div class=\"wb-sku\"><b>Kitchen rack · BOKRA2O044</b><span class=\"wb-goal\">Goal: Alexa ready</span></div><div class=\"wb-action\"><em>Recommended action</em><p>Rewrite backend keywords around 9 buyer questions Alexa answers for this category.</p></div><div class=\"wb-rows\"><div class=\"wb-row\"><b>Expected impact</b><span><span><strong>+9 answerable queries</strong> · indexable</span></span></div><div class=\"wb-row\"><b>Evidence</b><span>Alexa query sample · competitor term gap</span></div><div class=\"wb-row\"><b>Risk boundary</b><span>Listing copy untouched · backend fields only</span></div><div class=\"wb-row\"><b>Outcome review</b><span>Scheduled after approval</span></div></div><div class=\"wb-cta\"><button class=\"wb-approve\">Approve action</button><button class=\"wb-evidence\">See evidence</button></div></div>"];
   var hero = document.querySelector(".home-hero");
   var wbVisual = hero ? hero.querySelector(".wb-visual") : null;
   var wbBody = wbVisual ? wbVisual.querySelector(".wb-body") : null;
@@ -235,5 +235,53 @@
       if (!hTick) { hTick = true; window.requestAnimationFrame(setParallax); }
     }, { passive: true });
     setParallax();
+  }
+
+  /* ---- Magnetic spring buttons: primary CTAs lean toward the cursor ---- */
+  if (finePointer && !reduce) {
+    document.querySelectorAll('.home-hero .hero-actions a, #contact .wrap a, .wb-approve').forEach(function (el) {
+      el.classList.add('magnetic');
+      var mt = false;
+      el.addEventListener('pointermove', function (e) {
+        if (mt) return; mt = true;
+        window.requestAnimationFrame(function () {
+          mt = false;
+          var r = el.getBoundingClientRect();
+          var nx = (e.clientX - (r.left + r.width / 2)) / (r.width / 2);
+          var ny = (e.clientY - (r.top + r.height / 2)) / (r.height / 2);
+          el.style.setProperty('--mx', (nx * 5).toFixed(1) + 'px');
+          el.style.setProperty('--my', (ny * 4).toFixed(1) + 'px');
+        });
+      });
+      el.addEventListener('pointerleave', function () { el.style.setProperty('--mx', '0px'); el.style.setProperty('--my', '0px'); });
+    });
+  }
+
+  /* ---- Night-ops: the panel finishes the night (clock advances, bars complete) ---- */
+  var nightOps = document.querySelector('.night-ops');
+  if (nightOps) {
+    var nm = 2 * 60 + 47, clkTimer = null;
+    var tickClock = function () {
+      var c = nightOps.querySelector('.no-clock'); if (!c) return;
+      nm = (nm + 1) % (24 * 60);
+      c.textContent = String(Math.floor(nm / 60)).padStart(2, '0') + ':' + String(nm % 60).padStart(2, '0');
+    };
+    var startNight = function () {
+      if (reduce) { nightOps.classList.add('briefs-ready'); return; }
+      nightOps.classList.add('is-working');
+      if (!clkTimer) clkTimer = setInterval(tickClock, 1800);
+      var last = nightOps.querySelector('.no-row:nth-child(4) .no-line em');
+      if (last) last.addEventListener('animationend', function () { nightOps.classList.add('briefs-ready'); }, { once: true });
+    };
+    var stopClock = function () { if (clkTimer) { clearInterval(clkTimer); clkTimer = null; } };
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (es) {
+        es.forEach(function (e) {
+          if (e.isIntersecting) { startNight(); }
+          else stopClock();
+        });
+      }, { threshold: 0.4 }).observe(nightOps);
+    } else startNight();
+    document.addEventListener('visibilitychange', function () { if (document.hidden) stopClock(); });
   }
 })();

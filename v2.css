@@ -423,3 +423,67 @@
 
 /* ---- Active loop step text emphasis ---- */
 .loop-step.active > p { color: var(--neutral-700); }
+
+/* ============================================================
+   v4 — visual-first pass (per Ethan: less text, more visuals)
+   ============================================================ */
+
+/* ---- Workbench: real-report collage replaces the feature list ---- */
+.wb-shots { position: relative; aspect-ratio: 5 / 4; margin: 6px 0 18px; }
+.wb-shot {
+  position: absolute; margin: 0; overflow: hidden; border-radius: 14px;
+  background: var(--card); border: 1px solid var(--hair);
+  transition: transform .35s var(--ease-out), box-shadow .35s var(--ease-out), z-index 0s;
+}
+.wb-shot figcaption {
+  display: flex; align-items: center; gap: 7px; padding: 7px 12px;
+  border-bottom: 1px solid var(--hair); background: var(--oat-200);
+  font: 500 .64rem var(--mono); color: var(--muted); white-space: nowrap;
+}
+.wb-shot figcaption i {
+  width: 7px; height: 7px; border-radius: 50%; background: var(--success-600); flex-shrink: 0;
+}
+.wb-shot img { width: 100%; height: calc(100% - 30px); object-fit: cover; object-position: left top; display: block; }
+.wb-shot-front {
+  left: 0; top: 0; width: 76%; height: 82%; z-index: 2;
+  box-shadow: 0 2px 6px rgba(28,43,29,.08), 0 30px 60px -24px rgba(28,43,29,.45);
+}
+.wb-shot-back {
+  right: 0; bottom: 0; width: 62%; height: 64%; z-index: 1;
+  transform: rotate(2.2deg);
+  box-shadow: 0 1px 3px rgba(28,43,29,.06), 0 18px 44px -20px rgba(28,43,29,.35);
+}
+.wb-shot-front:hover { transform: translateY(-4px); z-index: 3; box-shadow: 0 4px 8px rgba(28,43,29,.08), 0 40px 80px -28px rgba(28,43,29,.5); }
+.wb-shot-back:hover { transform: rotate(0deg) translateY(-4px); z-index: 3; }
+
+/* the two report frames slide in when the section reveals */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes shotIn { from { opacity: 0; transform: translateY(18px) rotate(0deg); } }
+  #workbench .reveal.in .wb-shot-front { animation: shotIn .6s var(--ease-out) .15s backwards; }
+  #workbench .reveal.in .wb-shot-back { animation: shotIn .6s var(--ease-out) .32s backwards; }
+}
+
+/* six features as compact pills */
+.wb-points { list-style: none; padding: 0; margin: 0 0 16px; display: flex; flex-wrap: wrap; gap: 8px; }
+.wb-points li {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 7px 13px; border-radius: 999px;
+  background: var(--card); border: 1px solid var(--hair);
+  font: 600 .78rem var(--sans); color: var(--neutral-700); box-shadow: var(--sh-sm);
+}
+.wb-points li::before { content: "✓"; font-size: .7rem; font-weight: 700; color: var(--forest-600); }
+
+/* ---- Differentiators: viz becomes the protagonist ---- */
+section[data-screen-label="Luckee 2.0 differentiators"] .grid-3 .viz { min-height: 64px; transform: scale(1.18); transform-origin: left center; margin-bottom: 2px; }
+
+/* ---- Copilot: bigger product shot ---- */
+.copilot-strip { grid-template-columns: auto 1fr 380px; }
+.copilot-shot img { height: 205px; }
+
+@media (max-width: 980px) {
+  .wb-shots { aspect-ratio: auto; height: auto; position: static; }
+  .wb-shot { position: static; width: 100% !important; height: auto !important; transform: none !important; }
+  .wb-shot img { height: auto; max-height: 260px; }
+  .wb-shot + .wb-shot { margin-top: 10px; }
+  .copilot-strip { grid-template-columns: 1fr; }
+}

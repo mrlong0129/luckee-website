@@ -3,6 +3,20 @@
    Builds on website.css (page chrome) + root tokens.
    ============================================================ */
 
+/* Type-scale tokens from the design kit (inline styles reference these;
+   --fs-h2 drives all six section titles) */
+:root {
+  --fs-h1: clamp(2.6rem, 5vw, 4.1rem);
+  --fs-h1-hero: clamp(2.7rem, 5.2vw, 4.4rem);
+  --fs-h2: clamp(1.9rem, 3.2vw, 2.7rem);
+  --fs-h3: 1.4rem;
+  --fs-h4: 1.1rem;
+  --fs-lead: 1.18rem;
+  --fs-body: 1rem;
+  --fs-small: .9rem;
+  --fs-eyebrow: .72rem;
+}
+
 /* ---- Hero: workbench composition ---- */
 .wb-visual { position: relative; }
 .wb-visual::before {
@@ -291,3 +305,121 @@
   .slack-float { left: 8px; bottom: -28px; }
   .copilot-strip { grid-template-columns: 1fr; }
 }
+
+/* ============================================================
+   v3 — expressiveness layer
+   Choreographed entrances, living atmosphere, tactile depth.
+   Everything motion-bearing is gated on prefers-reduced-motion;
+   everything pointer-bearing is gated on (hover:hover).
+   ============================================================ */
+
+/* Extend the stagger wave past 6 children (9-card grid, 7-cell kernel) */
+.reveal-stagger.in > *:nth-child(7) { transition-delay: .38s; }
+.reveal-stagger.in > *:nth-child(8) { transition-delay: .44s; }
+.reveal-stagger.in > *:nth-child(9) { transition-delay: .50s; }
+
+@media (prefers-reduced-motion: no-preference) {
+
+  /* ---- Hero overture: left column cascades, workbench lands, UI ticks in ---- */
+  .js .home-hero .reveal { transition-duration: .75s; }
+  .home-hero .eyebrow.reveal.in { transition-delay: .05s; }
+  .home-hero h1.reveal.in { transition-delay: .16s; }
+  .home-hero .lead.reveal.in { transition-delay: .30s; }
+  .home-hero .hero-actions.reveal.in { transition-delay: .44s; }
+  .home-hero .proof-row.reveal.in { transition-delay: .56s; }
+  .js .home-hero [aria-label="Luckee workbench preview"].reveal { transform: translateY(26px) scale(.97); }
+  .home-hero [aria-label="Luckee workbench preview"].reveal.in { transition-delay: .34s; }
+
+  @keyframes heroPop { from { opacity: 0; transform: translateY(10px) scale(.97); } }
+  .home-hero .reveal.in .wb-q-item:nth-child(2) { animation: heroPop .45s var(--ease-out) .85s backwards; }
+  .home-hero .reveal.in .wb-q-item:nth-child(3) { animation: heroPop .45s var(--ease-out) .98s backwards; }
+  .home-hero .reveal.in .wb-q-item:nth-child(4) { animation: heroPop .45s var(--ease-out) 1.11s backwards; }
+  .home-hero .reveal.in .monitor-float { animation: heroPop .5s var(--ease-out) 1.30s backwards; }
+  .home-hero .reveal.in .slack-float { animation: heroPop .55s var(--ease-out) 1.50s backwards; }
+
+  /* ---- Decision card cascade: the agent finishes the brief as you arrive ---- */
+  @keyframes rowIn { from { opacity: 0; transform: translateY(8px); } }
+  #workbench .reveal.in .decision-card .wb-action { animation: rowIn .5s var(--ease-out) .25s backwards; }
+  #workbench .reveal.in .decision-card .wb-row:nth-child(1) { animation: rowIn .45s var(--ease-out) .45s backwards; }
+  #workbench .reveal.in .decision-card .wb-row:nth-child(2) { animation: rowIn .45s var(--ease-out) .57s backwards; }
+  #workbench .reveal.in .decision-card .wb-row:nth-child(3) { animation: rowIn .45s var(--ease-out) .69s backwards; }
+  #workbench .reveal.in .decision-card .wb-row:nth-child(4) { animation: rowIn .45s var(--ease-out) .81s backwards; }
+  #workbench .reveal.in .decision-card .wb-cta { animation: rowIn .45s var(--ease-out) .95s backwards; }
+
+  /* ---- Living atmosphere: aurora drift on the dark-band glow pools ---- */
+  @keyframes aurora { 0% { transform: translate3d(0,0,0) scale(1); } 100% { transform: translate3d(-2.5%,1.5%,0) scale(1.06); } }
+  .home-hero::before, .band-dark::before { animation: aurora 18s ease-in-out infinite alternate; will-change: transform; }
+
+  /* ---- Growth loop: progress trace sweeps along the rail ---- */
+  .loop-strip::after {
+    content: ""; position: absolute; top: 27px; left: 7%; right: 7%; height: 2px; z-index: 0;
+    border-radius: 2px; background: linear-gradient(90deg, var(--forest-400), var(--forest-600));
+    transform-origin: left center; transform: scaleX(var(--loop-p, 0));
+    transition: transform .9s var(--ease-out);
+  }
+
+  /* ---- Evidence scanline: the report reads as freshly generated ---- */
+  .evidence-frame { position: relative; }
+  @keyframes scanline { from { transform: translateY(-46px); } to { transform: translateY(300px); } }
+  .evidence-drawer.open .evidence-frame::after {
+    content: ""; position: absolute; left: 0; right: 0; top: 0; height: 46px; pointer-events: none;
+    background: linear-gradient(180deg, transparent, rgba(232,201,106,.18), transparent);
+    animation: scanline .9s var(--ease-out) .15s both;
+  }
+
+  /* ---- Approve ripple: success tint cascades down the brief ---- */
+  @keyframes okTint { 30% { background: var(--success-bg); } }
+  .is-approved-flow .wb-rows .wb-row:nth-child(1) { animation: okTint .7s var(--ease-out) .05s backwards; }
+  .is-approved-flow .wb-rows .wb-row:nth-child(2) { animation: okTint .7s var(--ease-out) .17s backwards; }
+  .is-approved-flow .wb-rows .wb-row:nth-child(3) { animation: okTint .7s var(--ease-out) .29s backwards; }
+  .is-approved-flow .wb-rows .wb-row:nth-child(4) { animation: okTint .7s var(--ease-out) .41s backwards; }
+  @keyframes monitorFlash {
+    0% { box-shadow: var(--sh-lg); border-color: var(--hair-dark); }
+    35% { box-shadow: 0 0 0 5px rgba(232,201,106,.22), var(--sh-lg); border-color: var(--gold-light); }
+    100% { box-shadow: var(--sh-lg); border-color: var(--hair-dark); }
+  }
+  .monitor-float.flash { animation: monitorFlash 1s var(--ease-out); }
+
+  /* ---- Vision horizon parallax (transform set from JS) ---- */
+  .vision-horizon { will-change: transform; transform: scale(1.12); }
+}
+
+@media (max-width: 980px) { .loop-strip::after { display: none; } }
+
+/* ---- Gold light-sweep on primary CTAs + approve (hover devices) ---- */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .home-hero .hero-actions a, .cta .btn, .wb-approve { position: relative; overflow: hidden; }
+  .home-hero .hero-actions a::after, .cta .btn::after, .wb-approve::after {
+    content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+    background: linear-gradient(110deg, transparent 32%, rgba(232,201,106,.32) 50%, transparent 68%);
+    transform: translateX(-130%); transition: none;
+  }
+  .home-hero .hero-actions a:hover::after, .cta .btn:hover::after, .wb-approve:hover::after {
+    transform: translateX(130%); transition: transform .65s var(--ease-out);
+  }
+
+  /* ---- Pointer-tracked gold spotlight inside card fields ---- */
+  .grid-3 > *, .kernel-cell { position: relative; }
+  .grid-3 > *::after, .kernel-cell::after {
+    content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+    opacity: 0; transition: opacity .35s var(--ease-out);
+    background: radial-gradient(220px circle at var(--mx, 50%) var(--my, 50%), rgba(201,168,76,.13), transparent 70%);
+  }
+  .grid-3 > *:hover::after, .kernel-cell:hover::after { opacity: 1; }
+
+  /* ---- Hero workbench 3D tilt with parallax floats ---- */
+  .wb-visual { perspective: 1100px; }
+  .wb-frame {
+    transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+    transition: transform .25s var(--ease-out); will-change: transform;
+  }
+  .slack-float { transform: translate3d(calc(var(--nx, 0) * -10px), calc(var(--ny, 0) * -8px), 0); transition: transform .3s var(--ease-out), box-shadow .3s var(--ease-out); }
+  .monitor-float { transform: translate3d(calc(var(--nx, 0) * 7px), calc(var(--ny, 0) * 6px), 0); transition: transform .3s var(--ease-out); }
+}
+
+/* ---- Approve state in the decision-card header chip ---- */
+.pill-live.is-monitoring { color: var(--gold-light); background: rgba(201,168,76,.16); }
+.pill-live.is-monitoring::before { background: var(--gold-light); }
+
+/* ---- Active loop step text emphasis ---- */
+.loop-step.active > p { color: var(--neutral-700); }

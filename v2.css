@@ -542,3 +542,143 @@ section[data-screen-label="Luckee 2.0 differentiators"] .grid-3 .viz { min-heigh
 
 /* bento balance: center content in compact cells so row-stretch whitespace distributes */
 .bento-cell:not(.bento-feature) { justify-content: center; }
+
+/* ============================================================
+   v6 — conceptual visuals (express the idea, not pictures of text)
+   ============================================================ */
+
+/* ---- Night ops: agents work around the clock ---- */
+.night-ops {
+  position: relative; border-radius: var(--r-card); overflow: hidden;
+  background: linear-gradient(160deg, var(--forest-850), var(--forest-900) 70%);
+  border: 1px solid var(--hair-dark); box-shadow: var(--sh-float);
+  color: var(--forest-300); padding: 20px 22px 18px; margin-bottom: 18px;
+  display: flex; flex-direction: column; gap: 14px;
+}
+.night-ops::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(60% 50% at 85% 0%, rgba(201,168,76,.10), transparent 60%);
+}
+.night-ops header { display: flex; align-items: baseline; gap: 12px; }
+.no-clock { font: 600 1.5rem var(--mono); color: var(--oat-100); letter-spacing: .02em; }
+.no-label { font: 500 .72rem var(--sans); color: var(--forest-300); }
+.no-live { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; font: 700 .62rem var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--forest-300); }
+.no-live i { width: 7px; height: 7px; border-radius: 50%; background: var(--success-600); animation: pulseDot 1.2s infinite var(--ease); }
+.no-rows { display: flex; flex-direction: column; gap: 9px; }
+.no-row {
+  display: grid; grid-template-columns: 118px 1fr; gap: 3px 14px; align-items: center;
+  background: rgba(217,232,218,.05); border: 1px solid var(--hair-dark);
+  border-radius: 12px; padding: 9px 13px;
+}
+.no-row b { font: 600 .72rem var(--mono); color: var(--oat-100); grid-row: span 2; }
+.no-task { font: 500 .68rem var(--sans); color: var(--forest-300); }
+.no-line { display: block; height: 4px; border-radius: 99px; background: rgba(217,232,218,.10); overflow: hidden; }
+.no-line em { display: block; height: 100%; width: 40%; border-radius: 99px; background: linear-gradient(90deg, var(--forest-500), var(--forest-300)); }
+.no-flow { display: flex; justify-content: center; gap: 26px; height: 18px; }
+.no-flow i { width: 2px; height: 100%; border-radius: 2px; background: linear-gradient(180deg, transparent, var(--gold-light)); opacity: .55; }
+.night-ops footer {
+  display: flex; align-items: center; gap: 13px;
+  background: rgba(201,168,76,.10); border: 1px solid rgba(232,201,106,.30);
+  border-radius: 13px; padding: 12px 15px;
+}
+.no-doc { font-size: 1.05rem; color: var(--gold-light); }
+.night-ops footer b { display: block; font: 600 .8rem var(--sans); color: var(--oat-100); }
+.night-ops footer span:last-of-type { font: 500 .66rem var(--sans); color: var(--forest-300); }
+.no-arrow { margin-left: auto; font: 400 1.2rem var(--serif); color: var(--gold-light); }
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes noScan { 0% { transform: translateX(-110%); } 60%, 100% { transform: translateX(280%); } }
+  .no-line em { animation: noScan 2.8s var(--ease) infinite; }
+  .no-row:nth-child(2) .no-line em { animation-delay: .5s; }
+  .no-row:nth-child(3) .no-line em { animation-delay: 1s; }
+  .no-row:nth-child(4) .no-line em { animation-delay: 1.5s; }
+  @keyframes noDrip { 0% { transform: translateY(-100%); opacity: 0; } 30% { opacity: .8; } 100% { transform: translateY(100%); opacity: 0; } }
+  .no-flow i { animation: noDrip 1.8s linear infinite; }
+  .no-flow i:nth-child(2) { animation-delay: .6s; }
+  .no-flow i:nth-child(3) { animation-delay: 1.2s; }
+}
+
+/* ---- Vignette base (bento feature figures) ---- */
+.vig {
+  margin: 0; height: 186px; display: grid; place-items: center; position: relative;
+  background: linear-gradient(165deg, var(--forest-050), var(--card) 75%);
+  border-bottom: 1px solid var(--hair); overflow: hidden;
+}
+
+/* goal -> action -> outcome path */
+.vig-path svg { width: 86%; height: auto; overflow: visible; }
+.vp-rail { stroke: var(--forest-100); stroke-width: 2; }
+.vp-draw { stroke: var(--forest-600); stroke-width: 2.5; stroke-linecap: round; }
+.vp-node { fill: var(--card); stroke: var(--forest-600); stroke-width: 2.5; }
+.vp-end { fill: var(--gold-light); stroke: var(--gold); }
+.vp-t { font: 600 11px var(--mono); fill: var(--muted); letter-spacing: .04em; }
+@media (prefers-reduced-motion: no-preference) {
+  .vp-draw { stroke-dasharray: 420; stroke-dashoffset: 420; }
+  .reveal-stagger.in .vp-draw { animation: vpDraw 1.4s var(--ease-out) .4s forwards; }
+  @keyframes vpDraw { to { stroke-dashoffset: 0; } }
+  .vp-node { opacity: 0; }
+  .reveal-stagger.in .vp-node { animation: vpPop .4s var(--ease-out) forwards; }
+  .reveal-stagger.in .vp-node.vp-mid { animation-delay: .9s; }
+  .reveal-stagger.in .vp-node.vp-end { animation-delay: 1.6s; }
+  @keyframes vpPop { from { opacity: 0; transform: scale(.4); transform-origin: center; transform-box: fill-box; } to { opacity: 1; transform: scale(1); transform-origin: center; transform-box: fill-box; } }
+}
+
+/* signals orbit a profit core */
+.vig-orbit { isolation: isolate; }
+.vo-core {
+  position: absolute; width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--forest-600); color: var(--oat-100); box-shadow: var(--sh-brand); z-index: 2;
+}
+.vo-core b { font: 400 .82rem var(--serif); letter-spacing: .02em; }
+.vo-ring { position: absolute; width: 142px; height: 142px; border-radius: 50%; border: 1.5px dashed var(--forest-300); opacity: .65; }
+.vo-sats { position: absolute; width: 142px; height: 142px; }
+.vo-sats span {
+  position: absolute; left: 50%; top: 50%;
+  transform: rotate(var(--a)) translateX(71px) rotate(calc(-1 * var(--a)));
+  translate: -50% -50%;
+  font: 600 .64rem var(--mono); color: var(--forest-700);
+  background: var(--card); border: 1px solid var(--forest-100); border-radius: 999px; padding: 4px 10px;
+  box-shadow: var(--sh-sm); white-space: nowrap;
+}
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes voSpin { to { rotate: 360deg; } }
+  @keyframes voCounter { to { rotate: -360deg; } }
+  .vo-sats { animation: voSpin 26s linear infinite; }
+  .vo-sats span { animation: voCounter 26s linear infinite; }
+  @keyframes voBreath { 0%,100% { transform: scale(1); } 50% { transform: scale(1.06); } }
+  .vo-core { animation: voBreath 4s var(--ease) infinite; }
+}
+
+/* ---- CTA horizon bookend ---- */
+.cta.band-dark { position: relative; }
+.cta-horizon {
+  position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: 58%;
+  object-fit: cover; object-position: bottom center; opacity: .4; pointer-events: none; filter: saturate(.92);
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 55%); mask-image: linear-gradient(180deg, transparent, #000 55%);
+}
+.cta.band-dark .wrap { position: relative; z-index: 1; }
+
+/* ---- contrast card: loop-closing ring ---- */
+.ring-draw { width: 46px; height: 46px; }
+.rd-c { stroke: rgba(232,201,106,.85); stroke-width: 2.5; stroke-linecap: round; }
+.rd-tick { stroke: var(--gold-light); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+@media (prefers-reduced-motion: no-preference) {
+  .rd-c { stroke-dasharray: 126; stroke-dashoffset: 126; }
+  .rd-tick { stroke-dasharray: 30; stroke-dashoffset: 30; }
+  .reveal-stagger.in .rd-c { animation: vpDraw 1s var(--ease-out) .3s forwards; }
+  .reveal-stagger.in .rd-tick { animation: vpDraw .5s var(--ease-out) 1.2s forwards; }
+}
+
+/* ---- loop rail: continuous energy flow ---- */
+@media (prefers-reduced-motion: no-preference) {
+  .loop-strip::before {
+    background: repeating-linear-gradient(90deg, var(--forest-100) 0 14px, rgba(156,191,157,.25) 14px 22px);
+    background-size: 44px 100%; animation: railFlow 1.6s linear infinite; opacity: .8;
+  }
+  @keyframes railFlow { to { background-position: 44px 0; } }
+}
+
+@media (max-width: 980px) {
+  .night-ops { padding: 16px; }
+  .no-row { grid-template-columns: 96px 1fr; }
+  .vig { height: 158px; }
+}

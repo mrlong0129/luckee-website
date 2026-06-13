@@ -487,3 +487,58 @@ section[data-screen-label="Luckee 2.0 differentiators"] .grid-3 .viz { min-heigh
   .wb-shot + .wb-shot { margin-top: 10px; }
   .copilot-strip { grid-template-columns: 1fr; }
 }
+
+/* ---- Bento layout for the nine differentiators ---- */
+.bento { display: grid; grid-template-columns: repeat(12, 1fr); gap: 14px; }
+.b-span3 { grid-column: span 3; } .b-span4 { grid-column: span 4; } .b-span5 { grid-column: span 5; }
+.bento-cell {
+  position: relative; display: flex; flex-direction: column; gap: 9px; padding: 24px;
+  background: var(--card); border: 1px solid var(--hair); border-radius: var(--r-card);
+  box-shadow: var(--sh-card);
+  transition: transform .32s var(--ease-out), box-shadow .32s var(--ease-out), border-color .32s var(--ease-out);
+}
+.bento-cell:hover { transform: translateY(-4px); box-shadow: var(--sh-card-hover); border-color: rgba(62,91,63,.22); }
+.bento-cell h3 { font-size: 1.15rem; margin: 0; }
+.bento-cell p { font: 500 .84rem var(--sans); color: var(--muted); line-height: 1.5; margin: 0; }
+.bento-cell .viz { min-height: 44px; }
+
+/* featured cells: real screenshot leads, text below */
+.bento-feature { padding: 0; overflow: hidden; }
+.bento-feature figure { margin: 0; position: relative; border-bottom: 1px solid var(--hair); }
+.bento-feature figure img { width: 100%; height: 172px; object-fit: cover; object-position: left top; display: block; }
+.bento-feature figcaption {
+  position: absolute; left: 10px; bottom: 10px; z-index: 1;
+  display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px;
+  background: rgba(255,255,255,.92); border: 1px solid var(--hair);
+  font: 500 .62rem var(--mono); color: var(--neutral-700); backdrop-filter: blur(3px);
+}
+.bento-feature figcaption i { width: 6px; height: 6px; border-radius: 50%; background: var(--success-600); }
+.bento-feature .bc-text { padding: 16px 22px 20px; display: flex; flex-direction: column; gap: 6px; }
+
+/* real-data chip — replaces skeleton-bar glyphs */
+.viz-datachip {
+  font: 600 .68rem var(--mono); color: var(--forest-700);
+  background: var(--forest-050); border: 1px solid var(--forest-100);
+  border-radius: 999px; padding: 5px 12px; white-space: nowrap;
+}
+
+/* spotlight + stagger for bento cells */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .bento-cell::after {
+    content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+    opacity: 0; transition: opacity .35s var(--ease-out);
+    background: radial-gradient(220px circle at var(--mx, 50%) var(--my, 50%), rgba(201,168,76,.13), transparent 70%);
+  }
+  .bento-cell:hover::after { opacity: 1; }
+}
+
+@media (max-width: 980px) {
+  .b-span3, .b-span4, .b-span5 { grid-column: span 6; }
+  .bento-feature figure img { height: 150px; }
+}
+@media (max-width: 760px) {
+  .b-span3, .b-span4, .b-span5 { grid-column: span 12; }
+}
+
+/* bento balance: center content in compact cells so row-stretch whitespace distributes */
+.bento-cell:not(.bento-feature) { justify-content: center; }

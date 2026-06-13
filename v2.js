@@ -207,9 +207,9 @@
 
   /* ================= Depth: card spotlight ================= */
   if (finePointer && !reduce) {
-    document.querySelectorAll(".grid-3, .kernel-grid").forEach(function (grid) {
+    document.querySelectorAll(".grid-3, .kernel-grid, .bento").forEach(function (grid) {
       grid.addEventListener("pointermove", function (e) {
-        var card = e.target.closest(".kernel-cell") || (e.target.closest(".grid-3 > *") || null);
+        var card = e.target.closest(".kernel-cell") || e.target.closest(".bento-cell") || (e.target.closest(".grid-3 > *") || null);
         if (!card || !grid.contains(card)) return;
         var r = card.getBoundingClientRect();
         card.style.setProperty("--mx", Math.round(e.clientX - r.left) + "px");

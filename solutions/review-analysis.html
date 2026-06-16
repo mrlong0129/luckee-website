@@ -15,6 +15,7 @@
     <link rel="icon" href="../assets/luckee-logo.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Montserrat:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" />
     <script>document.documentElement.classList.add("js")</script>
     <link rel="stylesheet" href="../styles.css" />
 
@@ -134,7 +135,7 @@
       .review-showcase-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
       .review-showcase-grid figure { margin: 0; }
       .review-showcase-grid figure img {
-        display: block; width: 100%; border: 1px solid var(--hair); border-radius: var(--r-frame);
+        display: block; width: 100%; border: 1px solid var(--hair); border-radius: 8px;
         box-shadow: var(--sh-sm); background: var(--oat-100);
       }
       .review-showcase-grid figcaption { color: var(--muted); font-size: .88rem; line-height: 1.6; margin-top: 12px; }
@@ -182,10 +183,16 @@
       .review-faq p { color: var(--muted); font-size: .94rem; line-height: 1.65; margin: 0; }
 
       /* ---- Hero visual badge ---- */
-      .review-hero-visual { position: relative; }
+      .review-hero-visual {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
       .review-hero-visual .review-frame { position: relative; }
       .live-badge {
-        position: absolute; top: 16px; left: 16px; z-index: 2;
+        position: relative; z-index: 2;
         display: inline-flex; align-items: center; gap: 7px;
         font-size: .72rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
         color: var(--success-600); background: var(--success-bg);
@@ -223,14 +230,14 @@
           <li class="nav-item">
             <a class="nav-link" href="../products/amazon-operation-assistant.html">Products</a>
             <div class="mega" aria-label="Product links">
-              <a href="../products/amazon-operation-assistant.html"><strong>Amazon Operation Assistant</strong><span>Luckee 1.0 for daily Amazon account operations.</span></a>
+              <a href="../products/amazon-operation-assistant.html"><strong>Amazon Operation Assistant</strong><span>Daily Amazon account operations in plain language.</span></a>
               <a href="../products/amazon-ads-workbench.html"><strong>Amazon Ads Workbench</strong><span>Human-approved PPC execution from diagnosis to outcome.</span></a>
             </div>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="../solutions.html">Solutions</a>
             <div class="mega" aria-label="Solution links">
-              <a href="../solutions/listing-optimizer.html"><strong>Listing Optimizer</strong><span>Listing copy, A+ content, backend keywords, and answerability.</span></a>
+              <a href="../solutions.html"><strong>Listing Optimizer</strong><span>Listing copy, A+ content, backend keywords, and answerability.</span></a>
               <a href="../solutions/ads-audit.html"><strong>Ads Audit</strong><span>PPC diagnosis for TACoS, ROAS, CPC, placement, and waste.</span></a>
               <a href="../solutions/ads-automation.html"><strong>Ads Automation</strong><span>Human-approved bid, budget, keyword, and negative changes.</span></a>
               <a href="../solutions/image-generation.html"><strong>E-commerce Image Generation</strong><span>Conversion-focused product, lifestyle, and comparison visuals.</span></a>
@@ -238,8 +245,8 @@
               <a href="../solutions/competition-analysis.html"><strong>Competition Analysis</strong><span>Competitor pricing, creatives, keywords, reviews, and market moves.</span></a>
             </div>
           </li>
-          <li class="nav-item"><a class="nav-link" href="../index.html#kernel">Platform</a></li>
-          <li class="nav-item"><a class="nav-link" href="../index.html#vision">Vision</a></li>
+          <li class="nav-item"><a class="nav-link" href="../index.html#loop">How it works</a></li>
+          <li class="nav-item"><a class="nav-link" href="../index.html#why">Why Luckee</a></li>
         </ul>
         <div class="nav-actions">
           <a class="btn btn-outline btn-sm" href="../solutions.html">See solutions</a>
@@ -262,15 +269,16 @@
         <a href="../products/amazon-operation-assistant.html">Amazon Operation Assistant</a>
         <a href="../products/amazon-ads-workbench.html">Amazon Ads Workbench</a>
         <span class="mm-group-label">Solutions</span>
-        <a href="../solutions/listing-optimizer.html">Listing Optimizer</a>
+        <a href="../solutions.html">Listing Optimizer</a>
         <a href="../solutions/ads-audit.html">Ads Audit</a>
         <a href="../solutions/ads-automation.html">Ads Automation</a>
         <a href="../solutions/image-generation.html">Image Generation</a>
         <a href="../solutions/review-analysis.html">Review Analysis</a>
         <a href="../solutions/competition-analysis.html">Competition Analysis</a>
-        <span class="mm-group-label">More</span>
-        <a href="../index.html#kernel">Platform</a>
-        <a href="../index.html#vision">Vision</a>
+        <span class="mm-group-label">Company</span>
+        <a href="../index.html#pricing">Pricing</a>
+        <a href="../index.html#resources">Resources</a>
+        <a href="../index.html#company">Company</a>
         <div class="mm-actions">
           <a class="btn btn-outline btn-block" href="../solutions.html">See solutions</a>
           <a class="btn btn-primary btn-block" href="../index.html#contact">Hire a team</a>
@@ -291,14 +299,14 @@
               listing, support, and competitive decisions.
             </p>
             <div class="hero-actions reveal">
-              <a class="btn btn-light btn-lg" href="mailto:hello@luckee.ai">Run a free ASIN</a>
+              <a class="btn btn-light btn-lg" href="mailto:contact@luckee.ai">Run an ASIN</a>
               <a class="btn btn-outline btn-lg" href="#example">See example report</a>
             </div>
           </div>
           <div class="review-hero-visual reveal" aria-label="Review Analysis report preview">
+            <span class="live-badge"><i></i> Live analysis</span>
             <div class="review-frame">
-              <span class="live-badge"><i></i> Live analysis</span>
-              <img src="../assets/review-analysis/summary.png" alt="Luckee Review Analysis summary dashboard" />
+              <img src="../assets/review-analysis/summary.png" alt="Luckee Review Analysis summary dashboard">
             </div>
           </div>
         </div>
@@ -364,7 +372,7 @@
                 <li><b>Metadata included</b><span>Date, variant, verified purchase, helpful votes, media flags, and review text remain audit-ready.</span></li>
               </ul>
             </div>
-            <figure><img src="../assets/review-analysis/execution-plan.png" alt="Review Analysis execution plan" /></figure>
+            <figure><img src="../assets/review-analysis/execution-plan.png" alt="Review Analysis execution plan" loading="lazy" decoding="async"></figure>
           </div>
 
           <div class="review-capability reverse reveal">
@@ -377,7 +385,7 @@
                 <li><b>Representative quotes</b><span>Each theme keeps evidence attached, so decisions do not drift away from customer language.</span></li>
               </ul>
             </div>
-            <figure><img src="../assets/review-analysis/summary.png" alt="Review Analysis theme summary" /></figure>
+            <figure><img src="../assets/review-analysis/summary.png" alt="Review Analysis theme summary" loading="lazy" decoding="async"></figure>
           </div>
 
           <div class="review-capability reveal">
@@ -390,7 +398,7 @@
                 <li><b>Time trend detection</b><span>Auto-flags crisis windows, recovery periods, and repeated quality changes.</span></li>
               </ul>
             </div>
-            <figure><img src="../assets/review-analysis/themes-trends.png" alt="Review Analysis themes and time trend report" /></figure>
+            <figure><img src="../assets/review-analysis/themes-trends.png" alt="Review Analysis themes and time trend report" loading="lazy" decoding="async"></figure>
           </div>
 
           <div class="review-capability reverse reveal">
@@ -447,8 +455,8 @@
               <span>B0BLCBRBVZ</span>
             </div>
             <div class="review-showcase-grid">
-              <figure><img src="../assets/review-analysis/summary.png" alt="Review summary card" /><figcaption><b>Summary card</b> Star distribution plus top positive and negative themes.</figcaption></figure>
-              <figure><img src="../assets/review-analysis/themes-trends.png" alt="Negative themes and time trend alert" /><figcaption><b>Trend detail</b> Negative themes plus auto-detected crisis and recovery windows.</figcaption></figure>
+              <figure><img src="../assets/review-analysis/summary.png" alt="Review summary card" loading="lazy" decoding="async"><figcaption><b>Summary card</b> Star distribution plus top positive and negative themes.</figcaption></figure>
+              <figure><img src="../assets/review-analysis/themes-trends.png" alt="Negative themes and time trend alert" loading="lazy" decoding="async"><figcaption><b>Trend detail</b> Negative themes plus auto-detected crisis and recovery windows.</figcaption></figure>
             </div>
             <div class="review-files">
               <article><b>reviews-data.md</b><p>Full review corpus with date, variant, VP status, helpful votes, and original text.</p><span>Deliverable 1 · Markdown</span></article>
@@ -520,7 +528,7 @@
         <div class="wrap reveal">
           <h2>Stop reading reviews. <em>Start acting on them.</em></h2>
           <p>Run Review Analysis on one ASIN and see what customer evidence says your team should fix next.</p>
-          <a class="btn btn-light btn-lg" href="mailto:hello@luckee.ai">Get Started Free</a>
+          <a data-primary-cta class="btn btn-light btn-lg" href="mailto:contact@luckee.ai">Get Started</a>
         </div>
       </section>
     </main>
@@ -529,21 +537,21 @@
       <div class="wrap footer-shell">
         <div class="footer-grid">
           <div class="footer-brand">
-            <a class="brand" href="../index.html" aria-label="Luckee AI home"><span class="brand-mark up" aria-hidden="true"></span><span>Luckee AI</span></a>
-            <p>Human-agent workbench for Amazon teams. Hire AI cowork teams that plan, prepare, execute, monitor, roll back, and prove complex e-commerce work.</p>
+            <a class="brand" href="../index.html" aria-label="Luckee AI home"><span class="brand-mark" aria-hidden="true"></span><span>Luckee AI</span></a>
+            <p>AI Growth Operator for commerce teams. Turn goals, account context, and market signals into reviewed actions your team can approve, audit, and prove.</p>
           </div>
           <div class="footer-col">
             <h3>Products</h3>
             <div class="footer-links">
               <a href="../products/amazon-operation-assistant.html">Amazon Operation Assistant</a>
               <a href="../products/amazon-ads-workbench.html">Amazon Ads Workbench</a>
-              <a href="../index.html#kernel">Platform</a>
+              <a href="../index.html#loop">How it works</a>
             </div>
           </div>
           <div class="footer-col">
             <h3>Solutions</h3>
             <div class="footer-links">
-              <a href="../solutions/listing-optimizer.html">Listing Optimizer</a>
+              <a href="../solutions.html">Listing Optimizer</a>
               <a href="../solutions/ads-audit.html">Ads Audit</a>
               <a href="../solutions/ads-automation.html">Ads Automation</a>
               <a href="../solutions/image-generation.html">Image Generation</a>
@@ -552,12 +560,12 @@
             </div>
           </div>
           <div class="footer-col">
-            <h3>Company</h3>
+            <h3>Learn</h3>
             <div class="footer-links">
-              <a href="../solutions.html">Solutions hub</a>
-              <a href="../index.html#vision">Vision</a>
+              <a href="../index.html#why">Why Luckee</a>
+              <a href="../index.html#products">Products</a>
               <a href="../index.html#contact">Book a demo</a>
-              <a href="mailto:hello@luckee.ai">hello@luckee.ai</a>
+              <a href="mailto:contact@luckee.ai">contact@luckee.ai</a>
             </div>
           </div>
         </div>

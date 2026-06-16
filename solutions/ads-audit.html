@@ -16,6 +16,7 @@
     <link rel="icon" href="../assets/luckee-logo.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Montserrat:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" />
     <script>document.documentElement.classList.add("js")</script>
     <link rel="stylesheet" href="../styles.css" />
 
@@ -49,14 +50,20 @@
       .ad-hero .hero-actions { margin-top: 30px; }
 
       /* hero visual frame */
-      .ad-hero-visual { position: relative; }
+      .ad-hero-visual {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
       .ad-hero-visual::before {
         content: ""; position: absolute; inset: -8% -6% -12% -4%;
         background: radial-gradient(60% 60% at 70% 28%, rgba(201,168,76,.16), transparent 70%);
         filter: blur(10px); z-index: 0; pointer-events: none;
       }
       .live-badge {
-        position: absolute; top: 18px; left: 18px; z-index: 3;
+        position: relative; z-index: 2;
         display: inline-flex; align-items: center; gap: 7px;
         font-size: .72rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
         color: var(--forest-900); background: var(--gold-light);
@@ -166,7 +173,20 @@
       .ad-kpi-strip article b { font-family: var(--serif); font-size: 2rem; line-height: 1; color: var(--forest-700); }
       .ad-kpi-strip article span { font-size: .8rem; color: var(--muted); font-weight: 500; }
       .ad-showcase-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-bottom: 28px; }
-      .ad-showcase-grid figure { margin: 0; }
+      .ad-showcase-grid figure { margin: 0; display: flex; flex-direction: column; }
+      .ad-showcase-grid .ad-frame {
+        height: clamp(280px, 32vw, 360px);
+        border-radius: 8px;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(180deg, #fff, var(--oat-100));
+      }
+      .ad-showcase-grid .ad-frame img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        object-position: center top;
+      }
       .ad-showcase-grid figcaption { font-size: .86rem; color: var(--muted); line-height: 1.55; margin-top: 12px; }
       .ad-showcase-grid figcaption b { color: var(--neutral-900); font-weight: 600; }
       .ad-files { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
@@ -192,7 +212,9 @@
         border-bottom: 1px solid var(--hair);
       }
       .ad-compare > div:last-child { border-bottom: 0; }
-      .ad-compare > div > * { padding: 16px 20px; font-size: .9rem; line-height: 1.5; }
+      .ad-compare > div > * {
+        padding: 16px 20px; font-size: .9rem; line-height: 1.5;
+      }
       .ad-compare > div:first-child {
         background: var(--forest-900); color: var(--oat-100);
       }
@@ -250,14 +272,14 @@
           <li class="nav-item">
             <a class="nav-link" href="../products/amazon-operation-assistant.html">Products</a>
             <div class="mega" aria-label="Product links">
-              <a href="../products/amazon-operation-assistant.html"><strong>Amazon Operation Assistant</strong><span>Luckee 1.0 for daily Amazon account operations.</span></a>
+              <a href="../products/amazon-operation-assistant.html"><strong>Amazon Operation Assistant</strong><span>Daily Amazon account operations in plain language.</span></a>
               <a href="../products/amazon-ads-workbench.html"><strong>Amazon Ads Workbench</strong><span>Human-approved PPC execution from diagnosis to outcome.</span></a>
             </div>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="../solutions.html">Solutions</a>
             <div class="mega" aria-label="Solution links">
-              <a href="../solutions/listing-optimizer.html"><strong>Listing Optimizer</strong><span>Listing copy, A+ content, backend keywords, and answerability.</span></a>
+              <a href="../solutions.html"><strong>Listing Optimizer</strong><span>Listing copy, A+ content, backend keywords, and answerability.</span></a>
               <a href="../solutions/ads-audit.html"><strong>Ads Audit</strong><span>PPC diagnosis for TACoS, ROAS, CPC, placement, and waste.</span></a>
               <a href="../solutions/ads-automation.html"><strong>Ads Automation</strong><span>Human-approved bid, budget, keyword, and negative changes.</span></a>
               <a href="../solutions/image-generation.html"><strong>E-commerce Image Generation</strong><span>Conversion-focused product, lifestyle, and comparison visuals.</span></a>
@@ -265,8 +287,8 @@
               <a href="../solutions/competition-analysis.html"><strong>Competition Analysis</strong><span>Competitor pricing, creatives, keywords, reviews, and market moves.</span></a>
             </div>
           </li>
-          <li class="nav-item"><a class="nav-link" href="../index.html#kernel">Platform</a></li>
-          <li class="nav-item"><a class="nav-link" href="../index.html#vision">Vision</a></li>
+          <li class="nav-item"><a class="nav-link" href="../index.html#loop">How it works</a></li>
+          <li class="nav-item"><a class="nav-link" href="../index.html#why">Why Luckee</a></li>
         </ul>
         <div class="nav-actions">
           <a class="btn btn-outline btn-sm" href="../solutions.html">See solutions</a>
@@ -288,15 +310,16 @@
         <a href="../products/amazon-operation-assistant.html">Amazon Operation Assistant</a>
         <a href="../products/amazon-ads-workbench.html">Amazon Ads Workbench</a>
         <span class="mm-group-label">Solutions</span>
-        <a href="../solutions/listing-optimizer.html">Listing Optimizer</a>
+        <a href="../solutions.html">Listing Optimizer</a>
         <a href="../solutions/ads-audit.html">Ads Audit</a>
         <a href="../solutions/ads-automation.html">Ads Automation</a>
         <a href="../solutions/image-generation.html">Image Generation</a>
         <a href="../solutions/review-analysis.html">Review Analysis</a>
         <a href="../solutions/competition-analysis.html">Competition Analysis</a>
-        <span class="mm-group-label">More</span>
-        <a href="../index.html#kernel">Platform</a>
-        <a href="../index.html#vision">Vision</a>
+        <span class="mm-group-label">Company</span>
+        <a href="../index.html#pricing">Pricing</a>
+        <a href="../index.html#resources">Resources</a>
+        <a href="../index.html#company">Company</a>
         <div class="mm-actions">
           <a class="btn btn-outline btn-block" href="../solutions.html">See solutions</a>
           <a class="btn btn-primary btn-block" href="../index.html#contact">Hire a team</a>
@@ -325,7 +348,7 @@
           <div class="ad-hero-visual reveal" aria-label="Ad Diagnosis report preview">
             <span class="live-badge"><i></i> Diagnosis running</span>
             <div class="ad-frame">
-              <img src="../assets/ad-diagnosis/summary.png" alt="Luckee Ad Diagnosis summary" />
+              <img src="../assets/ad-diagnosis/summary.png" alt="Luckee Ad Diagnosis summary">
             </div>
           </div>
         </div>
@@ -382,7 +405,7 @@
                 <li><b>Spend share by tier</b><span>See whether budget is flowing toward winners or being consumed by problematic campaigns.</span></li>
               </ul>
             </div>
-            <figure><div class="ad-frame"><img src="../assets/ad-diagnosis/consolidated-report.png" alt="Ad Diagnosis consolidated report" /></div></figure>
+            <figure><div class="ad-frame"><img src="../assets/ad-diagnosis/consolidated-report.png" alt="Ad Diagnosis consolidated report" loading="lazy" decoding="async"></div></figure>
           </div>
 
           <div class="ad-capability reverse reveal">
@@ -395,7 +418,7 @@
                 <li><b>Budget movement</b><span>Identify budget-capped winners and campaigns consuming budget without enough return.</span></li>
               </ul>
             </div>
-            <figure><div class="ad-frame"><img src="../assets/ad-diagnosis/campaign-analysis.jpg" alt="Ad Diagnosis campaign analysis report" /></div></figure>
+            <figure><div class="ad-frame"><img src="../assets/ad-diagnosis/campaign-analysis.jpg" alt="Ad Diagnosis campaign analysis report" loading="lazy" decoding="async"></div></figure>
           </div>
 
           <div class="ad-capability reveal">
@@ -408,7 +431,7 @@
                 <li><b>Per-row recommended action</b><span>Each keyword gets a practical instruction for review or execution.</span></li>
               </ul>
             </div>
-            <figure><div class="ad-frame"><img src="../assets/ad-diagnosis/keyword-report.png" alt="Ad Diagnosis keyword report" /></div></figure>
+            <figure><div class="ad-frame"><img src="../assets/ad-diagnosis/keyword-report.png" alt="Ad Diagnosis keyword report" loading="lazy" decoding="async"></div></figure>
           </div>
 
           <div class="ad-capability reverse reveal">
@@ -421,7 +444,7 @@
                 <li><b>Negative list drafts</b><span>Ready-to-copy negative terms with the rationale attached.</span></li>
               </ul>
             </div>
-            <figure><div class="ad-frame"><img src="../assets/ad-diagnosis/search-term-report.png" alt="Ad Diagnosis search term report" /></div></figure>
+            <figure><div class="ad-frame"><img src="../assets/ad-diagnosis/search-term-report.png" alt="Ad Diagnosis search term report" loading="lazy" decoding="async"></div></figure>
           </div>
 
           <div class="ad-capability reveal">
@@ -434,7 +457,7 @@
                 <li><b>JSON summaries</b><span>Machine-readable outputs for dashboards, scripts, or downstream workflows.</span></li>
               </ul>
             </div>
-            <figure><div class="ad-frame"><img src="../assets/ad-diagnosis/files-generated.png" alt="Ad Diagnosis generated report files" /></div></figure>
+            <figure><div class="ad-frame"><img src="../assets/ad-diagnosis/files-generated.png" alt="Ad Diagnosis generated report files" loading="lazy" decoding="async"></div></figure>
           </div>
         </div>
       </section>
@@ -483,8 +506,8 @@
               <article><b>44</b><span>Orders</span></article>
             </div>
             <div class="ad-showcase-grid">
-              <figure><div class="ad-frame"><img src="../assets/ad-diagnosis/consolidated-report.png" alt="Consolidated ad report" /></div><figcaption><b>Consolidated report</b> Core KPIs, health status distribution, and spend share by tier.</figcaption></figure>
-              <figure><div class="ad-frame"><img src="../assets/ad-diagnosis/campaign-analysis.jpg" alt="Campaign performance report" /></div><figcaption><b>Campaign performance</b> Per-campaign performance with status, ACOS, ROAS, orders, and action labels.</figcaption></figure>
+              <figure><div class="ad-frame"><img src="../assets/ad-diagnosis/consolidated-report.png" alt="Consolidated ad report" loading="lazy" decoding="async"></div><figcaption><b>Consolidated report</b> Core KPIs, health status distribution, and spend share by tier.</figcaption></figure>
+              <figure><div class="ad-frame"><img src="../assets/ad-diagnosis/campaign-analysis.jpg" alt="Campaign performance report" loading="lazy" decoding="async"></div><figcaption><b>Campaign performance</b> Per-campaign performance with status, ACOS, ROAS, orders, and action labels.</figcaption></figure>
             </div>
             <div class="ad-files">
               <article><b>Consolidated_Report_B0FVXS65LV.md</b><p>Executive view with KPI dashboard, campaign analysis, keyword highlights, search-term highlights, and next steps.</p><span>Final report · Markdown</span></article>
@@ -568,21 +591,21 @@
       <div class="wrap footer-shell">
         <div class="footer-grid">
           <div class="footer-brand">
-            <a class="brand" href="../index.html" aria-label="Luckee AI home"><span class="brand-mark up" aria-hidden="true"></span><span>Luckee AI</span></a>
-            <p>Human-agent workbench for Amazon teams. Hire AI cowork teams that plan, prepare, execute, monitor, roll back, and prove complex e-commerce work.</p>
+            <a class="brand" href="../index.html" aria-label="Luckee AI home"><span class="brand-mark" aria-hidden="true"></span><span>Luckee AI</span></a>
+            <p>AI Growth Operator for commerce teams. Turn goals, account context, and market signals into reviewed actions your team can approve, audit, and prove.</p>
           </div>
           <div class="footer-col">
             <h3>Products</h3>
             <div class="footer-links">
               <a href="../products/amazon-operation-assistant.html">Amazon Operation Assistant</a>
               <a href="../products/amazon-ads-workbench.html">Amazon Ads Workbench</a>
-              <a href="../index.html#kernel">Platform</a>
+              <a href="../index.html#loop">How it works</a>
             </div>
           </div>
           <div class="footer-col">
             <h3>Solutions</h3>
             <div class="footer-links">
-              <a href="../solutions/listing-optimizer.html">Listing Optimizer</a>
+              <a href="../solutions.html">Listing Optimizer</a>
               <a href="../solutions/ads-audit.html">Ads Audit</a>
               <a href="../solutions/ads-automation.html">Ads Automation</a>
               <a href="../solutions/image-generation.html">Image Generation</a>
@@ -591,12 +614,12 @@
             </div>
           </div>
           <div class="footer-col">
-            <h3>Company</h3>
+            <h3>Learn</h3>
             <div class="footer-links">
-              <a href="../solutions.html">Solutions hub</a>
-              <a href="../index.html#vision">Vision</a>
+              <a href="../index.html#why">Why Luckee</a>
+              <a href="../index.html#products">Products</a>
               <a href="../index.html#contact">Book a demo</a>
-              <a href="mailto:hello@luckee.ai">hello@luckee.ai</a>
+              <a href="mailto:contact@luckee.ai">contact@luckee.ai</a>
             </div>
           </div>
         </div>

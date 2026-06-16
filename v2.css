@@ -753,9 +753,9 @@ section[data-screen-label="Growth Operator differentiators"] .grid-3 .viz { min-
 /* ---- CTA horizon bookend ---- */
 .cta.band-dark { position: relative; }
 .cta-horizon {
-  position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: 58%;
-  object-fit: cover; object-position: bottom center; opacity: .4; pointer-events: none; filter: saturate(.92);
-  -webkit-mask-image: linear-gradient(180deg, transparent, #000 55%); mask-image: linear-gradient(180deg, transparent, #000 55%);
+  position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: 62%;
+  pointer-events: none; display: block;
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 52%); mask-image: linear-gradient(180deg, transparent, #000 52%);
 }
 .cta.band-dark .wrap { position: relative; z-index: 1; }
 

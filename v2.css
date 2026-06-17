@@ -751,7 +751,7 @@ section[data-screen-label="Growth Operator differentiators"] .grid-3 .viz { min-
 }
 
 /* ---- CTA horizon bookend ---- */
-.cta.band-dark { position: relative; }
+.cta.band-dark { position: relative; padding: 160px 0; }
 .cta-horizon {
   position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: 62%;
   pointer-events: none; display: block;

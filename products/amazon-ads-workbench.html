@@ -1,492 +1,1146 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Amazon Ads Workbench | Luckee AI</title>
+    <title>Luckee AI | Human-Agent Workbench for E-commerce Teams</title>
     <meta
       name="description"
-      content="Luckee Amazon Ads Workbench is a human-approved PPC execution workbench that prepares bid, budget, keyword, and waste reduction actions with guardrails, rollback, and outcome tracking."
+      content="Luckee AI lets e-commerce teams hire an AI cowork team that plans, prepares, executes, monitors, rolls back, and proves complex work with human approval."
     />
     <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#16241D" />
     <link rel="canonical" href="https://luckee.ai/products/amazon-ads-workbench" />
-    <meta property="og:title" content="Amazon Ads Workbench | Luckee AI" />
+    <meta
+      property="og:title"
+      content="Luckee AI | Human-Agent Workbench for E-commerce Teams"
+    />
     <meta
       property="og:description"
-      content="Luckee Amazon Ads Workbench is a human-approved PPC execution workbench that prepares bid, budget, keyword, and waste reduction actions with guardrails, rollback, and outcome tracking."
+      content="AI discovers problems and prepares work. Humans approve boundaries. Luckee executes, monitors, rolls back, and proves outcomes."
     />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://luckee.ai/products/amazon-ads-workbench" />
-    <meta name="theme-color" content="#16241D" />
     <link rel="icon" href="../assets/luckee-logo.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Montserrat:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" />
-    <script>document.documentElement.classList.add("js")</script>
-    <link rel="stylesheet" href="../styles.css" />
-
-    <!-- ===== Page-local styles · built entirely from Luckee 2.0 tokens ===== -->
-    <style>
-      /* --- Hero (dark forest signature, mirrors home-hero) --- */
-      .wb-hero {
-        position: relative; background: var(--forest-900); color: var(--oat-100);
-        overflow: hidden; padding: 96px 0 100px;
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Montserrat:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    />
+    <script>
+      document.documentElement.classList.add("js");
+    </script>
+    <link rel="stylesheet" href="workbench-styles.css" />
+    <link rel="stylesheet" href="../v2.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Luckee AI",
+        "url": "https://luckee.ai/",
+        "description": "Human-agent workbench for e-commerce teams."
       }
-      .wb-hero::before {
-        content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: .95;
-        background:
-          radial-gradient(38% 50% at 18% 26%, rgba(120,160,121,.30), transparent 62%),
-          radial-gradient(30% 42% at 82% 10%, rgba(201,168,76,.16), transparent 60%),
-          radial-gradient(48% 62% at 94% 98%, rgba(62,91,63,.55), transparent 66%);
-        filter: blur(2px);
-      }
-      .wb-hero > .wb-grain { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
-      .wb-hero-grid {
-        position: relative; z-index: 2;
-        display: grid; grid-template-columns: minmax(0,1.02fr) minmax(0,1.04fr);
-        gap: 56px; align-items: center;
-      }
-      .wb-kicker {
-        display: inline-flex; align-items: center; gap: 9px; margin: 0 0 18px;
-        font-family: var(--sans); font-weight: 600; font-size: .72rem; letter-spacing: .16em;
-        text-transform: uppercase; color: var(--forest-300);
-      }
-      .wb-kicker::before {
-        content: ""; width: 22px; height: 1px; background: currentColor; opacity: .55; display: inline-block;
-      }
-      .wb-kicker.accent-orange, .wb-kicker.accent-clay { color: var(--gold); }
-      .wb-hero h1 {
-        color: var(--oat-100); margin: 0; max-width: 16ch;
-        font-size: clamp(2.7rem, 5.2vw, 4.4rem); line-height: 1.02; letter-spacing: -.02em;
-      }
-      .wb-hero h1 em { font-family: var(--serif); font-style: italic; font-weight: 400; color: var(--gold-light); }
-      .wb-lede { color: var(--forest-300); font-size: 1.18rem; line-height: 1.64; max-width: 52ch; margin: 22px 0 0; }
-      .wb-note {
-        margin: 26px 0 0; font-size: .82rem; font-weight: 600; color: var(--forest-300);
-      }
-
-      /* --- Agent stack cards (hero device) --- */
-      .agent-stack {
-        display: flex; flex-direction: column; gap: 14px;
-      }
-      .agent-card {
-        display: flex; gap: 16px; align-items: flex-start;
-        background: rgba(217,232,218,.06); border: 1px solid var(--hair-dark);
-        border-radius: var(--r-card); padding: 18px 20px;
-        box-shadow: 0 18px 44px -28px rgba(0,0,0,.6);
-        transition: transform .3s var(--ease-out), border-color .3s var(--ease-out), background .3s var(--ease-out);
-      }
-      .agent-card:hover { transform: translateY(-3px); border-color: var(--forest-400); background: rgba(217,232,218,.09); }
-      .agent-pill {
-        flex-shrink: 0; width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center;
-        font-family: var(--mono); font-weight: 600; font-size: .82rem; letter-spacing: .02em;
-        background: rgba(217,232,218,.10); border: 1px solid var(--hair-dark); color: var(--forest-100);
-      }
-      .agent-card.orange .agent-pill { background: rgba(201,168,76,.16); border-color: rgba(201,168,76,.3); color: var(--gold-light); }
-      .agent-card.clay .agent-pill { background: rgba(120,160,121,.16); border-color: rgba(120,160,121,.3); color: var(--forest-100); }
-      .agent-card.gold .agent-pill { background: var(--gold); border-color: transparent; color: var(--forest-900); }
-      .agent-card b { display: block; font-family: var(--serif); font-weight: 400; font-size: 1.18rem; color: var(--oat-100); margin-bottom: 4px; }
-      .agent-card p { margin: 0 0 4px; font-size: .9rem; line-height: 1.5; color: var(--forest-300); }
-      .agent-card p strong { color: var(--oat-100); font-weight: 600; }
-      .agent-card em { font-family: var(--mono); font-style: normal; font-size: .72rem; color: var(--forest-400); }
-
-      /* --- Trust track --- */
-      .wb-trust { background: var(--oat-200); border-top: 1px solid var(--hair); border-bottom: 1px solid var(--hair); }
-      .trust-track {
-        display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
-        gap: 14px 28px; padding: 26px 0;
-      }
-      .trust-track span {
-        position: relative; font-size: .9rem; font-weight: 600; color: var(--forest-700);
-        padding-left: 20px;
-      }
-      .trust-track span::before {
-        content: ""; position: absolute; left: 0; top: 50%; transform: translateY(-50%);
-        width: 7px; height: 7px; border-radius: 50%; background: var(--gold);
-      }
-
-      /* --- Generic page section header (page-unique kicker/title/copy) --- */
-      .wb-section { padding: var(--band-pad) 0; }
-      .wb-section .wb-kicker { color: var(--forest-600); }
-      .wb-section .wb-kicker.accent-orange { color: var(--gold); }
-      .wb-section .wb-kicker.accent-clay { color: var(--forest-500); }
-      .wb-title {
-        font-family: var(--serif); font-weight: 400; letter-spacing: -.01em; line-height: 1.08;
-        font-size: clamp(1.9rem, 3.2vw, 2.7rem); margin: 0; max-width: 24ch; color: var(--neutral-900);
-      }
-      .wb-title em { font-family: var(--serif); font-style: italic; color: var(--forest-600); }
-      .wb-copy { margin: 18px 0 0; color: var(--muted); font-size: 1.02rem; line-height: 1.68; max-width: 62ch; }
-      .band-dark .wb-title { color: var(--oat-100); }
-      .band-dark .wb-title em { color: var(--gold-light); }
-      .band-dark .wb-copy { color: var(--forest-300); }
-      .band-dark .wb-kicker { color: var(--forest-300); }
-      .band-dark .wb-kicker.accent-orange { color: var(--gold); }
-
-      /* --- Audience grid --- */
-      .audience-grid {
-        display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 52px;
-      }
-      .audience-grid article {
-        background: var(--card); border: 1px solid var(--hair); border-radius: var(--r-card);
-        box-shadow: var(--sh-card); padding: 30px;
-        transition: transform .32s var(--ease-out), box-shadow .32s var(--ease-out), border-color .32s var(--ease-out);
-      }
-      .audience-grid article:hover { transform: translateY(-4px); box-shadow: var(--sh-card-hover); border-color: rgba(62,91,63,.22); }
-      .audience-grid article span {
-        display: inline-flex; align-items: center; height: 24px; padding: 0 11px; border-radius: var(--r-pill);
-        font-size: .72rem; font-weight: 600; letter-spacing: .04em;
-        background: var(--forest-050); color: var(--forest-700); border: 1px solid var(--forest-100);
-      }
-      .audience-grid article h3 { font-size: 1.3rem; margin: 16px 0 10px; }
-      .audience-grid article p { margin: 0; color: var(--muted); font-size: .95rem; line-height: 1.62; }
-
-      /* --- Services grid (Ad Diagnosis + Ads Automation) --- */
-      .services-grid {
-        display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; margin-top: 52px;
-      }
-      .service-card {
-        display: flex; flex-direction: column; gap: 14px; position: relative;
-        background: var(--card); border: 1px solid var(--hair); border-radius: var(--r-card);
-        box-shadow: var(--sh-card); padding: 30px; color: inherit;
-        transition: transform .32s var(--ease-out), box-shadow .32s var(--ease-out), border-color .32s var(--ease-out);
-      }
-      .service-card:hover { transform: translateY(-4px); box-shadow: var(--sh-card-hover); border-color: rgba(62,91,63,.22); }
-      .service-card h3 { font-size: 1.55rem; margin: 0; }
-      .service-card > p { margin: 0; color: var(--muted); font-size: .95rem; line-height: 1.62; }
-      .service-card .badge { align-self: flex-start; }
-      .service-card img {
-        width: 100%; border-radius: var(--r-frame); border: 1px solid var(--hair);
-        box-shadow: var(--sh-card); overflow: hidden; margin-top: 4px;
-      }
-      .service-card ul {
-        list-style: none; display: flex; flex-direction: column; gap: 12px; margin: 4px 0 0; padding: 0;
-      }
-      .service-card ul li {
-        position: relative; padding-left: 30px; color: var(--neutral-700); font-size: .92rem; line-height: 1.55;
-      }
-      .service-card ul li::before {
-        content: "✓"; position: absolute; left: 0; top: 0;
-        width: 22px; height: 22px; border-radius: 7px; display: grid; place-items: center;
-        background: var(--forest-050); color: var(--forest-600); border: 1px solid var(--forest-100);
-        font-size: .78rem; font-weight: 700;
-      }
-      a.service-card::after {
-        content: "→"; position: absolute; top: 30px; right: 30px; font-family: var(--serif); font-size: 1.4rem;
-        color: var(--forest-300); transition: transform .25s var(--ease-out), color .25s var(--ease-out);
-      }
-      a.service-card:hover::after { transform: translate(4px, -2px); color: var(--forest-600); }
-
-      /* automation preview tiles */
-      .automation-preview {
-        display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 2px;
-      }
-      .automation-preview div {
-        background: var(--oat-100); border: 1px solid var(--hair); border-radius: var(--r-input);
-        padding: 14px 14px; display: flex; flex-direction: column; gap: 4px;
-      }
-      .automation-preview b {
-        font-family: var(--sans); font-weight: 600; font-size: .68rem; letter-spacing: .06em;
-        text-transform: uppercase; color: var(--muted);
-      }
-      .automation-preview span { font-family: var(--serif); font-size: 1.2rem; line-height: 1.1; color: var(--forest-700); }
-
-      /* --- How row (3 steps) --- */
-      .how-row {
-        display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 52px;
-        counter-reset: how;
-      }
-      .how-row article {
-        background: var(--card); border: 1px solid var(--hair); border-radius: var(--r-card);
-        box-shadow: var(--sh-card); padding: 30px; position: relative;
-        transition: transform .32s var(--ease-out), box-shadow .32s var(--ease-out), border-color .32s var(--ease-out);
-      }
-      .how-row article:hover { transform: translateY(-4px); box-shadow: var(--sh-card-hover); border-color: rgba(62,91,63,.22); }
-      .how-row article::before {
-        counter-increment: how; content: counter(how, decimal-leading-zero);
-        display: grid; place-items: center; width: 48px; height: 48px; border-radius: 13px; margin-bottom: 18px;
-        background: linear-gradient(150deg, var(--forest-050), var(--card)); border: 1px solid var(--forest-100);
-        color: var(--forest-600); font-family: var(--serif); font-size: 1.3rem;
-        box-shadow: 0 1px 0 rgba(255,255,255,.7) inset;
-      }
-      .how-row article h3 { font-size: 1.3rem; margin: 0 0 10px; }
-      .how-row article p { margin: 0; color: var(--muted); font-size: .95rem; line-height: 1.62; }
-
-      /* --- Stats band --- */
-      .wb-stats { background: var(--forest-900); color: var(--oat-100); position: relative; overflow: hidden; padding: var(--band-pad) 0; }
-      .stats-grid {
-        position: relative; z-index: 1;
-        display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px;
-      }
-      .stats-grid article {
-        text-align: center; padding: 14px 10px;
-        border-right: 1px solid var(--hair-dark);
-      }
-      .stats-grid article:last-child { border-right: 0; }
-      .stats-grid article b {
-        display: block; font-family: var(--serif); font-weight: 400; font-size: clamp(2.6rem, 5vw, 3.4rem);
-        line-height: 1; color: var(--gold-light);
-      }
-      .stats-grid article span { display: block; margin-top: 10px; font-size: .86rem; font-weight: 600; color: var(--forest-300); }
-
-      /* --- Quote block --- */
-      .quote-block {
-        position: relative; max-width: 820px; margin: 0 auto; text-align: center;
-        background: var(--card); border: 1px solid var(--hair); border-radius: var(--r-sheet);
-        box-shadow: var(--sh-card); padding: 56px 48px 48px;
-      }
-      .quote-block .mark {
-        font-family: var(--serif); font-size: 5rem; line-height: .5; color: var(--gold);
-        height: 36px; margin-bottom: 4px;
-      }
-      .quote-block blockquote {
-        margin: 0; font-family: var(--serif); font-weight: 400; font-size: clamp(1.5rem, 3vw, 2.1rem);
-        line-height: 1.28; letter-spacing: -.01em; color: var(--neutral-900);
-      }
-      .quote-block .attribution {
-        margin-top: 24px; font-size: .82rem; font-weight: 600; letter-spacing: .04em;
-        text-transform: uppercase; color: var(--forest-600);
-      }
-
-      /* --- Responsive --- */
-      @media (max-width: 980px) {
-        .wb-hero { padding: 76px 0 80px; }
-        .wb-hero-grid { grid-template-columns: 1fr; gap: 44px; }
-        .audience-grid, .how-row { grid-template-columns: 1fr; }
-        .services-grid { grid-template-columns: 1fr; }
-        .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 32px 22px; }
-        .stats-grid article:nth-child(2) { border-right: 0; }
-      }
-      @media (max-width: 760px) {
-        .automation-preview { grid-template-columns: 1fr; }
-        .stats-grid { grid-template-columns: 1fr; }
-        .stats-grid article { border-right: 0; border-bottom: 1px solid var(--hair-dark); padding-bottom: 22px; }
-        .stats-grid article:last-child { border-bottom: 0; }
-        .quote-block { padding: 40px 26px 36px; }
-        .trust-track { gap: 12px 18px; }
-      }
-    </style>
+    </script>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
     <header class="site-header">
       <nav class="wrap nav" aria-label="Primary navigation">
-        <a class="brand" href="../index.html" aria-label="Luckee AI home">
-          <span class="brand-mark up" aria-hidden="true"></span>
+        <a class="brand" href="/luckee-website/" aria-label="Luckee AI home">
+          <span class="brand-mark" aria-hidden="true"></span>
           <span>Luckee AI</span>
         </a>
         <ul class="nav-list">
           <li class="nav-item">
-            <a class="nav-link" href="../products/amazon-operation-assistant.html">Products</a>
+            <a class="nav-link" href="/luckee-website/products/amazon-operation-assistant"
+              >Products</a
+            >
             <div class="mega" aria-label="Product links">
-              <a href="../products/amazon-operation-assistant.html"><strong>Amazon Operation Assistant</strong><span>Daily Amazon account operations in plain language.</span></a>
-              <a href="../products/amazon-ads-workbench.html"><strong>Amazon Ads Workbench</strong><span>Human-approved PPC execution from diagnosis to outcome.</span></a>
+              <a href="/luckee-website/products/amazon-operation-assistant">
+                <strong>Amazon Operation Assistant</strong>
+                <span>Luckee 1.0 for daily Amazon account operations.</span>
+              </a>
+              <a href="/luckee-website/products/amazon-ads-workbench">
+                <strong>Amazon Ads Workbench</strong>
+                <span
+                  >Human-approved PPC execution from diagnosis to outcome.</span
+                >
+              </a>
             </div>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="../solutions.html">Solutions</a>
+            <a class="nav-link" href="/luckee-website/solutions">Solutions</a>
             <div class="mega" aria-label="Solution links">
-              <a href="../solutions.html"><strong>Listing Optimizer</strong><span>Listing copy, A+ content, backend keywords, and answerability.</span></a>
-              <a href="../solutions/ads-audit.html"><strong>Ads Audit</strong><span>PPC diagnosis for TACoS, ROAS, CPC, placement, and waste.</span></a>
-              <a href="../solutions/ads-automation.html"><strong>Ads Automation</strong><span>Human-approved bid, budget, keyword, and negative changes.</span></a>
-              <a href="../solutions/image-generation.html"><strong>E-commerce Image Generation</strong><span>Conversion-focused product, lifestyle, and comparison visuals.</span></a>
-              <a href="../solutions/review-analysis.html"><strong>Review Analysis</strong><span>Complaint themes, buyer language, and product improvement signals.</span></a>
-              <a href="../solutions/competition-analysis.html"><strong>Competition Analysis</strong><span>Competitor pricing, creatives, keywords, reviews, and market moves.</span></a>
+              <a href="/luckee-website/solutions/listing-optimizer"
+                ><strong>Listing Optimizer</strong
+                ><span
+                  >Listing copy, A+ content, backend keywords, and
+                  answerability.</span
+                ></a
+              >
+              <a href="/luckee-website/solutions/ads-audit"
+                ><strong>Ads Audit</strong
+                ><span
+                  >PPC diagnosis for TACoS, ROAS, CPC, placement, and
+                  waste.</span
+                ></a
+              >
+              <a href="/luckee-website/solutions/ads-automation"
+                ><strong>Ads Automation</strong
+                ><span
+                  >Human-approved bid, budget, keyword, and negative
+                  changes.</span
+                ></a
+              >
+              <a href="/luckee-website/solutions/image-generation"
+                ><strong>E-commerce Image Generation</strong
+                ><span
+                  >Conversion-focused product, lifestyle, and comparison
+                  visuals.</span
+                ></a
+              >
+              <a href="/luckee-website/solutions/review-analysis"
+                ><strong>Review Analysis</strong
+                ><span
+                  >Complaint themes, buyer language, and product improvement
+                  signals.</span
+                ></a
+              >
+              <a href="/luckee-website/solutions/competition-analysis"
+                ><strong>Competition Analysis</strong
+                ><span
+                  >Competitor pricing, creatives, keywords, reviews, and market
+                  moves.</span
+                ></a
+              >
             </div>
           </li>
-          <li class="nav-item"><a class="nav-link" href="../index.html#loop">How it works</a></li>
-          <li class="nav-item"><a class="nav-link" href="../index.html#why">Why Luckee</a></li>
+          <li class="nav-item">
+            <a class="nav-link" href="#features">Features</a>
+            <div class="mega" aria-label="Feature links">
+              <a href="#feature-morning-queue">
+                <strong>Morning Queue</strong>
+                <span>High-priority decisions with fast human approval.</span>
+              </a>
+              <a href="#feature-profit-intelligence">
+                <strong>Profit Intelligence</strong>
+                <span>Profit-aware optimization beyond simple PPC rules.</span>
+              </a>
+              <a href="#feature-memory">
+                <strong>Structured Memory</strong>
+                <span>Persistent learning from your approvals and guardrails.</span>
+              </a>
+              <a href="#feature-integrations">
+                <strong>Integrations</strong>
+                <span>Seller context, communication, and ops inputs in one flow.</span>
+              </a>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#pricing">Pricing</a>
+          </li>
+          <li class="nav-item" hidden>
+            <a class="nav-link" href="#resources">Resources</a>
+          </li>
+          <li class="nav-item" hidden>
+            <a class="nav-link" href="#company">Company</a>
+          </li>
         </ul>
         <div class="nav-actions">
-          <a class="btn btn-outline btn-sm" href="../solutions.html">See solutions</a>
-          <a class="btn btn-primary btn-sm" href="../index.html#contact">Hire a team</a>
-          <button class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+          <a class="btn btn-outline btn-sm" href="/luckee-website/solutions">See solutions</a>
+          <a class="btn btn-primary btn-sm" href="#contact">Hire a team</a>
+          <button
+            class="nav-toggle"
+            aria-label="Open menu"
+            aria-expanded="false"
+            aria-controls="mobile-menu"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            >
+              <path d="M3 6h18M3 12h18M3 18h18" />
+            </svg>
           </button>
         </div>
       </nav>
     </header>
 
-    <!-- ===== MOBILE MENU (right after </header>) ===== -->
+    <!-- Mobile menu drawer -->
     <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
       <div class="mobile-menu-panel">
         <div class="mm-head">
-          <a class="brand" href="../index.html"><span class="brand-mark up" aria-hidden="true"></span><span>Luckee AI</span></a>
-          <button class="mm-close" aria-label="Close menu"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+          <a class="brand" href="/luckee-website/"
+            ><span class="brand-mark" aria-hidden="true"></span
+            ><span>Luckee AI</span></a
+          >
+          <button class="mm-close" aria-label="Close menu">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            >
+              <path d="M18 6 6 18M6 6l12 12" />
+            </svg>
+          </button>
         </div>
         <span class="mm-group-label">Products</span>
-        <a href="../products/amazon-operation-assistant.html">Amazon Operation Assistant</a>
-        <a href="../products/amazon-ads-workbench.html">Amazon Ads Workbench</a>
+        <a href="/luckee-website/products/amazon-operation-assistant"
+          >Amazon Operation Assistant</a
+        >
+        <a href="/luckee-website/products/amazon-ads-workbench">Amazon Ads Workbench</a>
         <span class="mm-group-label">Solutions</span>
-        <a href="../solutions.html">Listing Optimizer</a>
-        <a href="../solutions/ads-audit.html">Ads Audit</a>
-        <a href="../solutions/ads-automation.html">Ads Automation</a>
-        <a href="../solutions/image-generation.html">Image Generation</a>
-        <a href="../solutions/review-analysis.html">Review Analysis</a>
-        <a href="../solutions/competition-analysis.html">Competition Analysis</a>
-        <span class="mm-group-label">Company</span>
-        <a href="../index.html#pricing">Pricing</a>
-        <a href="../index.html#resources">Resources</a>
-        <a href="../index.html#company">Company</a>
+        <a href="/luckee-website/solutions/listing-optimizer">Listing Optimizer</a>
+        <a href="/luckee-website/solutions/ads-audit">Ads Audit</a>
+        <a href="/luckee-website/solutions/ads-automation">Ads Automation</a>
+        <a href="/luckee-website/solutions/image-generation">Image Generation</a>
+        <a href="/luckee-website/solutions/review-analysis">Review Analysis</a>
+        <a href="/luckee-website/solutions/competition-analysis">Competition Analysis</a>
+        <span class="mm-group-label">Features</span>
+        <a href="#feature-morning-queue">Morning Queue</a>
+        <a href="#feature-profit-intelligence">Profit Intelligence</a>
+        <a href="#feature-memory">Structured Memory</a>
+        <a href="#feature-integrations">Integrations</a>
+        <span class="mm-group-label" hidden>Company</span>
+        <a href="#pricing">Pricing</a>
+        <a href="#resources" hidden>Resources</a>
+        <a href="#company" hidden>Company</a>
         <div class="mm-actions">
-          <a class="btn btn-outline btn-block" href="../solutions.html">See solutions</a>
-          <a class="btn btn-primary btn-block" href="../index.html#contact">Hire a team</a>
+          <a class="btn btn-outline btn-block" href="/luckee-website/solutions"
+            >See solutions</a
+          >
+          <a class="btn btn-primary btn-block" href="#contact">Hire a team</a>
         </div>
       </div>
     </div>
 
     <main id="main">
       <!-- ============================ HERO ============================ -->
-      <section class="wb-hero">
-        <div class="wb-grain grain"></div>
-        <div class="wrap wb-hero-grid">
-          <div class="reveal">
-            <span class="wb-kicker">Product / Amazon Ads Automation</span>
-            <h1>Amazon ads decisions, <em>decided faster</em>.</h1>
-            <p class="wb-lede">
-              Luckee turns raw Amazon PPC data into a daily queue of decision-ready actions.
-              Agents diagnose wasted spend, draft bid, budget, keyword, and placement changes,
-              attach evidence, and keep revenue-impacting moves behind human approval and rollback guardrails.
+      <section class="home-hero">
+        <div class="grain-layer grain"></div>
+        <div class="wrap home-hero-grid">
+          <div>
+            <span class="eyebrow reveal"
+              ><span class="pulse" aria-hidden="true"></span>AI cowork teams for
+              Amazon operators</span
+            >
+            <h1 class="reveal">Your AI Co-Worker for <em>Amazon Growth</em></h1>
+            <p class="lead reveal">
+              Stop drowning in data. Luckee acts as your expert AI co-worker,
+              making daily, goal-oriented advertising and operational decisions
+              to maximize profit while
+              <strong
+                >keeping every revenue-impacting action under your
+                control</strong
+              >.
             </p>
-            <div class="hero-actions">
-              <a data-primary-cta class="btn btn-primary btn-lg" href="../index.html#contact">Get Started</a>
-              <a class="btn btn-outline btn-lg" href="../solutions/ads-audit.html">See Ad Diagnosis</a>
+            <div class="hero-actions reveal">
+              <a
+                data-primary-cta
+                class="btn btn-primary btn-lg"
+                href="/luckee-website/products/amazon-ads-workbench"
+                >Start Free Trial</a
+              >
+              <a class="btn btn-outline btn-lg" href="/luckee-website/solutions">Watch Demo</a>
             </div>
-            <p class="wb-note">Built for Amazon SMB operators and agencies · US · EU · JP</p>
+            <div class="proof-row reveal" aria-label="Luckee proof points">
+              <span class="proof">No Base Fees</span>
+              <span class="proof">Human-in-the-loop</span>
+            </div>
           </div>
-          <div class="agent-stack reveal" aria-label="Amazon ads automation agent activity">
-            <article class="agent-card">
-              <span class="agent-pill">AI</span>
-              <div><b>Ad Strategist</b><p>Daily priority queue: <strong>3 Star · 4 Healthy · 2 Problematic</strong> campaigns ready for review.</p><em>LanHome · 30-day window</em></div>
-            </article>
-            <article class="agent-card orange">
-              <span class="agent-pill">SP</span>
-              <div><b>Search Term Agent</b><p><strong>23 negative search terms</strong> drafted with wasted-spend evidence attached.</p><em>Auto campaign · $187 wasted spend recovered</em></div>
-            </article>
-            <article class="agent-card clay">
-              <span class="agent-pill">KW</span>
-              <div><b>Keyword Harvester</b><p>Auto winners promoted into exact match with ROAS evidence attached.</p><em>Approval required before launch</em></div>
-            </article>
-            <article class="agent-card gold">
-              <span class="agent-pill">OK</span>
-              <div><b>Human Approval</b><p>Budget, bid, negative, and Top of Search changes wait behind guardrails.</p><em>Rollback rule active</em></div>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <!-- ============================ TRUST TRACK ============================ -->
-      <section class="wb-trust">
-        <div class="wrap trust-track reveal">
-          <span>SMB sellers on Amazon US · EU · JP</span>
-          <span>Agency partners managing 7-figure ad spend</span>
-          <span>Sponsored Products diagnosis</span>
-          <span>Minutes from ASIN to action</span>
-        </div>
-      </section>
-
-      <!-- ============================ BUILT FOR ============================ -->
-      <section class="wb-section">
-        <div class="wrap">
-          <div class="reveal">
-            <span class="wb-kicker">Built for</span>
-            <h2 class="wb-title">For Amazon teams that need <em>answers</em>, not raw exports.</h2>
-            <p class="wb-copy">
-              Luckee behaves like an Amazon ad ops co-worker: it filters the noise, surfaces the
-              highest-impact decisions, and shows the logic before your team approves the action.
-            </p>
-          </div>
-          <div class="audience-grid reveal-stagger">
-            <article><span>In-house operators</span><h3>Skip the PPC reporting tax.</h3><p>Stop spending Mondays stitching console exports. Walk into standup with ranked actions, thresholds, and outcome proof.</p></article>
-            <article><span>Amazon agencies</span><h3>Two minutes per ASIN. Hours back per week.</h3><p>Run diagnosis per ASIN, stack reports by client, and route high-impact changes through approval.</p></article>
-            <article><span>Brand managers</span><h3>One decision view across markets.</h3><p>Use the same workflow for US, EU, and JP accounts while keeping budget and brand risk visible.</p></article>
-          </div>
-        </div>
-      </section>
-
-      <!-- ============================ PRODUCT LOOP ============================ -->
-      <section class="band wb-section">
-        <div class="wrap">
-          <div class="reveal">
-            <span class="wb-kicker accent-orange">Product loop</span>
-            <h2 class="wb-title">From Sponsored Products diagnosis to <em>approved execution</em>.</h2>
-            <p class="wb-copy">
-              Luckee does not stop at reports. The workbench carries each finding into a prepared
-              action, evidence, approval state, and outcome check.
-            </p>
-          </div>
-          <div class="services-grid reveal-stagger">
-            <a class="service-card" href="../solutions/ads-audit.html">
-              <span class="badge"><span class="dot"></span>Available</span>
-              <h3>Ad Diagnosis</h3>
-              <p>Whole-store SP advertising health check across campaigns, keywords, and search terms. Macro plus micro in one diagnosis.</p>
-              <img src="../assets/ad-diagnosis/consolidated-report.png" alt="Ad Diagnosis consolidated report preview" loading="lazy" decoding="async">
-              <ul>
-                <li>8-phase automated diagnosis</li>
-                <li>Star / Healthy / Monitor / Problematic classification</li>
-                <li>Keep / Optimize / Observe / Negative search-term labels</li>
-              </ul>
-            </a>
-            <article class="service-card automation-card">
-              <span class="badge">Workbench</span>
-              <h3>Ads Automation</h3>
-              <p>Turn diagnosis into prepared bid, budget, keyword, placement, and negative-list changes with human approval.</p>
-              <div class="automation-preview">
-                <div><b>Actions ready</b><span>12 changes</span></div>
-                <div><b>Approval queue</b><span>4 revenue-impacting</span></div>
-                <div><b>Rollback plan</b><span>Active</span></div>
+          <div
+            class="home-visual reveal"
+            aria-label="Luckee AI cowork team dashboard preview"
+          >
+            <div class="dashboard-mock">
+              <aside class="dash-sidebar">
+                <div class="dash-logo"><span>L</span><b>luckee</b></div>
+                <nav aria-label="Dashboard preview navigation">
+                  <span>Overview</span>
+                  <span>Inbox <i>1</i></span>
+                  <span class="active">Ads</span>
+                  <span>Automation</span>
+                </nav>
+                <div class="dash-config">
+                  <b>Configure</b>
+                  <span>Agents</span>
+                  <span>Data Sources</span>
+                  <span>System Settings</span>
+                </div>
+              </aside>
+              <div class="dash-main">
+                <div class="dash-head">
+                  <span>Today · Ads workspace</span>
+                  <h2>Today's Priority Decisions</h2>
+                  <p>
+                    1 task needs your approval · 3 low-risk optimizations are
+                    already running inside guardrails
+                  </p>
+                </div>
+                <article class="decision-panel">
+                  <div class="decision-panel__accent" aria-hidden="true"></div>
+                  <div class="decision-panel__head">
+                    <div>
+                      <span class="decision-badge">P0 Approval Required</span>
+                      <h3>Top of Search Efficiency Low</h3>
+                      <p>
+                        Luckee found a decision to reduce wasted spend this
+                        week.
+                      </p>
+                    </div>
+                    <span class="decision-evidence" aria-hidden="true"
+                      >View Evidence</span
+                    >
+                  </div>
+                  <div class="decision-metrics">
+                    <article>
+                      <span>Estimated Savings</span>
+                      <strong>$62-$110 / week</strong>
+                    </article>
+                    <article>
+                      <span>Target Impact</span>
+                      <strong>TACoS ≤ 18%</strong>
+                    </article>
+                    <article class="decision-metrics__wide">
+                      <span>Suggested Change</span>
+                      <strong
+                        >Reduce Top of Search placement modifier to 20%</strong
+                      >
+                    </article>
+                  </div>
+                  <div class="decision-actions">
+                    <span class="decision-monitor"
+                      >Agent will monitor for 48 hrs</span
+                    >
+                    <span
+                      class="decision-btn decision-btn-secondary"
+                      aria-hidden="true"
+                      >Reject</span
+                    >
+                    <span
+                      class="decision-btn decision-btn-primary"
+                      aria-hidden="true"
+                      >Approve &amp; Execute</span
+                    >
+                  </div>
+                </article>
               </div>
-              <ul>
-                <li>Diff previews before execution</li>
-                <li>Guardrails by ACOS, spend, bid movement, and budget</li>
-                <li>Outcome tracking after every approved action</li>
-              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ FEATURES ============================ -->
+      <section id="features" class="section feature-section">
+        <div class="wrap">
+          <div class="section-head reveal">
+            <div>
+              <p class="section-kicker">Intuitive AI Operations</p>
+              <h2 class="section-title">
+                A True <em>Co-Worker</em>, Not Just a Dashboard
+              </h2>
+            </div>
+            <p class="section-copy">
+              We redesigned how sellers interact with data. Luckee processes
+              complex variables and presents you with simple, actionable
+              decisions.
+            </p>
+          </div>
+          <div class="feature-stack">
+            <article id="feature-morning-queue" class="feature-row reveal">
+              <div class="feature-copy">
+                <span class="feature-pill feature-pill-forest"
+                  >Morning Queue</span
+                >
+                <h3>Your Daily Morning Queue</h3>
+                <p>
+                  Start your day with a curated inbox of high-impact decisions,
+                  sorted by priority. Luckee provides direct execution
+                  conclusions with transparent logic, eliminating analysis
+                  paralysis.
+                </p>
+                <ul class="feature-list">
+                  <li>Core changes require 1-click human approval.</li>
+                  <li>
+                    Low-risk optimizations run automatically within your
+                    guardrails.
+                  </li>
+                  <li>
+                    Every action is directly linked to your TACoS and Margin
+                    targets.
+                  </li>
+                </ul>
+              </div>
+              <div class="feature-visual feature-visual-light">
+                <div class="feature-inbox-shot">
+                  <aside class="feature-inbox-sidebar" aria-hidden="true">
+                    <div class="feature-inbox-logo">
+                      <span>L</span><b>luckee</b>
+                    </div>
+                    <nav class="feature-inbox-nav">
+                      <span>Overview</span>
+                      <span class="active">Inbox <i>2</i></span>
+                      <span>Ads</span>
+                      <span>Automation</span>
+                    </nav>
+                    <div class="feature-inbox-config">
+                      <b>Configure</b>
+                      <span>Agents</span>
+                      <span>Rules</span>
+                    </div>
+                  </aside>
+                  <div class="feature-inbox-shot__main">
+                    <div class="feature-inbox-shot__bar">
+                      <div class="feature-inbox-shot__dots" aria-hidden="true">
+                        <i></i><i></i><i></i>
+                      </div>
+                    </div>
+                    <div class="feature-inbox-shot__body">
+                      <div class="feature-inbox-shot__head">
+                        <div>
+                          <h4>Inbox: Priority Decisions</h4>
+                          <p>1 task needs your approval</p>
+                        </div>
+                        <span class="feature-inbox-shot__time">2 mins ago</span>
+                      </div>
+                      <div class="feature-inbox-stack">
+                        <article class="feature-inbox-decision">
+                          <div
+                            class="feature-inbox-decision__accent"
+                            aria-hidden="true"
+                          ></div>
+                          <div class="feature-inbox-decision__head">
+                            <span class="feature-priority__badge">P0</span>
+                            <strong
+                              >Pause inefficient exact match keyword</strong
+                            >
+                          </div>
+                          <p>
+                            Spent $45 with 0 conversions in 7 days. Action will
+                            save ~$180/mo.
+                          </p>
+                          <div class="feature-inbox-meta" aria-hidden="true">
+                            <span>Window 7 days</span>
+                            <span>Spend $45</span>
+                            <span>Savings ~$180/mo</span>
+                          </div>
+                          <div
+                            class="feature-priority__actions"
+                            aria-hidden="true"
+                          >
+                            <span
+                              class="feature-mini-btn feature-mini-btn-secondary"
+                              >Skip</span
+                            >
+                            <span
+                              class="feature-mini-btn feature-mini-btn-primary"
+                              >Approve &amp; Pause</span
+                            >
+                          </div>
+                        </article>
+                        <article class="feature-inbox-secondary">
+                          <div class="feature-inbox-secondary__head">
+                            <span
+                              class="feature-priority__badge feature-priority__badge-warn"
+                              >P1</span
+                            >
+                            <strong>Boost bid for converting term</strong>
+                          </div>
+                        </article>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article
+              id="feature-profit-intelligence"
+              class="feature-row feature-row-reverse reveal"
+            >
+              <div class="feature-copy">
+                <span class="feature-pill feature-pill-blue"
+                  >Profit Intelligence</span
+                >
+                <h3>Holistic Profit Intelligence</h3>
+                <p>
+                  Rules-based PPC tools fly blind. Luckee thinks like an owner,
+                  synthesizing multi-dimensional context to protect your bottom
+                  line.
+                </p>
+                <ul class="feature-list">
+                  <li>
+                    Factors in competitor pricing and organic rank changes.
+                  </li>
+                  <li>
+                    Automatically modulates strategy based on supply chain and
+                    inventory.
+                  </li>
+                  <li>
+                    Adapts bids around your real-time promotions and coupons.
+                  </li>
+                </ul>
+              </div>
+              <div class="feature-visual feature-visual-dark">
+                <div class="feature-dark-card">
+                  <div class="feature-dark-card__head">
+                    <h4>Profit Analysis Snapshot</h4>
+                    <span>Live context</span>
+                  </div>
+                  <div class="feature-dark-grid">
+                    <article>
+                      <span>Net Margin</span>
+                      <strong>+24.5%</strong>
+                      <em>▲ 2.1% from last week</em>
+                    </article>
+                    <article>
+                      <span>Inventory Status</span>
+                      <strong>14 Days</strong>
+                      <em>Low - Modulating Ads</em>
+                    </article>
+                  </div>
+                  <div class="feature-context">
+                    <b>Agent Context</b>
+                    <p>
+                      Noticed inventory dropping below 15 days. Temporarily
+                      reducing Top of Search bids to slow velocity and prevent
+                      stockout while maintaining margin.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article id="feature-memory" class="feature-row reveal">
+              <div class="feature-copy">
+                <span class="feature-pill feature-pill-plum"
+                  >Structured Memory</span
+                >
+                <h3>Structured Memory &amp; Evolution</h3>
+                <p>
+                  Each interaction, approval, and rejection is recorded into a
+                  structured memory layer. The agent learns your unique business
+                  logic and adapts its strategy over time.
+                </p>
+                <ul class="feature-list">
+                  <li>
+                    Chat with the agent to request deep-dives or explain
+                    decisions.
+                  </li>
+                  <li>
+                    Personalized automation rules that mold to your style.
+                  </li>
+                </ul>
+              </div>
+              <div class="feature-visual feature-visual-memory">
+                <div class="feature-memory-card">
+                  <div class="feature-memory-card__head">
+                    <div class="feature-memory-brand">
+                      <div class="feature-memory-avatar">L</div>
+                      <div class="feature-memory-brand-copy">
+                        <h4>Luckee Memory Engine</h4>
+                        <span
+                          >Structured rules, approvals, and learned
+                          preferences</span
+                        >
+                      </div>
+                    </div>
+                    <div class="feature-memory-status" aria-hidden="true">
+                      <span class="feature-memory-live"
+                        ><i></i>Learning active</span
+                      >
+                      <strong>Q4 rule active</strong>
+                    </div>
+                  </div>
+                  <div class="feature-memory-summary" aria-hidden="true">
+                    <article>
+                      <span>Approvals learned</span>
+                      <strong>12</strong>
+                    </article>
+                    <article>
+                      <span>Seasonal guardrails</span>
+                      <strong>3</strong>
+                    </article>
+                    <article>
+                      <span>Last update</span>
+                      <strong>Today</strong>
+                    </article>
+                  </div>
+                  <div class="feature-memory-thread">
+                    <article class="feature-memory-msg">
+                      <b>You</b>
+                      <p>
+                        Never lower bids on "coffee frother pro" during Q4, even
+                        if ACOS hits 45%.
+                      </p>
+                    </article>
+                    <article
+                      class="feature-memory-msg feature-memory-msg-agent"
+                    >
+                      <b>Agent</b>
+                      <p>
+                        Understood. I have added a seasonal structural guardrail
+                        for "coffee frother pro" to ignore the 45% ACOS cap from
+                        Oct 1 - Dec 31.
+                      </p>
+                      <div class="feature-memory-tags" aria-hidden="true">
+                        <span>Seasonal</span>
+                        <span>Guardrail saved</span>
+                      </div>
+                    </article>
+                  </div>
+                </div>
+              </div>
             </article>
           </div>
         </div>
       </section>
 
       <!-- ============================ HOW IT WORKS ============================ -->
-      <section class="wb-section">
-        <div class="wrap">
-          <div class="reveal">
-            <span class="wb-kicker accent-clay">How it works</span>
-            <h2 class="wb-title">Three steps from ASIN to <em>approved action</em>.</h2>
+      <section class="band" hidden>
+        <div class="wrap section">
+          <div class="section-head reveal">
+            <div>
+              <p class="section-kicker">How it works</p>
+              <h2 class="section-title">Human-Agent Collaboration</h2>
+            </div>
+            <p class="section-copy">
+              Experience a unified workspace where humans and multi-agents
+              organically complete tasks. Communicate and execute naturally via
+              built-in chat or directly in modern IM apps like Slack.
+            </p>
           </div>
-          <div class="how-row reveal-stagger">
-            <article><h3>Connect an ASIN</h3><p>Input ASIN, marketplace, store, and date range. Luckee pulls the relevant Sponsored Products data.</p></article>
-            <article><h3>Agents run</h3><p>Campaign, keyword, and search-term agents fetch, classify, diagnose, and validate findings in parallel.</p></article>
-            <article><h3>Approve execution</h3><p>Operators review evidence-backed diffs, approve within guardrails, and monitor outcomes after changes run.</p></article>
+          <div class="collab-grid reveal">
+            <div class="collab-copy">
+              <article class="collab-point">
+                <div class="collab-point__icon collab-point__icon-gold">01</div>
+                <div>
+                  <h3>Direct Actions, Less Noise</h3>
+                  <p>
+                    Filters out the noise and provides direct execution
+                    conclusions to quickly focus your attention where it
+                    matters.
+                  </p>
+                </div>
+              </article>
+              <article class="collab-point">
+                <div class="collab-point__icon collab-point__icon-gold-soft">
+                  02
+                </div>
+                <div>
+                  <h3>Explainable &amp; Safe</h3>
+                  <p>
+                    Every decision traces back to observable logic and
+                    background data. Core actions require your approval;
+                    non-critical ones run safely within bounds.
+                  </p>
+                </div>
+              </article>
+              <article class="collab-point">
+                <div class="collab-point__icon collab-point__icon-gold-pale">
+                  03
+                </div>
+                <div>
+                  <h3>Multi-Turn Dialogue</h3>
+                  <p>
+                    Have questions about a suggestion? Chat directly with the
+                    agent to refine strategies, adjust parameters, or understand
+                    the why behind the action.
+                  </p>
+                </div>
+              </article>
+            </div>
+            <div class="collab-visual">
+              <div class="collab-chat-shot">
+                <div class="collab-chat-shot__bar">
+                  <div class="collab-chat-shot__meta">
+                    <span class="collab-chat-shot__live"
+                      ><i></i>Ad Ops Agent</span
+                    >
+                    <span class="collab-chat-shot__channel">#inbox-daily</span>
+                  </div>
+                </div>
+                <div class="collab-chat-shot__body">
+                  <div class="collab-chat-shot__user">
+                    Run overnight placement and bid optimization review for all
+                    active auto campaigns.
+                  </div>
+                  <div class="collab-chat-shot__agent-row">
+                    <div class="collab-chat-shot__avatar">L</div>
+                    <div class="collab-chat-shot__reply">
+                      <p>
+                        Overnight review complete. I flagged 2 proposed changes
+                        across auto campaigns that need your approval:
+                      </p>
+                      <article class="collab-approval-card">
+                        <div class="collab-approval-card__head">
+                          <span class="feature-priority__badge">P0</span>
+                          <strong>MF03_Auto_Loose</strong>
+                        </div>
+                        <p>
+                          Lower Top of Search from 40% to 20%. ToS drove 72% of
+                          spend but only 25% of orders.
+                        </p>
+                        <div
+                          class="collab-approval-card__actions"
+                          aria-hidden="true"
+                        >
+                          <span
+                            class="feature-mini-btn feature-mini-btn-secondary"
+                            >Explain Further</span
+                          >
+                          <span
+                            class="feature-mini-btn feature-mini-btn-primary"
+                            >Approve</span
+                          >
+                        </div>
+                      </article>
+                    </div>
+                  </div>
+                </div>
+                <div class="collab-chat-shot__composer" aria-hidden="true">
+                  <span class="collab-chat-shot__placeholder"
+                    >Message Ad Ops Agent...</span
+                  >
+                  <span class="collab-chat-shot__send">↑</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      <!-- ============================ STATS ============================ -->
-      <section class="wb-stats band-dark grain">
-        <div class="wrap stats-grid reveal-stagger">
-          <article><b>14</b><span>Amazon marketplaces</span></article>
-          <article><b>8</b><span>Diagnosis phases</span></article>
-          <article><b>4</b><span>Markdown reports</span></article>
-          <article><b>P0-P3</b><span>Action priority</span></article>
+      <!-- ============================ TESTIMONIALS ============================ -->
+      <section class="band-white">
+        <div class="wrap section">
+          <div class="section-head center reveal">
+            <div>
+              <p class="section-kicker">Customer Stories</p>
+              <h2 class="section-title">Trusted by Modern Sellers</h2>
+            </div>
+          </div>
+          <div class="testimonial-grid reveal-stagger">
+            <article class="testimonial-card testimonial-card-forest">
+              <div class="testimonial-stars" aria-hidden="true">
+                <span>&#9733;</span><span>&#9733;</span><span>&#9733;</span
+                ><span>&#9733;</span><span>&#9733;</span>
+              </div>
+              <blockquote>
+                "It's literally like hiring an Amazon Ad Ops expert that works
+                24/7. The direct execution decisions save me 3 hours of
+                dashboard-staring every morning."
+              </blockquote>
+              <div class="testimonial-person">
+                <div class="testimonial-avatar">D</div>
+                <div>
+                  <strong>David Chen</strong>
+                  <span>7-Figure Brand Owner</span>
+                </div>
+              </div>
+            </article>
+            <article class="testimonial-card testimonial-card-gold">
+              <div class="testimonial-stars" aria-hidden="true">
+                <span>&#9733;</span><span>&#9733;</span><span>&#9733;</span
+                ><span>&#9733;</span><span>&#9733;</span>
+              </div>
+              <blockquote>
+                "The token-based pricing is brilliant. No more $2,000/month
+                agency retainers. I only pay for the exact optimization logic
+                the agent performs. Absolute game changer."
+              </blockquote>
+              <div class="testimonial-person">
+                <div class="testimonial-avatar">S</div>
+                <div>
+                  <strong>Sarah Jenkins</strong>
+                  <span>E-commerce Director</span>
+                </div>
+              </div>
+            </article>
+            <article class="testimonial-card testimonial-card-ink">
+              <div class="testimonial-stars" aria-hidden="true">
+                <span>&#9733;</span><span>&#9733;</span><span>&#9733;</span
+                ><span>&#9733;</span><span>&#9733;</span>
+              </div>
+              <blockquote>
+                "Rules-based tools just paused my ads indiscriminately. Luckee
+                actually looks at my organic traffic and inventory levels before
+                making a move. It protects my profit."
+              </blockquote>
+              <div class="testimonial-person">
+                <div class="testimonial-avatar">M</div>
+                <div>
+                  <strong>Michael T.</strong>
+                  <span>Amazon Agency Founder</span>
+                </div>
+              </div>
+            </article>
+          </div>
         </div>
       </section>
 
-      <!-- ============================ QUOTE ============================ -->
-      <section class="wb-section">
+      <!-- ============================ INTEGRATIONS ============================ -->
+      <section id="feature-integrations" class="band-dark integration-band">
+        <div class="wrap section">
+          <div class="section-head integration-head reveal">
+            <div>
+              <p class="section-kicker">Integrations</p>
+              <h2 class="section-title">
+                Seamlessly connects with your workflow as a true co-worker.
+              </h2>
+            </div>
+          </div>
+          <div
+            class="integration-grid reveal-stagger"
+            aria-label="Luckee integrations"
+          >
+            <article class="integration-card integration-card-seller">
+              <span class="integration-icon" aria-hidden="true">
+                <img src="../assets/integrations/amazon.svg" alt="" />
+              </span>
+              <div class="integration-body">
+                <strong>Amazon Seller Central</strong>
+              </div>
+            </article>
+            <article class="integration-card integration-card-slack">
+              <span class="integration-icon" aria-hidden="true">
+                <img src="../assets/integrations/slack.svg" alt="" />
+              </span>
+              <div class="integration-body">
+                <strong>Slack</strong>
+              </div>
+            </article>
+            <article class="integration-card integration-card-email">
+              <span class="integration-icon" aria-hidden="true">
+                <img src="../assets/integrations/email.svg" alt="" />
+              </span>
+              <div class="integration-body">
+                <strong>Email</strong>
+              </div>
+            </article>
+            <article class="integration-card integration-card-erp">
+              <span class="integration-icon" aria-hidden="true">
+                <img src="../assets/integrations/erp.svg" alt="" />
+              </span>
+              <div class="integration-body">
+                <strong>Your ERP</strong>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ PRODUCTS ============================ -->
+      <section class="band" hidden>
+        <div class="wrap section">
+          <div class="section-head reveal">
+            <div>
+              <p class="section-kicker">Products</p>
+              <h2 class="section-title">Choose a packaged Luckee system.</h2>
+            </div>
+            <p class="section-copy">
+              Products are standalone landing pages with their own positioning.
+              The homepage stays focused on the cowork-team concept.
+            </p>
+          </div>
+          <div class="grid-2 reveal-stagger">
+            <a
+              class="tile product-card"
+              href="/luckee-website/products/amazon-operation-assistant"
+            >
+              <span class="tag">Luckee 1.0</span>
+              <h3>Amazon Operation Assistant</h3>
+              <p>
+                Full-chain Amazon operating assistant for traffic, insight,
+                data, and ads workflows.
+              </p>
+            </a>
+            <a class="tile product-card" href="/luckee-website/products/amazon-ads-workbench">
+              <span class="tag">Amazon PPC</span>
+              <h3>Amazon Ads Workbench</h3>
+              <p>
+                Human-approved execution workbench for bid, budget, keyword, and
+                waste-reduction actions.
+              </p>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ PRICING ============================ -->
+      <section id="pricing" class="section">
         <div class="wrap">
-          <div class="quote-block reveal">
-            <div class="mark">"</div>
-            <blockquote>Luckee turned a weekly four-hour ads review into a two-minute decision drop. We finally got our Monday back.</blockquote>
-            <div class="attribution">Brand Operator · Amazon US &amp; DE</div>
+          <div class="section-head reveal">
+            <div>
+              <p class="section-kicker">Pricing</p>
+              <h2 class="section-title">Pay for performance, not promises.</h2>
+            </div>
+            <p class="section-copy">
+              No more exorbitant base service fees or agency retainers. Choose
+              the model that fits your business scale.
+            </p>
+          </div>
+          <div class="price-grid reveal-stagger">
+            <article class="tile price-card price-card-trial">
+              <span class="tag">Free Trial</span>
+              <h3>Free Trial / Lite</h3>
+              <strong>$0</strong>
+              <p>base fee</p>
+              <ul class="list">
+                <li>
+                  <span class="check">✓</span>Charged solely based on AI
+                  reasoning used.
+                </li>
+                <li>
+                  <span class="check">✓</span>Scale up or down based on
+                  seasonality.
+                </li>
+                <li>
+                  <span class="check">✓</span>Full transparency into every
+                  calculation and cost.
+                </li>
+                <li>
+                  <span class="check">✓</span>Low barrier to entry for testing
+                  efficacy.
+                </li>
+              </ul>
+              <div class="price-action">
+                <a
+                  data-primary-cta
+                  class="btn btn-primary"
+                  href="/luckee-website/amazon-assistant/"
+                  >Start Free Trial</a
+                >
+              </div>
+            </article>
+            <article class="tile price-card price-card-starter">
+              <span class="tag">Starter</span>
+              <h3>Assistant</h3>
+              <strong data-plan-price>$299/mo</strong>
+              <p>
+                Research, diagnosis, recommendations, and weekly operating
+                summaries before execution is turned on.
+              </p>
+              <ul class="list">
+                <li>
+                  <span class="check">✓</span>Guided diagnosis and operating
+                  recommendations.
+                </li>
+                <li>
+                  <span class="check">✓</span>Weekly summaries for the workflows
+                  you run.
+                </li>
+                <li>
+                  <span class="check">✓</span>Transparent logic before execution
+                  is enabled.
+                </li>
+              </ul>
+              <div class="price-action">
+                <a
+                  data-primary-cta
+                  class="btn btn-primary"
+                  href="/luckee-website/amazon-assistant/"
+                  >Get Started</a
+                >
+              </div>
+            </article>
+            <article class="tile price-card price-card-growth featured">
+              <span class="tag">Most Popular</span>
+              <h3>Performance Pro</h3>
+              <strong data-plan-price>$599/mo</strong>
+              <p>
+                Linked to your goal achievement and daily operating actions.
+              </p>
+              <ul class="list">
+                <li>
+                  <span class="check">✓</span>Daily optimization and automated
+                  routine tasks.
+                </li>
+                <li>
+                  <span class="check">✓</span>Detailed performance attribution
+                  reports.
+                </li>
+                <li>
+                  <span class="check">✓</span>Access to integrations across your
+                  workflow.
+                </li>
+              </ul>
+              <div class="price-action">
+                <a
+                  data-primary-cta
+                  class="btn btn-outline"
+                  href="/luckee-website/amazon-assistant/"
+                  >Get Started</a
+                >
+              </div>
+            </article>
+            <article class="tile price-card price-card-agency" hidden>
+              <span class="tag">Agency</span>
+              <h3>Multi-account</h3>
+              <strong data-plan-price>Custom</strong>
+              <p>
+                Client workspaces, account-level permissions, integrations,
+                routing, and portfolio reviews.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ RESOURCES / COMPANY ============================ -->
+      <section class="band" hidden>
+        <div class="wrap section">
+          <div class="grid-2 reveal-stagger">
+            <article id="resources" class="tile">
+              <span class="tag">Resources</span>
+              <h3 style="margin-top: 14px">
+                Playbooks for human-agent operations.
+              </h3>
+              <ul class="list" style="margin-top: 18px">
+                <li>
+                  <span class="check">✓</span>Amazon PPC waste reduction
+                  playbook.
+                </li>
+                <li>
+                  <span class="check">✓</span>Listing optimization and
+                  AI-shopping answerability guide.
+                </li>
+                <li>
+                  <span class="check">✓</span>Review mining for product and
+                  content improvement.
+                </li>
+              </ul>
+            </article>
+            <article id="company" class="tile">
+              <span class="tag">Company</span>
+              <h3 style="margin-top: 14px">
+                Built for lean brands and agencies.
+              </h3>
+              <p
+                style="margin-top: 14px; color: var(--muted); line-height: 1.7"
+              >
+                Luckee exists for teams that need more execution capacity
+                without giving up judgment, governance, rollback, or proof.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ FAQ ============================ -->
+      <section class="section faq-section">
+        <div class="wrap">
+          <div class="section-head center faq-head reveal">
+            <div>
+              <p class="section-kicker">FAQ</p>
+              <h2 class="section-title">Frequently Asked Questions</h2>
+            </div>
+          </div>
+          <div class="faq-list reveal-stagger">
+            <details class="faq-item" open>
+              <summary class="faq-question">
+                <span>How does the token-based pricing actually work?</span>
+                <span class="faq-toggle" aria-hidden="true"></span>
+              </summary>
+              <div class="faq-answer">
+                <p>
+                  Unlike traditional tools that charge a high flat fee or a
+                  percentage of ad spend, Luckee charges based on the AI
+                  reasoning (tokens) consumed to optimize your account. This
+                  means you only pay for the exact value and computations
+                  generated. It transparently scales up during heavy
+                  optimization phases and down during quiet periods.
+                </p>
+              </div>
+            </details>
+            <details class="faq-item">
+              <summary class="faq-question">
+                <span>Will the AI make changes without my permission?</span>
+                <span class="faq-toggle" aria-hidden="true"></span>
+              </summary>
+              <div class="faq-answer">
+                <p>
+                  No. You have complete control. Critical, high-impact changes
+                  (like significant bid adjustments, budget expansions, or new
+                  keyword launches) are placed in your 'Morning Queue' for
+                  1-click human approval. Low-risk background tasks can be set
+                  to run automatically, but strictly within the financial
+                  guardrails you define.
+                </p>
+              </div>
+            </details>
+            <details class="faq-item">
+              <summary class="faq-question">
+                <span>Do I need to be an Amazon Ads expert to use this?</span>
+                <span class="faq-toggle" aria-hidden="true"></span>
+              </summary>
+              <div class="faq-answer">
+                <p>
+                  Not at all. Luckee acts as your expert. It translates complex
+                  data into simple, actionable business decisions associated
+                  with your ultimate goals (like Net Margin or TACoS). If you
+                  have questions about a recommendation, you can chat with the
+                  agent directly in plain English for a detailed explanation.
+                </p>
+              </div>
+            </details>
+            <details class="faq-item">
+              <summary class="faq-question">
+                <span>How is Luckee different from rules-based PPC software?</span>
+                <span class="faq-toggle" aria-hidden="true"></span>
+              </summary>
+              <div class="faq-answer">
+                <p>
+                  Rules-based software blindly follows 'if-then' statements
+                  (e.g., 'If ACOS &gt; 30%, lower bid'). The Luckee agent utilizes
+                  advanced foundational models capable of reasoning. It looks at
+                  the holistic picture: organic rank, inventory velocity, recent
+                  promotions, and competitor pricing before making a nuanced,
+                  profit-focused decision.
+                </p>
+              </div>
+            </details>
+            <details class="faq-item">
+              <summary class="faq-question">
+                <span>Can I connect it to my Slack or Email?</span>
+                <span class="faq-toggle" aria-hidden="true"></span>
+              </summary>
+              <div class="faq-answer">
+                <p>
+                  Yes! Luckee is designed to fit seamlessly into your existing
+                  workflow. You can receive your daily optimization briefings
+                  directly in Slack or via Email, allowing your team to approve
+                  or discuss actions without logging into another dashboard.
+                </p>
+              </div>
+            </details>
           </div>
         </div>
       </section>
 
       <!-- ============================ FINAL CTA ============================ -->
-      <section class="band-dark grain cta">
+      <section id="contact" class="band-dark grain cta">
         <div class="wrap reveal">
-          <h2>Built for sellers who need <em>answers</em>, not raw exports.</h2>
-          <p>Try the Amazon Ads Automation flow on one ASIN: diagnose, prepare actions, approve safely, and track the result.</p>
-          <a data-primary-cta class="btn btn-light btn-lg" href="mailto:contact@luckee.ai">Get Started</a>
+          <h2>
+            Hire a cowork team that can <em>plan, act, and prove</em> the
+            result.
+          </h2>
+          <p>
+            Start with one operating loop, then expand Luckee across the
+            workflows your team repeats every week.
+          </p>
+          <a class="btn btn-light btn-lg" href="#" data-contact-mailto
+            >Book a demo</a
+          >
         </div>
       </section>
     </main>
@@ -495,44 +1149,48 @@
       <div class="wrap footer-shell">
         <div class="footer-grid">
           <div class="footer-brand">
-            <a class="brand" href="../index.html" aria-label="Luckee AI home"><span class="brand-mark" aria-hidden="true"></span><span>Luckee AI</span></a>
-            <p>AI Growth Operator for commerce teams. Turn goals, account context, and market signals into reviewed actions your team can approve, audit, and prove.</p>
+            <a class="brand" href="/luckee-website/" aria-label="Luckee AI home"><span class="brand-mark up" aria-hidden="true"></span><span>Luckee AI</span></a>
+            <p>Human-agent workbench for Amazon teams.</p>
           </div>
           <div class="footer-col">
             <h3>Products</h3>
             <div class="footer-links">
-              <a href="../products/amazon-operation-assistant.html">Amazon Operation Assistant</a>
-              <a href="../products/amazon-ads-workbench.html">Amazon Ads Workbench</a>
-              <a href="../index.html#loop">How it works</a>
+              <a href="/luckee-website/products/amazon-operation-assistant">Amazon Operation Assistant</a>
+              <a href="/luckee-website/products/amazon-ads-workbench">Amazon Ads Workbench</a>
+              <a href="/luckee-website/#pricing">Pricing</a>
             </div>
           </div>
           <div class="footer-col">
             <h3>Solutions</h3>
             <div class="footer-links">
-              <a href="../solutions.html">Listing Optimizer</a>
-              <a href="../solutions/ads-audit.html">Ads Audit</a>
-              <a href="../solutions/ads-automation.html">Ads Automation</a>
-              <a href="../solutions/image-generation.html">Image Generation</a>
-              <a href="../solutions/review-analysis.html">Review Analysis</a>
-              <a href="../solutions/competition-analysis.html">Competition Analysis</a>
+              <a href="/luckee-website/solutions/listing-optimizer">Listing Optimizer</a>
+              <a href="/luckee-website/solutions/ads-audit">Ads Audit</a>
+              <a href="/luckee-website/solutions/ads-automation">Ads Automation</a>
+              <a href="/luckee-website/solutions/image-generation">Image Generation</a>
+              <a href="/luckee-website/solutions/review-analysis">Review Analysis</a>
+              <a href="/luckee-website/solutions/competition-analysis">Competition Analysis</a>
             </div>
           </div>
           <div class="footer-col">
-            <h3>Learn</h3>
+            <h3>Features</h3>
             <div class="footer-links">
-              <a href="../index.html#why">Why Luckee</a>
-              <a href="../index.html#products">Products</a>
-              <a href="../index.html#contact">Book a demo</a>
-              <a href="mailto:contact@luckee.ai">contact@luckee.ai</a>
+              <a href="/luckee-website/#feature-morning-queue">Morning Queue</a>
+              <a href="/luckee-website/#feature-profit-intelligence">Profit Intelligence</a>
+              <a href="/luckee-website/#feature-memory">Structured Memory</a>
+              <a href="/luckee-website/#feature-integrations">Integrations</a>
             </div>
           </div>
         </div>
         <div class="footer-bottom">
-          <span>© 2026 Luckee AI. All rights reserved.</span>
-          <span>Built for lean brands, agencies, and human-approved AI operations.</span>
+          <span>© 2026 Luckee. All rights reserved.</span>
+          <div class="footer-bottom-links">
+            <a href="/luckee-website/amazon-assistant/privacy-policy?lang=en">Privacy Policy</a>
+            <a href="/luckee-website/amazon-assistant/user-agreement?lang=en">Terms of Service</a>
+          </div>
         </div>
-      </div>
+</div>
     </footer>
     <script src="../app.js"></script>
+    <script src="../v2.js"></script>
   </body>
 </html>

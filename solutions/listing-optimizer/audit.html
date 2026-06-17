@@ -1,0 +1,1693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Audit your listing · Luckee Listing</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="tokens.css">
+  <script src="google-ads-tag.js"></script>
+  <style>
+    /* ============================================================
+       AUDIT — page-local polish, aligned to the landing (Art Dir. B)
+       Elevated cards (crisp hairline + layered soft shadow + hover lift),
+       eyebrow short-rule heads, confident serif scale, warm rhythm.
+       All page-local. No edits to tokens.css / data.js / app.js.
+       ============================================================ */
+    :root {
+      --b-hair: rgba(28,43,29,.08);
+      --b-shadow-card: 0 1px 2px rgba(28,43,29,.05), 0 8px 28px -12px rgba(28,43,29,.18);
+      --b-shadow-card-hover: 0 2px 4px rgba(28,43,29,.06), 0 24px 56px -20px rgba(28,43,29,.34);
+      --b-ease: cubic-bezier(.22,.61,.36,1);
+    }
+
+    body { overflow-x: hidden; }
+    main { overflow-x: clip; }
+
+    /* ---- Page-local layout (centered single column) ---- */
+    .audit-wrap { max-width: 760px; margin: 0 auto; padding: 0 28px; }
+    .audit-section { padding: 84px 0 110px; }
+
+    /* ---- Section head — eyebrow short-rule treatment (matches landing .sec-head) ---- */
+    .audit-head { text-align: center; margin-bottom: 42px; }
+    .audit-head .eyebrow {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      margin-bottom: 18px;
+    }
+    .audit-head .eyebrow::before,
+    .audit-head .eyebrow::after {
+      content: ""; width: 22px; height: 1px; background: currentColor; opacity: .55; display: inline-block;
+    }
+    .audit-head h1 { margin-bottom: 16px; font-size: clamp(2.5rem, 4.6vw, 3.6rem); line-height: 1.04; letter-spacing: -.018em; }
+    .audit-head .lede { max-width: 600px; margin: 0 auto; }
+
+    /* ---- Elevated card primitive (crisp hairline + soft layered shadow) ---- */
+    .audit-card {
+      background: var(--card);
+      border: 1px solid var(--b-hair);
+      border-radius: var(--r-card);
+      box-shadow: var(--b-shadow-card);
+    }
+
+    .mode-block[hidden] { display: none; }
+    .mode-block { animation: audFade .4s var(--b-ease) both; }
+    @keyframes audFade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+    .field-help { font-size: .78rem; color: var(--muted); margin: 7px 0 0; line-height: 1.45; }
+    .run-time-note {
+      display: flex; align-items: flex-start; gap: 9px;
+      margin-top: 14px; padding: 12px 14px; border-radius: var(--r-input);
+      background: var(--info-bg); border: 1px solid #d4e1fb;
+      color: var(--info-600); font-size: .82rem; line-height: 1.5;
+      transition: box-shadow .22s var(--b-ease), transform .22s var(--b-ease);
+    }
+    .run-time-note svg { flex-shrink: 0; margin-top: 1px; }
+    .run-time-note b { font-weight: 700; }
+    .run-time-note.is-active {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 34px -22px rgba(37,99,235,.55);
+    }
+
+    /* ---- Advanced options ---- */
+    .adv-toggle {
+      display: inline-flex; align-items: center; gap: 8px; cursor: pointer;
+      font-weight: 600; font-size: .88rem; color: var(--forest-700);
+      background: transparent; border: 0; padding: 6px 0; user-select: none;
+      transition: color .15s var(--b-ease);
+    }
+    .adv-toggle:hover { color: var(--forest-600); }
+    .adv-toggle .chev { transition: transform .2s var(--b-ease); flex-shrink: 0; }
+    .adv-toggle[aria-expanded="true"] .chev { transform: rotate(90deg); }
+    .adv-body[hidden] { display: none; }
+    .adv-body {
+      margin-top: 18px; padding: 20px 20px 4px; border-radius: var(--r-input);
+      background: var(--oat-100); border: 1px solid var(--b-hair);
+      animation: audFade .35s var(--b-ease) both;
+    }
+
+    .reassure {
+      display: flex; align-items: center; justify-content: center; gap: 9px;
+      margin-top: 20px; font-size: .82rem; color: var(--muted); text-align: center;
+    }
+    .reassure svg { flex-shrink: 0; color: var(--forest-600); }
+
+    /* ---- Intent split: primary "Run audit" vs secondary "sample report" ---- */
+    .intent-split {
+      display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+      margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--b-hair);
+    }
+    .intent-split .is-or {
+      font-size: .74rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+      color: var(--muted);
+    }
+    .intent-split .is-sample { display: flex; flex-direction: column; gap: 3px; flex: 1; min-width: 200px; }
+    .intent-split .is-sample .is-lead { font-size: .82rem; color: var(--muted); line-height: 1.45; }
+    .link-sample {
+      display: inline-flex; align-items: center; gap: 7px; align-self: flex-start;
+      font-weight: 600; font-size: .9rem; color: var(--forest-600);
+      text-decoration: none; transition: gap .15s var(--b-ease), color .15s var(--b-ease);
+    }
+    .link-sample:hover { color: var(--forest-700); gap: 10px; }
+    .link-sample svg { flex-shrink: 0; transition: transform .15s var(--b-ease); }
+    .link-sample:hover svg { transform: translateX(2px); }
+
+    /* ---- Sample result preview (compact elevated panel, pre-submit) ---- */
+    .preview-card { margin-top: 26px; overflow: hidden; }
+    .preview-card .pv-head {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      padding: 15px 22px; border-bottom: 1px solid var(--b-hair); background: var(--oat-100);
+    }
+    .pv-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: .72rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--forest-600);
+    }
+    .pv-eyebrow svg { color: var(--premium-gold, #B8902E); }
+    .pv-tag {
+      font-size: .68rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+      color: var(--muted); font-family: var(--mono);
+    }
+    .pv-body { padding: 18px 22px 22px; }
+    .pv-scoreline { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+    .pv-score {
+      font-family: var(--mono); font-weight: 600; font-size: 1.5rem; line-height: 1; color: var(--neutral-900);
+    }
+    .pv-score .pv-cur { color: var(--error-600); }
+    .pv-score .pv-arrow { color: var(--muted); margin: 0 4px; font-weight: 500; }
+    .pv-score .pv-proj { color: var(--success-600); }
+    .pv-score-cap { font-size: .8rem; color: var(--muted); line-height: 1.4; }
+    .pv-rows { display: grid; gap: 1px; background: var(--b-hair); border-radius: var(--r-sm); overflow: hidden; border: 1px solid var(--b-hair); }
+    .pv-row {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 11px 14px; background: var(--card); font-size: .85rem; color: var(--neutral-700); line-height: 1.45;
+    }
+    .pv-row .pv-k { font-weight: 600; color: var(--neutral-900); flex-shrink: 0; min-width: 124px; }
+    .pv-row .pv-v { min-width: 0; }
+    .pv-row .pv-v .q { font-style: italic; color: var(--forest-700); }
+    .pv-areas { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 14px; }
+    .pv-area-chip {
+      display: inline-flex; align-items: center; padding: 5px 11px; border-radius: var(--r-pill);
+      font-size: .76rem; font-weight: 600; background: var(--forest-050); color: var(--forest-700);
+      border: 1px solid var(--forest-100);
+    }
+    .pv-foot {
+      display: flex; align-items: center; gap: 8px; margin-top: 16px;
+      font-size: .76rem; color: var(--muted); line-height: 1.45;
+    }
+    .pv-foot svg { flex-shrink: 0; color: var(--forest-600); }
+
+    @media (max-width: 768px) {
+      .pv-row .pv-k { min-width: 0; }
+      .pv-row { flex-direction: column; gap: 2px; }
+    }
+
+    /* ---- Field grid for paired inputs ---- */
+    .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .field-grid .field + .field { margin-top: 0; }
+
+    /* ============================================================
+       STATE B — analysis in progress
+       ============================================================ */
+    .progress-head { display: flex; align-items: center; gap: 11px; margin-bottom: 6px; }
+    .progress-head .mono { font-size: .92rem; color: var(--neutral-700); font-weight: 500; }
+    .progress-sub { font-size: .84rem; color: var(--muted); margin-bottom: 24px; }
+
+    /* honest demo note — matches landing's gold/info reassurance pill */
+    .demo-note {
+      align-items: flex-start; gap: 10px; margin: 0 0 22px; padding: 12px 15px;
+      background: var(--info-bg); border: 1px solid #d4e1fb; border-radius: var(--r-input);
+      font-size: .82rem; color: var(--info-600); line-height: 1.5;
+    }
+    .demo-note svg, .demo-note .di { flex-shrink: 0; color: var(--info-600); margin-top: 1px; }
+    .demo-note b { font-weight: 700; }
+
+    .progress-error-card {
+      margin-top: 18px; padding: 18px 20px; border-radius: var(--r-md);
+      border: 1px solid #f4d3d3; background: var(--error-bg); color: #7a2020;
+    }
+    .progress-error-card[hidden] { display: none; }
+    .progress-error-head {
+      display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--error-600);
+    }
+    .progress-error-head svg { flex-shrink: 0; }
+    .progress-error-body { margin-top: 10px; color: #7a2020; line-height: 1.6; }
+    .progress-error-meta {
+      display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px;
+      font-size: .82rem; color: #8a3838;
+    }
+    .progress-error-chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 10px; border-radius: 999px; border: 1px solid #efc5c5;
+      background: rgba(255,255,255,.55);
+    }
+    .progress-error-request {
+      margin-top: 14px; padding: 12px 14px; border-radius: var(--r-sm);
+      border: 1px dashed #e8baba; background: rgba(255,255,255,.6);
+    }
+    .progress-error-request b {
+      display: block; margin-bottom: 6px; color: #8a3838;
+      font-size: .82rem; text-transform: uppercase; letter-spacing: .06em;
+    }
+
+    .phase-list { display: flex; flex-direction: column; gap: 2px; }
+    .phase {
+      display: flex; align-items: center; gap: 14px; padding: 13px 14px;
+      border-bottom: 1px solid var(--b-hair); border-radius: 12px;
+      transition: opacity .3s var(--b-ease), background .3s var(--b-ease);
+    }
+    .phase:last-child { border-bottom: 0; }
+    .phase .ph-icon { width: 26px; height: 26px; flex-shrink: 0; display: grid; place-items: center; }
+    .phase .ph-label { font-size: .94rem; font-weight: 500; color: var(--neutral-700); flex: 1; }
+    .phase .ph-meta { font-size: .76rem; color: var(--muted); font-family: var(--mono); }
+
+    .phase[data-state="pending"] { opacity: .5; }
+    .phase[data-state="pending"] .ph-label { color: var(--muted); }
+    .phase[data-state="active"] {
+      background: var(--forest-050); border-bottom-color: transparent;
+      box-shadow: inset 0 0 0 1px var(--forest-100);
+    }
+    .phase[data-state="active"] .ph-label { color: var(--forest-700); font-weight: 600; }
+    .phase[data-state="active"] .ph-meta { color: var(--forest-600); }
+    .phase[data-state="done"] .ph-label { color: var(--neutral-900); }
+
+    /* spinner */
+    .spinner {
+      width: 18px; height: 18px; border-radius: 50%;
+      border: 2px solid var(--forest-100); border-top-color: var(--forest-600);
+      animation: spin .7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .ph-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--oat-400); }
+    .check { width: 26px; height: 26px; border-radius: 50%; background: var(--success-bg); display: grid; place-items: center; color: var(--success-600); }
+    .check svg { width: 15px; height: 15px; }
+
+    /* ---- Evidence pack (elevated card, refined rows) ---- */
+    .evidence-card { margin-top: 22px; overflow: hidden; }
+    .evidence-card .ev-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 17px 22px; border-bottom: 1px solid var(--b-hair); background: var(--oat-100);
+    }
+    .ev-title { font-size: .72rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--forest-600); }
+    .ev-count { font-size: .76rem; color: var(--muted); font-family: var(--mono); }
+    .ev-rows { padding: 8px 10px; }
+    .ev-row {
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      padding: 13px 14px; border-radius: var(--r-sm);
+      transition: background .15s var(--b-ease);
+    }
+    .ev-row:hover { background: var(--oat-100); }
+    .ev-row + .ev-row { border-top: 1px solid var(--b-hair); }
+    .ev-row .ev-body { flex: 1; min-width: 0; }
+    .ev-row .ev-sec { font-size: .9rem; font-weight: 600; color: var(--neutral-900); }
+    .ev-row .ev-sum { font-size: .78rem; color: var(--muted); line-height: 1.45; margin-top: 3px; }
+    .ev-row .chip { flex-shrink: 0; }
+    .ev-placeholder { padding: 26px 14px; text-align: center; color: var(--muted); font-size: .84rem; }
+
+    .progress-cta { text-align: center; margin-top: 34px; }
+    .progress-cta[hidden] { display: none; }
+    .progress-cta .pc-note { font-size: .82rem; color: var(--muted); margin-top: 14px; }
+
+    .state-block[hidden] { display: none; }
+
+    /* scroll-reveal is provided by app.js (data-reveal → .reveal/fadeUp);
+       only neutralize page-local entry animations under reduced-motion. */
+    @media (prefers-reduced-motion: reduce) {
+      .mode-block, .adv-body { animation: none !important; opacity: 1 !important; transform: none !important; }
+    }
+
+    @media (max-width: 768px) {
+      .audit-wrap { padding: 0 20px; }
+      .audit-section { padding: 52px 0 80px; }
+      .field-grid { grid-template-columns: 1fr; }
+      .audit-head .eyebrow::before, .audit-head .eyebrow::after { width: 16px; }
+      .ev-head { padding: 15px 18px; }
+      .ev-row { padding: 12px; }
+    }
+  </style>
+</head>
+<body class="has-atmos">
+  <div id="nav"></div>
+
+  <main class="audit-section">
+    <div class="audit-wrap">
+
+      <!-- ============================ STATE A — FORM ============================ -->
+      <section id="audit-form" class="state-block">
+        <div class="audit-head" data-reveal>
+          <span class="eyebrow">Start an audit</span>
+          <h1>Audit your listing</h1>
+          <p class="lede muted">Enter an ASIN or Amazon product link. We extract evidence, simulate 20+ Alexa for Shopping questions and benchmark top competitors.</p>
+        </div>
+
+        <div class="audit-card card-pad-lg" data-reveal>
+          <div>
+            <div class="mode-block" id="block-asin">
+              <div class="field">
+                <label class="label" for="asin">ASIN or product URL</label>
+                <input class="input mono" id="asin" type="text" value="B0G1MJWK3Z" placeholder="B0… or https://www.amazon.com/dp/…">
+                <p class="field-help">We pull the live page evidence — title, bullets, A+ and spec table.</p>
+              </div>
+              <div class="field">
+                <label class="label" for="marketplace">Marketplace</label>
+                <select class="select" id="marketplace">
+                  <option value="US" selected>Amazon.com — United States</option>
+                  <option value="UK">Amazon.co.uk — United Kingdom</option>
+                  <option value="DE">Amazon.de — Germany</option>
+                  <option value="JP">Amazon.co.jp — Japan</option>
+                  <option value="CA">Amazon.ca — Canada</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- ADVANCED OPTIONS -->
+            <div style="margin-top:24px">
+              <button class="adv-toggle" id="adv-toggle" type="button" aria-expanded="false">
+                <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                Advanced options
+                <span class="muted" style="font-weight:400">— category, audience, focus questions, competitors</span>
+              </button>
+              <div class="adv-body" id="adv-body" hidden>
+                <p class="field-help" style="margin:0 0 18px">Optional — these sharpen the audit: <b>Category</b> picks the right competitor set, <b>Focus questions</b> steer the Q&amp;A simulation, and <b>Competitor ASINs</b> improve gap ranking.</p>
+                <div class="field-grid">
+                  <div class="field">
+                    <label class="label" for="a-category">Category</label>
+                    <input class="input" id="a-category" type="text" placeholder="e.g. Hair Styling Tools">
+                  </div>
+                  <div class="field">
+                    <label class="label" for="a-audience">Target audience</label>
+                    <input class="input" id="a-audience" type="text" placeholder="e.g. women with thick hair">
+                  </div>
+                </div>
+                <div class="field" style="margin-top:18px">
+                  <label class="label" for="a-focus">Focus questions <span class="muted" style="font-weight:400">(one per line)</span></label>
+                  <textarea class="textarea" id="a-focus" placeholder="What buyer questions matter most? e.g. Is it good for thick hair?"></textarea>
+                </div>
+                <div class="field" style="margin-top:18px">
+                  <label class="label" for="a-competitors">Competitor ASINs</label>
+                  <input class="input mono" id="a-competitors" type="text" placeholder="B0…, B0…, B0…">
+                </div>
+                <div class="field" style="margin-top:18px">
+                  <label class="label" for="a-keywords">Keywords</label>
+                  <input class="input" id="a-keywords" type="text" placeholder="blow dryer brush, hot air brush, …">
+                </div>
+              </div>
+            </div>
+
+            <!-- RUN — PRIMARY INTENT: audit a real ASIN -->
+            <button class="btn btn-primary btn-lg btn-block" id="run" type="button" style="margin-top:28px">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v4M3 5h4M6 17v4M4 19h4"/><path d="M13 4 8.5 15 13 13.5 15 18l4.5-11L13 4Z"/></svg>
+              Audit my real ASIN
+            </button>
+            <div class="run-time-note" id="run-time-note" role="note">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+              <span><b>Report timing:</b> after sign-in, a real listing audit usually takes 10-15 minutes. Keep this page open while the agent loop runs.</span>
+            </div>
+
+            <div class="reassure">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg>
+              <span>Evidence-gated · brand-aware · we never invent specs.</span>
+            </div>
+
+            <!-- SECONDARY INTENT: skip straight to the sample report -->
+            <div class="intent-split">
+              <span class="is-or">or</span>
+              <div class="is-sample">
+                <span class="is-lead">Just want to see the output first? Skip the form and open the pre-computed sample report.</span>
+                <a class="link-sample" href="report.html?sample=1">
+                  Try the sample report
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SAMPLE RESULT PREVIEW — what you'll get, before you submit -->
+        <div class="audit-card preview-card" id="preview-card" data-reveal>
+          <div class="pv-head">
+            <span class="pv-eyebrow">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v4M3 5h4M6 17v4M4 19h4"/><path d="M13 4 8.5 15 13 13.5 15 18l4.5-11L13 4Z"/></svg>
+              Preview · what you'll get
+            </span>
+            <span class="pv-tag" id="pv-tag"></span>
+          </div>
+          <div class="pv-body" id="pv-body"><!-- filled from LUCKEE_DATA --></div>
+        </div>
+      </section>
+
+      <!-- ======================= STATE B — IN PROGRESS ======================= -->
+      <section id="audit-progress" class="state-block" hidden>
+        <div class="audit-head" data-reveal>
+          <span class="eyebrow">Working</span>
+          <h1>Analyzing your listing</h1>
+          <p class="lede muted">Luckee is running the agent loop: pulling page evidence, simulating shopper questions and benchmarking competitors. A real listing audit usually takes 10-15 minutes.</p>
+        </div>
+
+        <div class="audit-card card-pad-lg" data-reveal>
+          <div class="progress-head">
+            <span class="live-dot"></span>
+            <span class="mono">Analyzing <strong id="prog-asin">B0G1MJWK3Z</strong> · <span id="prog-mkt">US</span></span>
+          </div>
+          <p class="progress-sub">Evidence-gated pipeline running — every finding will be traced to extracted page evidence. Keep this page open for the 10-15 minute report run.</p>
+          <div class="demo-note" id="demo-note" style="display:none"></div>
+
+          <div class="phase-list" id="phase-list"></div>
+          <div class="progress-error-card" id="progress-error-card" hidden></div>
+        </div>
+
+        <!-- Evidence pack fills in row-by-row -->
+        <div class="audit-card evidence-card" id="evidence-card" data-reveal>
+          <div class="ev-head">
+            <span class="ev-title">Evidence Pack</span>
+            <span class="ev-count" id="ev-count">0 / 6 sections</span>
+          </div>
+          <div class="ev-rows" id="ev-rows">
+            <div class="ev-placeholder" id="ev-placeholder">Waiting for extraction to begin…</div>
+          </div>
+        </div>
+
+        <div class="progress-cta" id="progress-cta" hidden>
+          <div class="audit-card card-pad-lg" style="text-align:left">
+            <span class="eyebrow">Report ready</span>
+            <h2 id="gate-title" style="margin-top:12px;font-size:2rem">Your report is ready.</h2>
+            <p class="muted" id="gate-body" style="margin-top:10px;line-height:1.6"></p>
+            <div data-funnel-slot="gate" style="margin-top:18px"></div>
+        <a class="btn btn-primary btn-lg" id="view-report" href="report.html?audit=free" style="margin-top:22px">
+              View report
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+            <p class="pc-note" id="gate-note">Audit complete · 6 evidence sections · 20 questions simulated</p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <script src="data.js"></script>
+  <script src="analytics-config.js"></script>
+  <script src="analytics-sdk.js"></script>
+  <script src="tracking.js"></script>
+  <script src="auth.js"></script>
+  <script src="ws.js"></script>
+  <script src="app.js"></script>
+  <script>
+    (function () {
+      const D = window.LUCKEE_DATA;
+      const L = window.Luckee;
+
+      /* ---- inject marketing nav ---- */
+      document.getElementById('nav').innerHTML = L.topNav('listing');
+      L.wireMarketingNav();
+      L.bootstrapFunnelPage();
+
+      /* ---- prefill ASIN from ?asin= ---- */
+      const params = new URLSearchParams(location.search);
+      const asinParam = params.get('asin');
+      if (asinParam) {
+        const normalized = normalizeListingInput(asinParam);
+        document.getElementById('asin').value = normalized.asin || asinParam;
+      }
+      const mktParam = params.get('marketplace');
+      if (mktParam) { const ms = document.getElementById('marketplace'); if ([...ms.options].some(o => o.value === mktParam)) ms.value = mktParam; }
+      const replayThreadId = params.get('replay_thread_id') || (params.get('replay') === '1' ? (params.get('thread_id') || '') : '');
+      const replayOnly = !!replayThreadId;
+      window.LuckeeListingTrack?.trackPageView?.('audit', {
+        dataMode: replayOnly ? 'replay' : 'live',
+        asin: asinParam || '',
+        marketplace: mktParam || ''
+      });
+
+      /* ============================ SAMPLE RESULT PREVIEW ============================
+         Pre-submit panel so users know what the audit produces. Computed from
+         LUCKEE_DATA wherever possible so it can't drift from the report. */
+      (function renderPreview() {
+        const body = document.getElementById('pv-body');
+        const tag = document.getElementById('pv-tag');
+        if (!body) return;
+
+        const a = D.answerability || {};
+        const cur = a.clear, total = a.total, proj = a.projectedClear;
+
+        // Competitor-covered gap = the first benchmark module you don't cover but
+        // competitors do — this is the single most-damaging missing dimension.
+        let compGap = null;
+        (D.benchmark || []).some(m => {
+          const youMissing = m.you === 'not_available';
+          const compCovers = (m.comp || []).some(c => c === 'available');
+          if (youMissing && compCovers) { compGap = m.module; return true; }
+          return false;
+        });
+
+        // Top gap = the HIGH-risk UNKNOWN buyer question tied to that competitor-covered
+        // gap (match on the gap's leading keyword, e.g. "Hair-type"), so the headline
+        // question and the covered-gap dimension always agree.
+        const compKey = (compGap || '').toLowerCase().split(/[ /]/)[0]; // "hair-type"
+        let topGap = null;
+        const pickQ = (pred) =>
+          (D.qaGroups || []).some(g => (g.items || []).some(it => {
+            if (pred(it)) { topGap = it; return true; } return false;
+          }));
+        // 1) HIGH + UNKNOWN whose gap matches the competitor-covered dimension
+        if (compKey) pickQ(it => it.risk === 'HIGH' && it.support === 'UNKNOWN'
+          && String(it.gap || '').toLowerCase().includes(compKey));
+        // 2) any HIGH + UNKNOWN  3) any HIGH
+        if (!topGap) pickQ(it => it.risk === 'HIGH' && it.support === 'UNKNOWN');
+        if (!topGap) pickQ(it => it.risk === 'HIGH');
+
+        // Fix areas = the optimizable listing fields the audit ships rewrites for,
+        // taken from the suggest bundle modules (Title · Bullets · A+ · Search Terms).
+        const FIELD_ORDER = ['Title', 'Bullets', 'A+', 'Search Terms'];
+        const labelMap = { 'A+ Page': 'A+' };
+        const mods = (D.bundle && D.bundle.modules) || {};
+        const areaSet = new Set();
+        Object.keys(mods).forEach(k => {
+          const raw = (mods[k] && mods[k].label) || '';
+          const lbl = labelMap[raw] || raw;
+          if (lbl) areaSet.add(lbl);
+        });
+        let areas = [...areaSet].sort((x, y) => {
+          const ix = FIELD_ORDER.indexOf(x), iy = FIELD_ORDER.indexOf(y);
+          return (ix === -1 ? 99 : ix) - (iy === -1 ? 99 : iy);
+        });
+
+        tag.textContent = D.product.brand + ' · ' + D.product.asin;
+
+        body.innerHTML = `
+          <div class="pv-scoreline">
+            <span class="pv-score"><span class="pv-cur">${cur}</span><span class="pv-arrow">→</span><span class="pv-proj">${proj}</span> / ${total}</span>
+            <span class="pv-score-cap">buyer questions clearly answered — current ${cur} / ${total}, projected ${proj} / ${total} after fixes.</span>
+          </div>
+          <div class="pv-rows">
+            <div class="pv-row"><span class="pv-k">Current score</span><span class="pv-v">${cur} / ${total} buyer questions clearly answered</span></div>
+            ${topGap ? `<div class="pv-row"><span class="pv-k">Top gap</span><span class="pv-v"><span class="q">“${L.esc(topGap.q)}”</span></span></div>` : ''}
+            ${compGap ? `<div class="pv-row"><span class="pv-k">Competitor-covered gap</span><span class="pv-v">${L.esc(compGap)}</span></div>` : ''}
+            <div class="pv-row"><span class="pv-k">After fixes</span><span class="pv-v">projected ${proj} / ${total}</span></div>
+          </div>
+          <div class="pv-areas" aria-label="Fix areas">
+            ${areas.map(x => `<span class="pv-area-chip">${L.esc(x)}</span>`).join('')}
+          </div>
+          <div class="pv-foot">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+            <span>Sample preview from the pre-computed ${L.esc(D.product.brand)} audit. Run yours above to see your own gaps.</span>
+          </div>`;
+      })();
+
+      /* ---- inline field validation helper ---- */
+      function fieldError(input, msg) {
+        input.style.borderColor = 'var(--error-600)';
+        input.style.boxShadow = '0 0 0 3px rgba(220,40,40,.12)';
+        let err = input.parentNode.querySelector('.field-err');
+        if (!err) {
+          err = document.createElement('div');
+          err.className = 'field-err'; err.setAttribute('role', 'alert');
+          err.style.cssText = 'color:var(--error-600);font-size:.8rem;margin-top:6px;font-weight:500';
+          input.parentNode.appendChild(err);
+        }
+        err.textContent = msg;
+        input.focus();
+        input.addEventListener('input', function clr() {
+          input.style.borderColor = ''; input.style.boxShadow = '';
+          if (err && err.parentNode) err.remove();
+          input.removeEventListener('input', clr);
+        });
+      }
+
+      function isValidAsin(value) {
+        return /^[A-Z0-9]{10}$/i.test(String(value || '').trim());
+      }
+
+      function isAmazonProductUrl(value) {
+        const raw = String(value || '').trim();
+        if (!raw) return false;
+        try {
+          const url = new URL(raw);
+          return /(^|\.)amazon\./i.test(url.hostname);
+        } catch (_) {
+          return false;
+        }
+      }
+
+      function extractAsinFromAmazonUrl(value) {
+        const raw = String(value || '').trim();
+        if (!raw) return '';
+        try {
+          const url = new URL(raw);
+          if (!/(^|\.)amazon\./i.test(url.hostname)) return '';
+          const match = url.pathname.match(/\/(?:dp|gp\/product|exec\/obidos\/ASIN)\/([A-Z0-9]{10})(?:[/?#]|$)/i);
+          return match ? match[1].toUpperCase() : '';
+        } catch (_) {
+          return '';
+        }
+      }
+
+      function normalizeListingInput(value) {
+        const raw = String(value || '').trim();
+        if (!raw) return { asin: '', error: 'Enter an ASIN or Amazon URL to audit.' };
+        if (isValidAsin(raw)) return { asin: raw.toUpperCase(), error: '' };
+        if (!isAmazonProductUrl(raw)) {
+          return { asin: '', error: 'Enter a valid 10-character ASIN or Amazon product URL.' };
+        }
+        const asin = extractAsinFromAmazonUrl(raw);
+        if (!asin) {
+          return { asin: '', error: 'Enter an Amazon product URL that includes a valid ASIN.' };
+        }
+        return { asin, error: '' };
+      }
+
+      let lastTrackedAsinEntry = '';
+      function extractAsinEntry(value) {
+        const normalized = normalizeListingInput(value);
+        if (!normalized.asin) return null;
+        return {
+          asin: normalized.asin,
+          inputType: isAmazonProductUrl(value) ? 'amazon_url' : 'asin'
+        };
+      }
+
+      function trackAsinEntered(rawValue) {
+        const entry = extractAsinEntry(rawValue);
+        if (!entry) return;
+        const marketplaceSelect = document.getElementById('marketplace');
+        const marketplace = marketplaceSelect?.value || 'US';
+        const key = `${entry.asin}:${marketplace}`;
+        if (lastTrackedAsinEntry === key) return;
+        lastTrackedAsinEntry = key;
+        L.trackListingEvent('LISTING_ASIN_ENTERED', {
+          asin: entry.asin,
+          marketplace,
+          input_type: entry.inputType,
+          dataMode: replayOnly ? 'replay' : 'live'
+        });
+      }
+
+      /* ============================ MODE TOGGLE ============================ */
+      const blockAsin = document.getElementById('block-asin');
+
+      /* ============================ ADVANCED ============================ */
+      const advToggle = document.getElementById('adv-toggle');
+      const advBody = document.getElementById('adv-body');
+      advToggle.addEventListener('click', () => {
+        const open = advToggle.getAttribute('aria-expanded') === 'true';
+        advToggle.setAttribute('aria-expanded', String(!open));
+        advBody.hidden = open;
+        // when opening, keep the new fields + Run button reachable
+        if (!open) requestAnimationFrame(() => advBody.scrollIntoView({ behavior: 'smooth', block: 'nearest' }));
+      });
+
+      const USER_STORAGE_KEY = 'luckee-listing:user';
+      const LEGACY_USER_STORAGE_KEY = 'user';
+
+      function readUserSession() {
+        try {
+          return JSON.parse(
+            window.localStorage.getItem(USER_STORAGE_KEY)
+            || window.localStorage.getItem(LEGACY_USER_STORAGE_KEY)
+            || '{}'
+          ) || {};
+        }
+        catch (err) { return {}; }
+      }
+
+      /* ============================ RUN → STATE B ============================ */
+      const formEl = document.getElementById('audit-form');
+      const progEl = document.getElementById('audit-progress');
+      const runBtn = document.getElementById('run');
+      const runTimeNote = document.getElementById('run-time-note');
+      document.getElementById('asin')?.addEventListener('blur', event => trackAsinEntered(event.target.value));
+      document.getElementById('asin')?.addEventListener('change', event => trackAsinEntered(event.target.value));
+
+      const PHASES = [
+        { label: 'Extracting listing evidence', meta: 'title · bullets · A+ · spec table' },
+        { label: 'Reading A+ images (13 detected)', meta: '13 modules' },
+        { label: 'Simulating Alexa Shopping Q&A (20+ questions)', meta: '20 questions · 5 areas' },
+        { label: 'Benchmarking top competitors', meta: '3 competitors' },
+        { label: 'Building optimization plan', meta: 'P0 · P1 · P2' }
+      ];
+      const INIT_PHASE = {
+        step_id: 'step-init',
+        description: 'Initializing diagnosis run',
+        step_index: 0,
+        meta: 'ws connected · preparing todo list'
+      };
+      const FINAL_PHASE = {
+        step_id: 'step-final-report',
+        description: 'Generating final report',
+        step_index: 999,
+        meta: 'dashboard · evidence pack · workspace bundle'
+      };
+
+      const phaseList = document.getElementById('phase-list');
+      const evRows = document.getElementById('ev-rows');
+      const evPlaceholder = document.getElementById('ev-placeholder');
+      const evCount = document.getElementById('ev-count');
+      const progCta = document.getElementById('progress-cta');
+      const DASHBOARD_SESSION_KEY = 'luckee-listing:latest-dashboard';
+      const WORKSPACE_SESSION_KEY = 'luckee-listing:latest-workspace-bundle';
+      const THREAD_SESSION_KEY = 'luckee-listing:latest-thread-id';
+      const ACTIVE_AUDIT_SESSION_KEY = 'luckee-listing:active-audit-session';
+      const LISTING_TOOL_NAME = window.LuckeeAgentWs?.LISTING_TOOL_NAME || 'luckee-listing';
+      let latestDiagnosisThreadId = replayThreadId || '';
+      let activeDiagnosisStartedAt = 0;
+      let hasLivePlan = false;
+      let initPhaseStatus = 'pending';
+      let finalPhaseStatus = 'pending';
+      let latestPlanSteps = [];
+      let latestErrorUpdate = null;
+      let runStarted = false;
+      let runStartedAt = 0;
+
+      function persistLatestThreadId(threadId) {
+        if (!threadId) return;
+        latestDiagnosisThreadId = threadId;
+        L.setListingTrackContext({ threadId });
+        try { window.sessionStorage.setItem(THREAD_SESSION_KEY, threadId); } catch (err) {}
+      }
+
+      function readJsonSession(key) {
+        try {
+          const raw = window.sessionStorage.getItem(key);
+          return raw ? JSON.parse(raw) : null;
+        } catch (err) {
+          return null;
+        }
+      }
+
+      function readLatestDashboardSnapshot() {
+        const record = readJsonSession(DASHBOARD_SESSION_KEY);
+        const dashboard = record?.dashboard || record;
+        return dashboard?.type === 'listing_diagnosis_dashboard' ? dashboard : null;
+      }
+
+      function syncAuditUrl(payload, threadId, options) {
+        try {
+          const next = new URL(window.location.href);
+          const asin = String(payload?.asin || payload?.listingInput || '').trim();
+          const marketplace = String(payload?.marketplace || '').trim();
+          const shouldReplay = options?.replay === true;
+          if (asin) next.searchParams.set('asin', asin);
+          if (marketplace) next.searchParams.set('marketplace', marketplace);
+          if (threadId) next.searchParams.set('thread_id', threadId);
+          if (shouldReplay) next.searchParams.set('replay', '1');
+          else next.searchParams.delete('replay');
+          next.searchParams.delete('replay_thread_id');
+          window.history.replaceState({}, '', next.pathname.split('/').pop() + next.search + next.hash);
+        } catch (err) {}
+      }
+
+      function buildAuditSessionSnapshot(overrides) {
+        const dashboard = artifactState.dashboard || readLatestDashboardSnapshot() || null;
+        return Object.assign({
+          state: progCta.hidden ? 'running' : 'completed',
+          threadId: latestDiagnosisThreadId,
+          asin: document.getElementById('prog-asin')?.textContent || '',
+          marketplace: document.getElementById('prog-mkt')?.textContent || '',
+          marketplaceLabel: '',
+          advancedOptions: readAsinAdvancedOptions(),
+          latestPlanSteps,
+          hasLivePlan,
+          runStarted,
+          runStartedAt,
+          initPhaseStatus,
+          finalPhaseStatus,
+          errorUpdate: latestErrorUpdate,
+          dashboard,
+          updatedAt: Date.now()
+        }, overrides || {});
+      }
+
+      function persistActiveAuditSession(overrides) {
+        const snapshot = buildAuditSessionSnapshot(overrides);
+        if (!snapshot.threadId) return;
+        persistLatestThreadId(snapshot.threadId);
+        try {
+          window.sessionStorage.setItem(ACTIVE_AUDIT_SESSION_KEY, JSON.stringify(snapshot));
+        } catch (err) {}
+      }
+
+      function markRunStarted(info) {
+        if (runStarted) return;
+        runStarted = true;
+        runStartedAt = Date.now();
+        persistActiveAuditSession({
+          state: 'running',
+          runStarted: true,
+          runStartedAt,
+          lastRunStartedMessageId: info?.messageId || info?.message_id || ''
+        });
+      }
+
+      function readActiveAuditSession() {
+        return readJsonSession(ACTIVE_AUDIT_SESSION_KEY);
+      }
+
+      function getNavigationType() {
+        try {
+          return window.performance?.getEntriesByType?.('navigation')?.[0]?.type || '';
+        } catch (err) {
+          return '';
+        }
+      }
+
+      function shouldResumePersistedAudit(session) {
+        if (!session?.threadId || session.state !== 'running' || session.runStarted !== true) return false;
+        if (replayOnly && replayThreadId === session.threadId) return true;
+        return getNavigationType() === 'reload';
+      }
+
+      function clearActiveAuditSession() {
+        try { window.sessionStorage.removeItem(ACTIVE_AUDIT_SESSION_KEY); } catch (err) {}
+      }
+
+      function navigateToPricing() {
+        clearActiveAuditSession();
+        try { window.sessionStorage.setItem('luckee-listing:pricing-focus', '1'); } catch (err) {}
+        try {
+          const next = new URL('index.html', window.location.href);
+          next.searchParams.set('from', 'audit-paywall');
+          next.hash = 'pricing';
+          window.location.assign(next.pathname.split('/').pop() + next.search + next.hash);
+        } catch (err) {
+          window.location.assign('index.html?from=audit-paywall#pricing');
+        }
+      }
+
+      function showProgressView(state) {
+        const demo = document.getElementById('demo-note');
+        if (demo) {
+          updateLiveStatus({ state: state || 'connecting' });
+        }
+        formEl.hidden = true;
+        progEl.hidden = false;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      function promptSubscriptionRequired() {
+        return new Promise((resolve) => {
+          L.showFunnelModal({
+            eyebrow: 'Subscription required',
+            title: 'Your free Luckee Listing runs are used up.',
+            body: 'Complete a subscription before continuing to another diagnosis. You can open pricing now or come back later.',
+            primary: 'Open pricing',
+            secondary: 'Not now',
+            trackingPayload: {
+              reason: 'subscription_required',
+              placement: 'audit_run'
+            },
+            onConfirm: () => {
+              navigateToPricing();
+              resolve(true);
+            },
+            onCancel: () => resolve(false)
+          });
+        });
+      }
+
+      function promptCreditsRequired() {
+        return new Promise((resolve) => {
+          L.showFunnelModal({
+            eyebrow: 'Credits required',
+            title: 'You do not have enough Luckee credits to start this diagnosis.',
+            body: 'This account is subscribed, but the remaining Luckee credits are 0. Recharge credits before starting another live diagnosis.',
+            primary: 'View pricing',
+            secondary: 'Not now',
+            onConfirm: () => {
+              navigateToPricing();
+              resolve(true);
+            },
+            onCancel: () => resolve(false)
+          });
+        });
+      }
+
+      async function resolveDiagnosisAccess() {
+        const userInfo = await window.LuckeeAuth.getCurrentUser();
+        const availability = await window.LuckeeAuth.getUserRelatedToolAvailable(LISTING_TOOL_NAME);
+        const isSubscribed = Number(userInfo?.memberStatus || 0) === 1;
+
+        if (availability.toolAvailable) {
+          return {
+            toolAvailable: true,
+            isSubscribed,
+            toolName: LISTING_TOOL_NAME
+          };
+        }
+
+        if (!isSubscribed) {
+          await promptSubscriptionRequired();
+          return {
+            blocked: true,
+            toolAvailable: false,
+            isSubscribed: false,
+            toolName: ''
+          };
+        }
+
+        const creditSummary = await window.LuckeeAuth.getUserCredits();
+        if (Number.isFinite(creditSummary?.remaining) && creditSummary.remaining <= 0) {
+          await promptCreditsRequired();
+          return {
+            blocked: true,
+            toolAvailable: false,
+            isSubscribed: true,
+            toolName: '',
+            reason: 'credits_exhausted',
+            remainingCredits: creditSummary.remaining
+          };
+        }
+
+        return {
+          toolAvailable: false,
+          isSubscribed: true,
+          toolName: '',
+          remainingCredits: creditSummary?.remaining
+        };
+      }
+
+      function triggerListingDiagnosis(payload) {
+        const state = L.funnel ? L.funnel.getState() : { signedIn: false };
+        const run = async () => {
+          if (!window.LuckeeAgentWs?.runListingDiagnosis) {
+            console.error('[Luckee Listing WS] ws.js is not loaded');
+            L.trackListingEvent('LISTING_AUDIT_RUN_RESULT', {
+              success: false,
+              errorCode: 'ws_unavailable',
+              sourceType: payload?.sourceType || '',
+              marketplace: payload?.marketplace || '',
+              asin: payload?.asin || '',
+              threadId: payload?.threadId || ''
+            }, { immediate: true });
+            runBtn.disabled = false;
+            return;
+          }
+          activeDiagnosisStartedAt = Date.now();
+          L.setListingTrackContext({
+            threadId: payload?.threadId || '',
+            sourceType: payload?.sourceType || '',
+            marketplace: payload?.marketplace || '',
+            asin: payload?.asin || '',
+            dataMode: payload?.replayOnly ? 'replay' : 'live'
+          });
+          // Only count a real audit as "started" once it actually runs (replay path,
+          // or live path after the tool-availability / subscription / credits gate
+          // passes). Firing it on click would mislabel blocked sessions as started.
+          const emitAuditRunStart = () => L.trackListingEvent('LISTING_AUDIT_RUN_START', {
+            sourceType: payload?.sourceType || '',
+            marketplace: payload?.marketplace || '',
+            asin: payload?.asin || '',
+            threadId: payload?.threadId || '',
+            attachmentCount: Array.isArray(payload?.attachments) ? payload.attachments.length : 0,
+            dataMode: payload?.replayOnly ? 'replay' : 'live'
+          });
+          if (payload?.replayOnly) {
+            emitAuditRunStart();
+            showProgressView('replay');
+            window.LuckeeAgentWs.runListingDiagnosis(payload).catch((error) => {
+              console.error('[Luckee Listing WS] diagnosis failed', error);
+              L.trackListingEvent('LISTING_AUDIT_RUN_RESULT', {
+                success: false,
+                errorCode: 'diagnosis_failed',
+                durationMs: activeDiagnosisStartedAt ? Date.now() - activeDiagnosisStartedAt : 0,
+                sourceType: payload?.sourceType || '',
+                marketplace: payload?.marketplace || '',
+                asin: payload?.asin || '',
+                threadId: latestDiagnosisThreadId || payload?.threadId || '',
+                dataMode: 'replay'
+              }, { immediate: true });
+              if (error?.name !== 'LuckeeListingErrorUpdate') {
+                renderAuditError(error);
+              }
+              runBtn.disabled = false;
+            });
+            return;
+          }
+          let access;
+          try {
+            access = await resolveDiagnosisAccess();
+          } catch (error) {
+            console.error('[Luckee Listing] diagnosis access check failed', error);
+            L.showNoticeModal({
+              eyebrow: 'Unable to continue',
+              title: 'We could not verify your Listing usage right now.',
+              body: error?.message || 'Please try again in a moment.'
+            });
+            runBtn.disabled = false;
+            return;
+          }
+          if (access?.blocked) {
+            L.trackListingEvent('LISTING_AUDIT_BLOCKED', {
+              reason: access?.reason || (access?.isSubscribed === false ? 'subscription_required' : 'blocked'),
+              sourceType: payload?.sourceType || '',
+              marketplace: payload?.marketplace || '',
+              asin: payload?.asin || '',
+              threadId: payload?.threadId || '',
+              remainingCredits: Number.isFinite(access?.remainingCredits) ? access.remainingCredits : null
+            }, { immediate: true });
+            runBtn.disabled = false;
+            return;
+          }
+          emitAuditRunStart();
+          showProgressView(payload?.replayOnly ? 'replay' : 'connecting');
+          window.LuckeeAgentWs.runListingDiagnosis(Object.assign({}, payload, {
+            toolName: access?.toolName || ''
+          })).catch((error) => {
+            console.error('[Luckee Listing WS] diagnosis failed', error);
+            L.trackListingEvent('LISTING_AUDIT_RUN_RESULT', {
+              success: false,
+              errorCode: 'diagnosis_failed',
+              durationMs: activeDiagnosisStartedAt ? Date.now() - activeDiagnosisStartedAt : 0,
+              sourceType: payload?.sourceType || '',
+              marketplace: payload?.marketplace || '',
+              asin: payload?.asin || '',
+              threadId: latestDiagnosisThreadId || payload?.threadId || ''
+            }, { immediate: true });
+            if (error?.name !== 'LuckeeListingErrorUpdate') {
+              renderAuditError(error);
+            }
+            runBtn.disabled = false;
+          });
+        };
+        if (!state.signedIn) {
+          L.showAuthModal({
+            mode: 'login',
+            reason: 'audit_start',
+            placement: 'audit_run',
+            onSuccess: run
+          });
+          return false;
+        }
+        run();
+        return true;
+      }
+
+      const gate = D.funnel && D.funnel.reportGate ? D.funnel.reportGate : {};
+      document.getElementById('gate-title').textContent = gate.title || 'Your report is ready.';
+      document.getElementById('gate-body').textContent = gate.body || 'The audit is complete. Open the diagnosis report to view the result.';
+      document.getElementById('view-report').childNodes[0].nodeValue = (gate.primary || 'View report') + ' ';
+      document.getElementById('gate-note').textContent = gate.secondary || 'Audit complete · first report remains free.';
+      document.getElementById('view-report').addEventListener('click', (e) => {
+        e.preventDefault();
+        const summary = reportArtifactSummary();
+        L.trackListingEvent('LISTING_CTA_CLICK', {
+          ctaId: 'view_report',
+          placement: 'report_gate',
+          targetPage: 'report',
+          reportId: summary.reportId || '',
+          threadId: latestDiagnosisThreadId || ''
+        }, { immediate: true });
+        L.funnel.markAuditViewed();
+        location.href = 'report.html?audit=free';
+      });
+
+      const RETRIEVAL = {
+        retrieved: { cls: 'chip-clear', label: 'Retrieved' },
+        partially_retrieved: { cls: 'chip-partial', label: 'Partial' },
+        not_available: { cls: 'chip-conflict', label: 'Not available' }
+      };
+      function retrievalChip(status) {
+        const r = RETRIEVAL[status] || RETRIEVAL.not_available;
+        return `<span class="chip ${r.cls}"><span class="dot"></span>${r.label}</span>`;
+      }
+
+      const CHECK_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg>`;
+
+      function defaultPlanSteps() {
+        return PHASES.map((p, i) => ({
+          step_id: `step-${i + 1}`,
+          description: p.label,
+          step_index: i + 1,
+          status: 'pending'
+        }));
+      }
+
+      function phaseMeta(step, index) {
+        if ((step?.step_id || '') === INIT_PHASE.step_id || Number(step?.step_index) === 0) {
+          return INIT_PHASE.meta;
+        }
+        if ((step?.step_id || '') === FINAL_PHASE.step_id) {
+          return FINAL_PHASE.meta;
+        }
+        const fixed = PHASES[(Number(step.step_index) || index + 1) - 1];
+        return fixed ? fixed.meta : '';
+      }
+
+      function normalizePhaseState(status) {
+        if (status === 'completed' || status === 'complete' || status === 'done') return 'done';
+        if (status === 'in_progress' || status === 'running' || status === 'active') return 'active';
+        return 'pending';
+      }
+
+      function sortStepIndex(step) {
+        const index = Number(step?.step_index);
+        return Number.isFinite(index) ? index : 999;
+      }
+
+      function isInternalPhase(step) {
+        const stepId = step?.step_id || '';
+        return stepId === INIT_PHASE.step_id || stepId === FINAL_PHASE.step_id || Number(step?.step_index) === 0;
+      }
+
+      function arePlanStepsComplete(steps) {
+        const list = Array.isArray(steps) ? steps.filter(step => !isInternalPhase(step)) : [];
+        return list.length > 0 && list.every(step => normalizePhaseState(step?.status) === 'done');
+      }
+
+      function withFixedPhases(steps) {
+        const list = Array.isArray(steps) && steps.length ? steps : defaultPlanSteps();
+        const middleSteps = list.filter(step => !isInternalPhase(step));
+        const nextFinalStatus = normalizePhaseState(finalPhaseStatus) === 'done'
+          ? 'completed'
+          : arePlanStepsComplete(middleSteps)
+            ? 'in_progress'
+            : finalPhaseStatus;
+        return [
+          Object.assign({}, INIT_PHASE, { status: initPhaseStatus }),
+          ...middleSteps,
+          Object.assign({}, FINAL_PHASE, { status: nextFinalStatus })
+        ];
+      }
+
+      function renderPlanSteps(steps) {
+        const list = withFixedPhases(steps)
+          .slice()
+          .sort((a, b) => sortStepIndex(a) - sortStepIndex(b));
+        phaseList.innerHTML = list.map((p, i) => {
+          const state = normalizePhaseState(p.status);
+          const icon = state === 'active'
+            ? '<span class="spinner"></span>'
+            : state === 'done'
+              ? `<span class="check">${CHECK_SVG}</span>`
+              : '<span class="ph-dot"></span>';
+          const fallbackPhase = PHASES[Math.max(0, i - 1)];
+          return `
+          <div class="phase" data-state="${state}" data-i="${i}">
+            <div class="ph-icon">${icon}</div>
+            <span class="ph-label">${L.esc(p.description || p.reason || fallbackPhase?.label || 'Working')}</span>
+            <span class="ph-meta">${L.esc(phaseMeta(p, i))}</span>
+          </div>`;
+        }).join('');
+      }
+
+      function renderPhases() {
+        renderPlanSteps(defaultPlanSteps());
+      }
+
+      function renderInitPhase() {
+        initPhaseStatus = 'in_progress';
+        renderPlanSteps(defaultPlanSteps());
+      }
+
+      function populateProgressHeader(payload) {
+        const asinVal = String(payload?.asin || payload?.listingInput || '').trim() || 'Unknown listing';
+        const mktVal = String(payload?.marketplace || '').trim() || 'US';
+        document.getElementById('prog-asin').textContent = asinVal;
+        document.getElementById('prog-mkt').textContent = mktVal;
+      }
+
+      function cleanListInput(value) {
+        return String(value || '')
+          .split(/\n|,|，|;/)
+          .map(item => item.trim())
+          .filter(Boolean);
+      }
+
+      function readAsinAdvancedOptions() {
+        return {
+          category: (document.getElementById('a-category')?.value || '').trim(),
+          audience: (document.getElementById('a-audience')?.value || '').trim(),
+          focusQuestions: cleanListInput(document.getElementById('a-focus')?.value),
+          competitorAsins: cleanListInput(document.getElementById('a-competitors')?.value),
+          keywords: cleanListInput(document.getElementById('a-keywords')?.value)
+        };
+      }
+
+      function updatePlanFromWs(plan) {
+        const steps = plan && Array.isArray(plan.steps) ? plan.steps : [];
+        if (!steps.length) return;
+        hasLivePlan = true;
+        latestPlanSteps = steps;
+        initPhaseStatus = 'completed';
+        finalPhaseStatus = arePlanStepsComplete(steps) ? 'in_progress' : 'pending';
+        renderPlanSteps(steps);
+        persistActiveAuditSession();
+      }
+
+      function updateLiveStatus(status) {
+        const demo = document.getElementById('demo-note');
+        if (!demo) return;
+        const di = '<svg class="di" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>';
+        demo.style.display = 'flex';
+        demo.style.background = '';
+        demo.style.color = '';
+        demo.style.borderColor = '';
+        if (status?.state === 'replay') {
+          demo.innerHTML = di + '<span><b>Replay mode.</b> Reconnecting to a saved agent thread for UI development; no new diagnosis query will be sent.</span>';
+          return;
+        }
+        if (status?.state === 'message_idle') {
+          demo.innerHTML = di + '<span><b>Syncing connection.</b> We have not received agent updates for a moment, so we are reconnecting to the same diagnosis thread and catching up from history.</span>';
+          return;
+        }
+        if (status?.state === 'reconnecting' || status?.state === 'reconnect_scheduled') {
+          demo.innerHTML = di + '<span><b>Reconnecting.</b> The diagnosis is still running; reconnecting to the same agent thread.</span>';
+          return;
+        }
+        demo.innerHTML = di + '<span><b>Agent loop running.</b> Real listing audits usually take 10-15 minutes after sign-in. This page keeps the live plan in sync and opens the diagnosis report as soon as the final schema arrives.</span>';
+      }
+
+      function normalizeAuditErrorUpdate(input) {
+        if (!input) return null;
+        const raw = input.raw || input;
+        const errorMessage = String(
+          input.errorMessage
+          || raw.error_message
+          || raw.errorMessage
+          || input.message
+          || raw.message
+          || 'Diagnosis failed before the agent could finish.'
+        ).trim();
+        return {
+          type: 'error_update',
+          errorCode: input.errorCode ?? raw.error_code ?? raw.errorCode ?? '',
+          errorMessage,
+          originalRequest: String(input.originalRequest || raw.original_request || raw.request || '').trim(),
+          messageId: input.messageId || raw.message_id || raw.messageId || raw.id || '',
+          timestamp: input.timestamp || raw.timestamp || raw.ts || new Date().toISOString()
+        };
+      }
+
+      function renderAuditError(input, options) {
+        const errorUpdate = normalizeAuditErrorUpdate(input);
+        if (!errorUpdate) return;
+        latestErrorUpdate = errorUpdate;
+        runBtn.disabled = false;
+        progCta.hidden = true;
+        progCta.classList.remove('reveal');
+        showProgressView('error');
+
+        const demo = document.getElementById('demo-note');
+        if (demo) {
+          const warnIcon = '<svg class="di" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/></svg>';
+          demo.style.display = 'flex';
+          demo.style.background = 'var(--error-bg)';
+          demo.style.color = '#7a2020';
+          demo.style.borderColor = '#f0c5c5';
+          demo.innerHTML = warnIcon + '<span><b>Diagnosis stopped.</b> The agent returned an error update, so this run will not continue until you start a new attempt.</span>';
+        }
+
+        const errorCard = document.getElementById('progress-error-card');
+        if (errorCard) {
+          const meta = [];
+          if (errorUpdate.errorCode !== '' && errorUpdate.errorCode !== null && errorUpdate.errorCode !== undefined) {
+            meta.push(`<span class="progress-error-chip">Error code: ${L.esc(String(errorUpdate.errorCode))}</span>`);
+          }
+          if (errorUpdate.messageId) {
+            meta.push(`<span class="progress-error-chip">Message: ${L.esc(String(errorUpdate.messageId))}</span>`);
+          }
+          errorCard.innerHTML = `
+            <div class="progress-error-head">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/></svg>
+              <span>Execution failed</span>
+            </div>
+            <div class="progress-error-body">${L.esc(errorUpdate.errorMessage)}</div>
+            ${meta.length ? `<div class="progress-error-meta">${meta.join('')}</div>` : ''}
+            ${errorUpdate.originalRequest ? `<div class="progress-error-request"><b>Original request</b><div>${L.esc(errorUpdate.originalRequest)}</div></div>` : ''}
+          `;
+          errorCard.hidden = false;
+        }
+
+        evRows.innerHTML = '<div class="ev-placeholder">Diagnosis stopped before the evidence pack finished. Start a new run after fixing the upstream issue.</div>';
+        evCount.textContent = '0 / 0 sections';
+
+        if (!options?.skipPersist) {
+          persistActiveAuditSession({ state: 'error', errorUpdate });
+        }
+      }
+
+      const artifactState = {
+        files: [],
+        dashboard: null,
+        reportIds: new Set()
+      };
+      const REQUIRED_REPORT_ARTIFACTS = [
+        'listing_context',
+        'evidence_pack',
+        'qa_simulation',
+        'priority_actions',
+        'listing_diagnosis_dashboard.draft'
+      ];
+
+      function normalizeArtifactPath(msg) {
+        return String(msg?.file_path || msg?.filePath || msg?.path || '').replace(/\\/g, '/');
+      }
+
+      function parseJsonMaybe(value) {
+        if (!value) return null;
+        if (typeof value === 'object') return value;
+        if (typeof value !== 'string') return null;
+        try { return JSON.parse(value); } catch (err) { return null; }
+      }
+
+      function readFileMonitorJson(msg) {
+        return parseJsonMaybe(msg?.content)
+          || parseJsonMaybe(msg?.data)
+          || parseJsonMaybe(msg?.payload)
+          || parseJsonMaybe(msg?.file_content)
+          || parseJsonMaybe(msg?.fileContent)
+          || null;
+      }
+
+      function extractReportIdFromPath(path) {
+        const name = String(path || '').split('/').pop() || '';
+        const dashboard = name.match(/^(.+)\.json$/);
+        if (path.includes('/skill-to-ui/listing_diagnosis_dashboard/') && dashboard) return dashboard[1];
+        const report = name.match(/^(.+?)_(?:listing_context|evidence_pack|a_plus_visual_analysis|keyword_evidence|qa_simulation|priority_actions|listing_diagnosis_dashboard\.draft)\.json$/);
+        return report ? report[1] : '';
+      }
+
+      function isListingDashboardArtifact(path, data) {
+        return path.includes('skill-to-ui/listing_diagnosis_dashboard/')
+          || data?.type === 'listing_diagnosis_dashboard';
+      }
+
+      function extractStructuredBlock(data, type) {
+        const blocks = data?.metadata?.structured_blocks;
+        return Array.isArray(blocks) ? blocks.find(block => block?.type === type) : null;
+      }
+
+      function isAlexaSuggestBundleArtifact(path, data) {
+        return path.includes('skill-to-ui/alexa_suggest_checklist/')
+          || data?.type === 'alexa_suggest_checklist_bundle';
+      }
+
+      function getReportArtifactKind(path) {
+        const name = String(path || '').split('/').pop() || '';
+        const match = name.match(/^.+?_(listing_context|evidence_pack|a_plus_visual_analysis|keyword_evidence|qa_simulation|priority_actions|listing_diagnosis_dashboard\.draft)\.json$/);
+        return match ? match[1] : '';
+      }
+
+      function reportArtifactSummary() {
+        const byReport = {};
+        artifactState.files.forEach(file => {
+          if (!file.reportId) return;
+          const kind = getReportArtifactKind(file.path);
+          if (!kind) return;
+          if (!byReport[file.reportId]) byReport[file.reportId] = new Set();
+          byReport[file.reportId].add(kind);
+        });
+        const reportIds = Object.keys(byReport);
+        const reportId = reportIds[reportIds.length - 1] || '';
+        const present = reportId ? byReport[reportId] : new Set();
+        return {
+          reportId,
+          present,
+          missing: REQUIRED_REPORT_ARTIFACTS.filter(kind => !present.has(kind))
+        };
+      }
+
+      function rememberArtifact(msg) {
+        if (!msg || msg.type !== 'file_monitor') return;
+        const path = normalizeArtifactPath(msg);
+        const data = readFileMonitorJson(msg);
+        const reportId = extractReportIdFromPath(path);
+        if (reportId) artifactState.reportIds.add(reportId);
+        artifactState.files = artifactState.files.filter(file => file.path !== path);
+        artifactState.files.push({ path, data, msg, reportId });
+
+        if (isListingDashboardArtifact(path, data)) {
+          persistDashboardArtifact(data, path, reportId);
+          if (data?.type === 'listing_diagnosis_dashboard') {
+            artifactState.dashboard = data;
+            renderDashboardEvidence(data);
+          }
+        }
+
+        if (isAlexaSuggestBundleArtifact(path, data)) {
+          persistWorkspaceArtifact(data, path, reportId);
+        }
+
+        persistActiveAuditSession();
+      }
+
+      function persistDashboardArtifact(dashboard, path, reportId) {
+        const resolvedReportId = reportId || dashboard?.report_meta?.report_id || dashboard?.report_meta?.target || extractReportIdFromPath(path) || '';
+        L.setListingTrackContext({
+          reportId: resolvedReportId,
+          threadId: latestDiagnosisThreadId || ''
+        });
+        try {
+          window.sessionStorage.setItem(DASHBOARD_SESSION_KEY, JSON.stringify({
+            reportId: resolvedReportId,
+            threadId: latestDiagnosisThreadId,
+            path: path || '',
+            content: dashboard ? JSON.stringify(dashboard) : '',
+            dashboard: dashboard?.type === 'listing_diagnosis_dashboard' ? dashboard : null
+          }));
+        } catch (err) {}
+      }
+
+      function persistWorkspaceBundle(source, block, path, reportId) {
+        try {
+          window.sessionStorage.setItem(WORKSPACE_SESSION_KEY, JSON.stringify({
+            reportId: reportId || block?.report_id || extractReportIdFromPath(path) || '',
+            threadId: latestDiagnosisThreadId,
+            path,
+            content: source?.content || '',
+            bundle: block
+          }));
+        } catch (err) {}
+      }
+
+      function persistWorkspaceArtifact(data, path, reportId) {
+        if (data?.type === 'alexa_suggest_checklist_bundle') {
+          persistWorkspaceBundle(data, data, path, reportId);
+          return;
+        }
+        try {
+          window.sessionStorage.setItem(WORKSPACE_SESSION_KEY, JSON.stringify({
+            reportId: reportId || extractReportIdFromPath(path) || '',
+            threadId: latestDiagnosisThreadId,
+            path,
+            content: '',
+            bundle: null
+          }));
+        } catch (err) {}
+      }
+
+      function renderDashboardEvidence(dashboard) {
+        const sections = dashboard?.evidence_pack?.sections;
+        if (!Array.isArray(sections) || !sections.length) return false;
+        if (evPlaceholder && evPlaceholder.parentNode) evPlaceholder.remove();
+        evRows.innerHTML = sections.map(section => `
+          <div class="ev-row reveal">
+            <div class="ev-body">
+              <div class="ev-sec">${L.esc(section.section || 'Evidence')}</div>
+              <div class="ev-sum">${L.esc(section.summary || '')}</div>
+            </div>
+            ${retrievalChip(section.status)}
+          </div>`).join('');
+        evCount.textContent = sections.length + ' / ' + sections.length + ' sections';
+        return true;
+      }
+
+      function showArtifactMissingState() {
+        const summary = reportArtifactSummary();
+        const suffix = summary.reportId
+          ? ` Report files found for ${L.esc(summary.reportId)}; missing dashboard artifact.`
+          : ' No report artifact messages were received by the browser.';
+        evRows.innerHTML = `<div class="ev-placeholder">Diagnosis finished, but the listing_diagnosis_dashboard artifact was not found yet.${suffix}</div>`;
+        evCount.textContent = '0 / 0 sections';
+      }
+
+      function handleWsMessage(msg) {
+        if (msg?.type === 'turn_state' && msg?.state === 'working') {
+          markRunStarted(msg);
+        }
+        rememberArtifact(msg);
+      }
+
+      function finishLivePlan() {
+        const summary = reportArtifactSummary();
+        const success = !!artifactState.dashboard;
+        L.trackListingEvent('LISTING_AUDIT_RUN_RESULT', {
+          success,
+          errorCode: success ? '' : 'dashboard_missing',
+          durationMs: activeDiagnosisStartedAt ? Date.now() - activeDiagnosisStartedAt : 0,
+          threadId: latestDiagnosisThreadId || '',
+          reportId: summary.reportId || '',
+          dataMode: replayOnly ? 'replay' : 'live'
+        }, { immediate: true });
+        if (artifactState.dashboard) {
+          renderDashboardEvidence(artifactState.dashboard);
+          L.trackListingEvent('LISTING_REPORT_READY', {
+            success: true,
+            threadId: latestDiagnosisThreadId || '',
+            reportId: summary.reportId || '',
+            dataMode: replayOnly ? 'replay' : 'live'
+          }, { immediate: true });
+        }
+        initPhaseStatus = 'completed';
+        finalPhaseStatus = 'completed';
+        renderPlanSteps(latestPlanSteps.length ? latestPlanSteps : defaultPlanSteps());
+        if (artifactState.dashboard) renderDashboardEvidence(artifactState.dashboard);
+        else showArtifactMissingState();
+        progCta.hidden = false;
+        progCta.classList.add('reveal');
+        persistActiveAuditSession({ state: 'completed' });
+        syncAuditUrl({
+          asin: document.getElementById('prog-asin')?.textContent || '',
+          marketplace: document.getElementById('prog-mkt')?.textContent || ''
+        }, latestDiagnosisThreadId, { replay: false });
+        progCta.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+
+      function restoreAuditProgress(session) {
+        if (!session?.threadId) return false;
+        latestDiagnosisThreadId = session.threadId;
+        latestErrorUpdate = session.errorUpdate || null;
+        populateProgressHeader({
+          asin: session.asin,
+          marketplace: session.marketplace
+        });
+        initPhaseStatus = session.initPhaseStatus || 'pending';
+        finalPhaseStatus = session.finalPhaseStatus || 'pending';
+        latestPlanSteps = Array.isArray(session.latestPlanSteps) ? session.latestPlanSteps : [];
+        hasLivePlan = !!session.hasLivePlan;
+        runStarted = session.runStarted === true;
+        runStartedAt = Number(session.runStartedAt || 0);
+        artifactState.dashboard = session.dashboard || readLatestDashboardSnapshot() || null;
+        renderPlanSteps(latestPlanSteps.length ? latestPlanSteps : defaultPlanSteps());
+        if (artifactState.dashboard) renderDashboardEvidence(artifactState.dashboard);
+        else {
+          evRows.innerHTML = '<div class="ev-placeholder" id="ev-placeholder">Reconnecting to the active diagnosis thread…</div>';
+          evCount.textContent = '0 / 0 sections';
+        }
+        progCta.hidden = session.state !== 'completed';
+        if (session.state === 'completed') progCta.classList.add('reveal');
+        showProgressView(session.state === 'completed' ? 'open' : 'replay');
+        if (session.state === 'error' && latestErrorUpdate) {
+          renderAuditError(latestErrorUpdate, { skipPersist: true });
+        }
+        syncAuditUrl(session, session.threadId, { replay: session.state !== 'completed' });
+        return true;
+      }
+
+      function buildReplayPayload(session) {
+        return {
+          sourceType: 'asin_url',
+          listingInput: session?.asin || '',
+          asin: session?.asin || '',
+          marketplace: session?.marketplace || 'US',
+          marketplaceLabel: session?.marketplaceLabel || session?.marketplace || 'US',
+          advancedOptions: session?.advancedOptions || {},
+          pastedListing: null,
+          attachments: [],
+          threadId: session?.threadId || '',
+          replayOnly: true,
+          onMessage: handleWsMessage,
+          onPlan: updatePlanFromWs,
+          onStatus: status => {
+            persistLatestThreadId(status?.threadId);
+            if (status?.state === 'run_started') {
+              markRunStarted(status);
+            }
+            if (status?.state === 'open' && !hasLivePlan) {
+              renderInitPhase();
+            }
+            updateLiveStatus(status);
+            persistActiveAuditSession({ state: 'running' });
+          },
+          onErrorUpdate: (update) => renderAuditError(update),
+          onComplete: finishLivePlan
+        };
+      }
+
+      function resumePersistedAudit(session) {
+        if (!restoreAuditProgress(session)) return;
+        if (session.state === 'completed') return;
+        runBtn.disabled = true;
+        triggerListingDiagnosis(buildReplayPayload(session));
+      }
+
+      function setPhaseState(i, state) {
+        const el = phaseList.querySelector(`.phase[data-i="${i}"]`);
+        if (!el) return;
+        el.setAttribute('data-state', state);
+        const icon = el.querySelector('.ph-icon');
+        if (state === 'active') icon.innerHTML = `<span class="spinner"></span>`;
+        else if (state === 'done') icon.innerHTML = `<span class="check">${CHECK_SVG}</span>`;
+        else icon.innerHTML = `<span class="ph-dot"></span>`;
+      }
+
+      runBtn.addEventListener('click', async () => {
+        const asinInput = document.getElementById('asin');
+        const normalized = normalizeListingInput(asinInput.value);
+        if (!normalized.asin) {
+          return fieldError(asinInput, normalized.error);
+        }
+        asinInput.value = normalized.asin;
+        runBtn.disabled = true;
+
+        // reflect chosen ASIN / marketplace in the progress header
+        if (runTimeNote) runTimeNote.classList.add('is-active');
+        const asinVal = normalized.asin;
+        const marketplaceSelect = document.getElementById('marketplace');
+        const mktVal = marketplaceSelect.value || 'US';
+        const mktLabel = marketplaceSelect.selectedOptions?.[0]?.textContent?.trim() || mktVal;
+        trackAsinEntered(asinVal);
+        populateProgressHeader({ asin: asinVal, marketplace: mktVal });
+        initPhaseStatus = 'pending';
+        finalPhaseStatus = 'pending';
+        latestPlanSteps = [];
+        renderPhases();
+        hasLivePlan = false;
+        runStarted = false;
+        runStartedAt = 0;
+        artifactState.files = [];
+        artifactState.dashboard = null;
+        artifactState.reportIds = new Set();
+        latestErrorUpdate = null;
+        const progressErrorCard = document.getElementById('progress-error-card');
+        if (progressErrorCard) {
+          progressErrorCard.hidden = true;
+          progressErrorCard.innerHTML = '';
+        }
+        progCta.hidden = true;
+        progCta.classList.remove('reveal');
+        const nextThreadId = replayThreadId || window.LuckeeAgentWs?.createThreadId?.() || undefined;
+
+        const diagnosisPayload = {
+          sourceType: 'asin_url',
+          listingInput: asinVal,
+          asin: asinVal,
+          marketplace: mktVal,
+          marketplaceLabel: mktLabel,
+          advancedOptions: readAsinAdvancedOptions(),
+          pastedListing: null,
+          attachments: [],
+          threadId: nextThreadId,
+          replayOnly,
+          onMessage: handleWsMessage,
+          onPlan: updatePlanFromWs,
+          onStatus: status => {
+            persistLatestThreadId(status?.threadId);
+            if (status?.state === 'run_started') {
+              markRunStarted(status);
+            }
+            if (!replayOnly && status?.state === 'open' && !hasLivePlan) {
+              renderInitPhase();
+            }
+            updateLiveStatus(status);
+          },
+          onErrorUpdate: (update) => renderAuditError(update),
+          onComplete: finishLivePlan
+        };
+        // Update context and URL before firing the event so that pageUrl() and
+        // analytics context both reflect the new thread when LISTING_AUDIT_START_CLICK lands.
+        L.setListingTrackContext({
+          threadId: nextThreadId,
+          sourceType: diagnosisPayload.sourceType,
+          marketplace: diagnosisPayload.marketplace,
+          asin: diagnosisPayload.asin,
+          dataMode: replayOnly ? 'replay' : 'live'
+        });
+        syncAuditUrl(diagnosisPayload, nextThreadId, { replay: false });
+        L.trackListingEvent('LISTING_AUDIT_START_CLICK', {
+          sourceType: diagnosisPayload.sourceType,
+          marketplace: diagnosisPayload.marketplace,
+          marketplaceLabel: diagnosisPayload.marketplaceLabel,
+          asin: diagnosisPayload.asin,
+          threadId: diagnosisPayload.threadId,
+          attachmentCount: diagnosisPayload.attachments.length,
+          advancedOptionCount: Object.values(diagnosisPayload.advancedOptions || {})
+            .filter(value => Array.isArray(value) ? value.length : !!value).length,
+          dataMode: replayOnly ? 'replay' : 'live'
+        }, { immediate: true });
+        persistActiveAuditSession({
+          state: 'running',
+          threadId: nextThreadId,
+          asin: asinVal,
+          marketplace: mktVal,
+          marketplaceLabel: mktLabel,
+          advancedOptions: diagnosisPayload.advancedOptions,
+          latestPlanSteps: [],
+          hasLivePlan: false,
+          runStarted: false,
+          runStartedAt: 0,
+          initPhaseStatus: 'pending',
+          finalPhaseStatus: 'pending',
+          dashboard: null
+        });
+        if (!triggerListingDiagnosis(diagnosisPayload)) {
+          runBtn.disabled = false;
+          return;
+        }
+      });
+
+      const persistedAuditSession = readActiveAuditSession();
+      if (shouldResumePersistedAudit(persistedAuditSession)) {
+        resumePersistedAudit(persistedAuditSession);
+      }
+    })();
+  </script>
+</body>
+</html>

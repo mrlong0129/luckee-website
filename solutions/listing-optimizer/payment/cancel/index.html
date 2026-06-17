@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Payment cancelled · Luckee Listing</title>
+  <meta name="description" content="Your Luckee Listing checkout was cancelled. Return to pricing to try again.">
+  <link rel="stylesheet" href="/luckee-website/solutions/listing-optimizer/tokens.css">
+  <script src="/luckee-website/solutions/listing-optimizer/google-ads-tag.js"></script>
+  <style>
+    body{
+      margin:0;
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      background:linear-gradient(180deg,#f7f3ea 0%,#f2ecdf 100%);
+      color:var(--ink-900);
+      font-family:Montserrat,system-ui,sans-serif;
+    }
+    .shell{
+      width:min(680px,calc(100vw - 32px));
+      padding:32px;
+    }
+    .card{
+      background:rgba(255,255,255,.92);
+      border:1px solid var(--border-soft);
+      border-radius:var(--r-sheet);
+      box-shadow:0 24px 72px -42px rgba(28,43,29,.4);
+      padding:40px 36px;
+      text-align:center;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 14px;
+      border-radius:999px;
+      background:rgba(184,134,11,.08);
+      color:#9a6f00;
+      font-size:.82rem;
+      font-weight:700;
+    }
+    h1{
+      margin:18px 0 12px;
+      font-size:clamp(2rem,3vw,2.6rem);
+      line-height:1.08;
+      font-family:"Instrument Serif",serif;
+      font-weight:400;
+    }
+    p{
+      margin:0 auto;
+      max-width:46ch;
+      color:var(--muted);
+      line-height:1.7;
+      font-size:1rem;
+    }
+    .actions{
+      display:flex;
+      justify-content:center;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-top:28px;
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="card">
+      <span class="badge">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        Checkout cancelled
+      </span>
+      <h1>No charge was made.</h1>
+      <p>
+        Your Stripe checkout was cancelled before completion. You can return to Luckee Listing pricing and try the subscription or credit pack purchase again anytime.
+      </p>
+      <div class="actions">
+        <a class="btn btn-primary" href="/luckee-website/solutions/listing-optimizer/#pricing">Back to pricing</a>
+        <a class="btn btn-outline" href="/luckee-website/solutions/listing-optimizer/">Go to home</a>
+      </div>
+    </section>
+  </main>
+  <script src="/luckee-website/solutions/listing-optimizer/analytics-config.js"></script>
+  <script src="/luckee-website/solutions/listing-optimizer/analytics-sdk.js"></script>
+  <script src="/luckee-website/solutions/listing-optimizer/tracking.js"></script>
+  <script>
+    (function () {
+      const pendingCheckoutKey = 'luckee-listing:pending-checkout';
+      const params = new URLSearchParams(window.location.search || '');
+      function readPendingCheckout() {
+        try {
+          return JSON.parse(window.sessionStorage.getItem(pendingCheckoutKey) || '{}') || {};
+        } catch (error) {
+          return {};
+        }
+      }
+      const pendingCheckout = readPendingCheckout();
+      const checkoutSessionId = params.get('session_id') || params.get('checkout_session_id') || pendingCheckout.checkout_session_id || '';
+      const cancelPayload = Object.assign({}, pendingCheckout, {
+        checkout_session_id: checkoutSessionId,
+        order_id: params.get('order_id') || params.get('orderId') || pendingCheckout.order_id || '',
+        subscription_id: params.get('subscription_id') || params.get('subscriptionId') || pendingCheckout.subscription_id || '',
+        source: 'listing',
+        cancel_page_visible: true
+      });
+      window.LuckeeListingTrack?.track?.('LISTING_CHECKOUT_CANCELLED', cancelPayload, { immediate: true });
+      try {
+        window.sessionStorage.removeItem(pendingCheckoutKey);
+      } catch (error) {}
+    })();
+  </script>
+</body>
+</html>

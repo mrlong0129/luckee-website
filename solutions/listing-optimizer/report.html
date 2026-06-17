@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diagnosis report · Luckee Listing</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="tokens.css">
+  <script src="google-ads-tag.js"></script>
+  <style>
+    /* ============================================================
+       report.html — page-local layout · ART DIRECTION B
+       Matches the landing design language: eyebrow+rule section
+       headers, elevated cards (hairline + soft shadow + hover),
+       Instrument Serif section titles, warm premium spacing rhythm.
+       All styling is page-local. No edits to tokens.css/data.js/app.js.
+       ============================================================ */
+
+    /* ---- shared B-grade primitives (mirror index.html) ---- */
+    :root {
+      --b-shadow-card: 0 1px 2px rgba(28,43,29,.05), 0 8px 28px -12px rgba(28,43,29,.18);
+      --b-shadow-card-hover: 0 2px 4px rgba(28,43,29,.06), 0 20px 48px -20px rgba(28,43,29,.32);
+      --b-hair: rgba(28,43,29,.08);
+      --b-ease: cubic-bezier(.22,.61,.36,1);
+    }
+
+    .report-wrap { max-width: 1100px; margin: 0 auto; padding: 0 28px; }
+    .report-section { padding: 48px 0 120px; }
+
+    /* elevated card primitive — hairline + soft layered shadow + lift on hover */
+    .report-wrap .card {
+      border: 1px solid var(--b-hair);
+      box-shadow: var(--b-shadow-card);
+    }
+    /* all framed surfaces (cards + table cards) share the same hairline + shadow */
+    .report-wrap .table-card {
+      border: 1px solid var(--b-hair);
+      box-shadow: var(--b-shadow-card);
+    }
+
+    /* ---- Sample / live data banner ---- */
+    .sample-banner {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 13px 18px; border-radius: var(--r-input);
+      background: var(--info-bg); border: 1px solid color-mix(in srgb, var(--info-600) 20%, white);
+      color: var(--neutral-700); font-size: .86rem; line-height: 1.55;
+    }
+    .sample-banner svg { flex-shrink: 0; color: var(--info-600); margin-top: 2px; }
+    .sample-banner b { color: var(--info-600); font-weight: 600; }
+    .sample-banner .mono { font-family: var(--mono); color: var(--neutral-900); }
+    /* keep the banner snug above the header card */
+    .blocks > .sample-banner + * { margin-top: 20px; }
+
+    /* ---- 0b. Top-line summary (the 3 things a seller needs at a glance) ---- */
+    .topline.card-pad { padding: 28px 32px; }
+    .topline .sec-head { margin-bottom: 18px; }
+    .topline .tl-lead {
+      font-size: 1.02rem; line-height: 1.6; color: var(--neutral-700); margin: 0 0 22px; max-width: 80ch;
+    }
+    .topline .tl-lead .hl { color: var(--forest-700); font-weight: 600; }
+    .topline-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+    }
+    .tl-card {
+      position: relative; padding: 20px 22px; border-radius: var(--r-input);
+      background: var(--oat-100); border: 1px solid var(--b-hair);
+      box-shadow: inset 4px 0 0 var(--forest-600);
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .tl-card.tl-problem { box-shadow: inset 4px 0 0 var(--error-600); }
+    .tl-card.tl-action  { box-shadow: inset 4px 0 0 var(--premium-gold); }
+    .tl-card .tl-k {
+      display: inline-flex; align-items: center; gap: 7px;
+      font-size: .66rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted);
+    }
+    .tl-card .tl-k svg { flex-shrink: 0; }
+    .tl-card.tl-score .tl-k { color: var(--forest-700); }
+    .tl-card.tl-problem .tl-k { color: var(--error-600); }
+    .tl-card.tl-action .tl-k { color: var(--premium-gold); }
+    .tl-card .tl-v {
+      font-family: var(--serif); font-size: 1.46rem; line-height: 1.14; color: var(--neutral-900);
+    }
+    .tl-card.tl-score .tl-v .mono { font-family: var(--mono); font-size: 1.7rem; font-weight: 600; color: var(--forest-700); }
+    .tl-card.tl-score .tl-v .lab { font-family: var(--mono); font-size: .82rem; font-weight: 600; color: var(--forest-700); letter-spacing: .04em; }
+    .tl-card .tl-note { font-size: .82rem; line-height: 1.5; color: var(--muted); margin-top: -2px; }
+    .tl-card .tl-note .mono { font-family: var(--mono); color: var(--neutral-700); }
+
+    @media (max-width: 760px) {
+      .topline-grid { grid-template-columns: 1fr; }
+    }
+
+    /* generous vertical rhythm between major blocks (landing breathing room) */
+    .blocks > * + * { margin-top: 38px; }
+
+    /* ---- 1. Report header ---- */
+    .report-header.card-pad { padding: 32px; }
+    .report-hd { display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: center; }
+    .hd-left { display: flex; gap: 24px; align-items: flex-start; min-width: 0; }
+    .product-tile {
+      width: 92px; height: 92px; flex-shrink: 0; border-radius: 18px;
+      background: linear-gradient(150deg, var(--forest-600), var(--forest-800));
+      display: grid; place-items: center; color: var(--oat-100);
+      font-family: var(--serif); font-size: 3rem; line-height: 1;
+      box-shadow: var(--sh-brand); position: relative; overflow: hidden;
+    }
+    .product-tile::after {
+      content: ""; position: absolute; inset: 0;
+      background: radial-gradient(120% 90% at 80% 0%, rgba(255,255,255,.18), transparent 55%);
+    }
+    .hd-eyebrow-row { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+    .hd-title { font-size: clamp(1.5rem, 2.6vw, 2.05rem); line-height: 1.12; margin: 10px 0 12px; }
+    .hd-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; font-size: .86rem; color: var(--muted); }
+    .hd-meta .sep { color: var(--border); }
+    .hd-meta .stars { color: var(--premium-gold); letter-spacing: 1px; }
+    .hd-meta .price { font-weight: 600; color: var(--neutral-900); }
+
+    /* a hairline rail separates the score column from the identity (desktop) */
+    .hd-right {
+      display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center;
+      padding-left: 40px; border-left: 1px solid var(--b-hair);
+    }
+    .ring-wrap { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .score-ring { width: 108px; height: 108px; }
+    .score-ring .inner { width: 82px; height: 82px; }
+    .score-ring .num { font-size: 1.7rem; }
+    .ring-label { font-size: .76rem; font-weight: 600; color: var(--neutral-700); letter-spacing: .02em; }
+    .ring-projected { font-size: .74rem; color: var(--muted); letter-spacing: .01em; margin-top: -2px; }
+    .ring-projected b { font-family: var(--mono); color: var(--forest-700); font-weight: 600; }
+    .risk-count { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
+    .risk-count .chip { gap: 5px; }
+    .risk-count .chip b { font-family: var(--mono); }
+
+    /* ---- 2. Executive summary ---- */
+    .exec-card.card-pad { padding: 32px; }
+    /* a quiet left accent + serif lead-in give the summary editorial weight */
+    .exec-card .sec-head { margin-bottom: 14px; }
+    .summary-prose { font-size: 1.04rem; line-height: 1.72; color: var(--neutral-700); margin: 0; max-width: 92ch; }
+    .summary-prose .hl { color: var(--forest-700); font-weight: 600; }
+
+    /* ---- section eyebrow heading rhythm (matches landing .sec-head) ---- */
+    .sec-head { margin-bottom: 20px; max-width: 760px; }
+    .sec-head .eyebrow { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+    .sec-head .eyebrow::before {
+      content: ""; width: 22px; height: 1px; background: currentColor; opacity: .55; display: inline-block; flex-shrink: 0;
+    }
+    .sec-head h2 { font-size: clamp(1.55rem, 2.5vw, 2.05rem); line-height: 1.06; letter-spacing: -.012em; }
+    .sec-head p.sub { font-size: .94rem; color: var(--muted); margin: 10px 0 0; line-height: 1.6; }
+    /* serif italic emphasis available inside Montserrat-led headings (landing parity) */
+    .ser-accent { font-family: var(--serif); font-weight: 400; font-style: italic; }
+
+    /* ---- 3. Risk / gap / impact ---- */
+    .risk-table td:first-child { white-space: nowrap; }
+    .risk-table tbody tr { box-shadow: inset 4px 0 0 transparent; transition: background .12s, box-shadow .12s; }
+    .risk-table tbody tr.lvl-HIGH { box-shadow: inset 4px 0 0 var(--error-600); }
+    .risk-table tbody tr.lvl-MED  { box-shadow: inset 4px 0 0 var(--warning-600); }
+    .risk-table tbody tr.lvl-LOW  { box-shadow: inset 4px 0 0 var(--success-600); }
+    .risk-table tbody tr td:first-child { padding-left: 18px; }
+    .risk-table .gap-txt { font-weight: 600; color: var(--neutral-900); }
+    .risk-table .impact-txt { color: var(--neutral-700); line-height: 1.55; }
+    .fix-pill {
+      display: inline-flex; align-items: center; font-size: .72rem; font-weight: 500;
+      font-family: var(--mono); color: var(--forest-700); background: var(--forest-050);
+      border: 1px solid var(--forest-100); border-radius: 8px; padding: 3px 9px; line-height: 1.3;
+    }
+
+    /* ---- 4. Evidence pack ---- */
+    .inv-strip {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 28px;
+      padding: 24px; margin-top: 0; border-top: 1px solid var(--b-hair);
+      background: var(--oat-100);
+    }
+    .inv-col .inv-k { font-size: .68rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+    .inv-col .inv-v { font-size: .92rem; font-weight: 600; color: var(--neutral-900); margin-bottom: 16px; }
+    .chip-row { display: flex; flex-wrap: wrap; gap: 7px; }
+    .ev-note {
+      display: flex; gap: 11px; align-items: flex-start; padding: 16px 24px;
+      border-top: 1px solid var(--b-hair); background: var(--oat-200);
+      font-size: .82rem; color: var(--muted); line-height: 1.55;
+    }
+    .ev-note svg { flex-shrink: 0; color: var(--forest-600); margin-top: 2px; }
+    .ev-note b { color: var(--neutral-700); font-weight: 600; }
+
+    /* ---- 5. Q&A simulation ---- */
+    .qa-meta {
+      display: inline-flex; align-items: center; gap: 9px; margin-top: 10px;
+      font-size: .82rem; color: var(--muted); font-family: var(--mono);
+    }
+    .qa-meta .countpill {
+      background: var(--forest-600); color: var(--oat-100); border-radius: var(--r-pill);
+      padding: 4px 12px; font-weight: 600; font-size: .78rem; box-shadow: var(--sh-brand);
+    }
+    .qa-group { margin-top: 30px; }
+    .qa-group:first-child { margin-top: 26px; }
+    .qa-group-hd { display: flex; align-items: center; gap: 12px; margin-bottom: 13px; }
+    .qa-group-hd .gidx {
+      width: 28px; height: 28px; border-radius: 9px; flex-shrink: 0;
+      background: var(--forest-050); color: var(--forest-700); border: 1px solid var(--forest-100);
+      display: grid; place-items: center; font-family: var(--mono); font-size: .78rem; font-weight: 600;
+    }
+    .qa-group-hd .gtitle { font-family: var(--serif); font-size: 1.32rem; line-height: 1.1; color: var(--neutral-900); }
+    .qa-group-hd .gcount { font-size: .74rem; color: var(--muted); font-family: var(--mono); margin-left: auto; letter-spacing: .02em; }
+
+    .qa-table { font-size: .88rem; }
+    .qa-table th.col-n { width: 38px; text-align: center; }
+    .qa-table th.col-q { width: 30%; }
+    .qa-table td.col-n { text-align: center; font-family: var(--mono); color: var(--muted); font-size: .8rem; }
+    .qa-table .q-cell { font-weight: 600; color: var(--neutral-900); cursor: pointer; }
+    .qa-table .q-cell .chev {
+      display: inline-block; width: 13px; transition: transform .2s var(--b-ease);
+      color: var(--forest-600); font-family: var(--mono); margin-right: 5px;
+    }
+    .qa-row.open .q-cell .chev { transform: rotate(90deg); }
+    .qa-table tr.qa-row { cursor: pointer; }
+    .qa-table tr.qa-row td { transition: background .12s; }
+    .qa-table tr.qa-row:hover > td { background: var(--oat-200); }
+    .qa-table tr.qa-row.open > td { background: var(--forest-050); }
+    /* keyboard focus lands on the whole row — make it unmistakable */
+    .qa-table tr.qa-row:focus-visible { outline: 2px solid var(--forest-600); outline-offset: -2px; }
+    .qa-table tr.qa-row:focus-visible > td { background: var(--forest-050); }
+    .qa-table .ev-tag { font-family: var(--mono); font-size: .76rem; color: var(--neutral-700); }
+    .qa-table .gap-cell { color: var(--muted); font-size: .82rem; line-height: 1.45; }
+
+    /* expandable detail panel */
+    .qa-detail-row > td { padding: 0 !important; border-bottom: 1px solid var(--b-hair); }
+    .qa-detail {
+      display: grid; grid-template-columns: 1.6fr 1fr; gap: 0;
+      background: var(--oat-100); border-left: 3px solid var(--forest-600);
+    }
+    .qa-detail .det-block { padding: 18px 22px; }
+    .qa-detail .det-block + .det-block { border-left: 1px solid var(--b-hair); }
+    .qa-detail .det-k { font-size: .66rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--forest-700); margin-bottom: 9px; display: flex; align-items: center; gap: 6px; }
+    .qa-detail .det-answer { font-size: .92rem; line-height: 1.62; color: var(--neutral-900); font-style: italic; }
+    .qa-detail .det-answer::before { content: "“"; color: var(--forest-300); font-family: var(--serif); font-size: 1.4rem; line-height: 0; vertical-align: -.2em; margin-right: 2px; }
+    .qa-detail .det-answer::after { content: "”"; color: var(--forest-300); font-family: var(--serif); font-size: 1.4rem; line-height: 0; vertical-align: -.4em; margin-left: 1px; }
+    .qa-detail .det-fix { font-size: .84rem; color: var(--neutral-700); line-height: 1.5; }
+    .qa-detail .det-fix .fix-pill { margin-top: 8px; }
+
+    /* ---- 6. Competitor benchmark ---- */
+    .bench-table th.col-mod { width: 26%; }
+    .bench-table th { text-align: center; }
+    .bench-table th.col-mod { text-align: left; }
+    .bench-table td { text-align: center; }
+    .bench-table td.mod-cell { text-align: left; font-weight: 600; color: var(--neutral-900); }
+    .bench-table th.you-col { background: color-mix(in srgb, var(--forest-600) 16%, white); }
+    /* competitor identity stacked inside each header cell */
+    .bench-table thead th { vertical-align: top; }
+    .bench-name { display: block; font-size: .8rem; font-weight: 700; text-transform: none; letter-spacing: 0; color: var(--neutral-900); }
+    .bench-id { display: block; font-size: .66rem; font-weight: 500; letter-spacing: 0; text-transform: none; color: var(--muted); margin-top: 2px; }
+    .bench-pr { display: block; font-size: .68rem; font-weight: 500; letter-spacing: 0; text-transform: none; color: var(--forest-700); margin-top: 2px; }
+    .bench-table th.you-col .bench-name { color: var(--forest-800); }
+    /* benchmark source caption */
+    .bench-source { padding: 13px 18px; border-top: 1px solid var(--b-hair); background: var(--oat-100); font-size: .76rem; color: var(--muted); line-height: 1.55; font-style: italic; }
+    .bench-table td.you-col { background: var(--forest-050); border-left: 1px solid var(--forest-100); border-right: 1px solid var(--forest-100); }
+    .bench-table tr.gap-row td.mod-cell,
+    .bench-table tr.gap-row td { background: var(--error-bg); }
+    .bench-table tr.gap-row td.you-col { background: color-mix(in srgb, var(--error-600) 14%, white); }
+    .cover-cell { display: inline-flex; flex-direction: column; align-items: center; gap: 4px; line-height: 1; }
+    .cover-cell .cl { font-size: .66rem; color: var(--muted); letter-spacing: .02em; }
+    .bench-legend { display: flex; flex-wrap: wrap; gap: 16px; padding: 14px 18px; border-top: 1px solid var(--b-hair); background: var(--oat-100); font-size: .78rem; color: var(--muted); }
+    .bench-legend span { display: inline-flex; align-items: center; gap: 6px; }
+
+    /* ---- 7. Priority actions ---- */
+    .action-list { display: flex; flex-direction: column; gap: 14px; }
+    .action-card {
+      display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: start;
+      padding: 20px 24px; background: var(--card); border: 1px solid var(--b-hair);
+      border-radius: var(--r-card); box-shadow: var(--b-shadow-card);
+      transition: box-shadow .32s var(--b-ease), transform .32s var(--b-ease), border-color .32s var(--b-ease);
+    }
+    .action-card:hover { box-shadow: var(--b-shadow-card-hover); transform: translateY(-3px); border-color: rgba(62,91,63,.22); }
+    .action-card .ac-num {
+      width: 34px; height: 34px; border-radius: 11px; flex-shrink: 0;
+      background: linear-gradient(150deg, var(--forest-050), var(--card));
+      border: 1px solid var(--forest-100); display: grid; place-items: center;
+      font-family: var(--serif); font-size: 1.18rem; color: var(--forest-700);
+      box-shadow: 0 1px 0 rgba(255,255,255,.7) inset;
+    }
+    .action-card .ac-action { font-size: 1.04rem; font-weight: 600; color: var(--neutral-900); line-height: 1.4; }
+    .action-card .ac-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; margin: 10px 0 9px; }
+    .action-card .ac-why { font-size: .88rem; color: var(--muted); line-height: 1.55; }
+    .action-card .ac-why::before { content: "→ "; color: var(--forest-600); font-weight: 600; }
+    /* enrichment chips on each action card */
+    .ac-resolves {
+      display: inline-flex; align-items: center; height: 24px; padding: 0 10px;
+      border-radius: var(--r-pill); font-family: var(--mono); font-size: .72rem; font-weight: 600;
+      background: var(--forest-050); color: var(--forest-700); border: 1px solid var(--forest-100);
+    }
+    .ac-flag {
+      display: inline-flex; align-items: center; gap: 5px; height: 24px; padding: 0 10px;
+      border-radius: var(--r-pill); font-size: .72rem; font-weight: 600; letter-spacing: .01em; line-height: 1;
+    }
+    .ac-flag svg { flex-shrink: 0; }
+    .ac-flag-input { background: var(--warning-bg); color: var(--warning-600); }
+    .ac-flag-compliance { background: var(--error-bg); color: var(--error-600); }
+    .ac-flag-design { background: var(--neutral-bg); color: var(--muted); }
+
+    /* ---- 8. Sticky closing CTA bar (dark band w/ atmospheric glow, landing parity) ---- */
+    .cta-bar {
+      position: sticky; bottom: 0; z-index: 30; margin-top: 52px;
+    }
+    .cta-bar-inner {
+      max-width: 1100px; margin: 0 auto; padding: 20px 30px;
+      display: flex; align-items: center; justify-content: space-between; gap: 24px;
+      background: var(--forest-900); color: var(--oat-100);
+      border-radius: var(--r-card) var(--r-card) 0 0;
+      box-shadow: 0 -2px 4px rgba(28,43,29,.06), 0 -18px 48px -20px rgba(28,43,29,.5);
+      border: 1px solid rgba(217,232,218,.10); border-bottom: 0;
+      position: relative; overflow: hidden;
+    }
+    /* layered radial glow — same recipe as the landing .band-dark::before */
+    .cta-bar-inner::before {
+      content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 0;
+      background:
+        radial-gradient(60% 130% at 8% -20%, rgba(77,112,78,.45), transparent 60%),
+        radial-gradient(50% 130% at 100% 140%, rgba(201,168,76,.14), transparent 58%);
+    }
+    .cta-bar-inner .cta-copy { display: flex; align-items: center; gap: 15px; position: relative; z-index: 1; }
+    .cta-bar-inner .cta-copy svg { color: var(--premium-gold-light); flex-shrink: 0; }
+    .cta-bar-inner .cta-copy .t { font-family: var(--serif); font-size: 1.42rem; line-height: 1.18; color: var(--oat-100); }
+    .cta-bar-inner .cta-copy .s { font-size: .84rem; color: var(--forest-300); margin-top: 3px; line-height: 1.4; }
+    .cta-bar-inner .btn { position: relative; z-index: 1; flex-shrink: 0; }
+
+    @media (max-width: 860px) {
+      .report-hd { grid-template-columns: 1fr; gap: 28px; }
+      /* drop the vertical rail when the header stacks; use a top hairline instead */
+      .hd-right {
+        align-items: flex-start; text-align: left;
+        padding-left: 0; border-left: 0;
+        padding-top: 24px; border-top: 1px solid var(--b-hair);
+      }
+      .ring-wrap { align-items: flex-start; }
+      .inv-strip { grid-template-columns: 1fr; gap: 20px; }
+      .qa-detail { grid-template-columns: 1fr; }
+      .qa-detail .det-block + .det-block { border-left: 0; border-top: 1px solid var(--b-hair); }
+    }
+    @media (max-width: 768px) {
+      .report-section { padding: 28px 0 100px; }
+      .hd-left { gap: 16px; }
+      .product-tile { width: 72px; height: 72px; font-size: 2.4rem; }
+      .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .table-scroll .table { min-width: 720px; }
+      .cta-bar-inner { flex-direction: column; align-items: stretch; text-align: center; }
+      .cta-bar-inner .cta-copy { justify-content: center; }
+    }
+  </style>
+</head>
+<body class="has-atmos">
+  <div id="nav"></div>
+
+  <main class="report-section">
+    <div class="report-wrap blocks">
+
+      <!-- ===================== 0. SAMPLE / LIVE BANNER ===================== -->
+      <div class="sample-banner" role="note" data-reveal>
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        <span id="report-data-note"><b>Sample report</b> — this prototype shows a pre-computed audit for Funflow (<span class="mono">B0G1MJWK3Z</span>, US). Your own input is not yet connected to live extraction.</span>
+      </div>
+      <div data-funnel-slot="report" data-reveal></div>
+
+      <!-- ===================== 0b. TOP-LINE SUMMARY (3 things at a glance) ===================== -->
+      <section class="card card-pad topline" id="topline" data-reveal>
+        <div class="sec-head">
+          <span class="eyebrow">At a glance</span>
+          <h2>Your listing in <span class="ser-accent">three lines</span></h2>
+        </div>
+        <p class="tl-lead">These are the buyer questions your listing fails to answer before the shopper decides to buy — surfaced by <span class="hl">Alexa for Shopping (formerly Rufus)</span>.</p>
+        <div class="topline-grid">
+          <div class="tl-card tl-score">
+            <span class="tl-k">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="m7 14 4-4 4 4 5-6"/></svg>
+              Current score
+            </span>
+            <div class="tl-v"><span class="mono" id="tl-score-num"></span> <span class="lab">CLEAR</span></div>
+            <div class="tl-note" id="tl-score-note"></div>
+          </div>
+          <div class="tl-card tl-problem">
+            <span class="tl-k">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4M12 17h.01"/></svg>
+              Biggest problem
+            </span>
+            <div class="tl-v" id="tl-problem-v">Hair-type suitability missing</div>
+            <div class="tl-note" id="tl-problem-note"></div>
+          </div>
+          <div class="tl-card tl-action">
+            <span class="tl-k">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></svg>
+              First priority action
+            </span>
+            <div class="tl-v" id="tl-action-v">Fix Bullet 2 + Title</div>
+            <div class="tl-note" id="tl-action-note"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== 1. REPORT HEADER ===================== -->
+      <section class="card card-pad" id="report-header" data-reveal>
+        <div class="report-hd">
+          <div class="hd-left">
+            <div class="product-tile" id="brand-tile">F</div>
+            <div style="min-width:0">
+              <div class="hd-eyebrow-row">
+                <span class="eyebrow">Diagnosis report</span>
+                <span class="tag" id="report-mode-tag" title="This prototype shows a pre-computed sample report">Sample data</span>
+              </div>
+              <h1 class="hd-title serif" id="prod-title"></h1>
+              <div class="hd-meta" id="prod-meta"></div>
+            </div>
+          </div>
+          <div class="hd-right">
+            <div class="ring-wrap">
+              <div class="score-ring" id="score-ring">
+                <div class="inner">
+                  <div>
+                    <div class="num" id="score-num"></div>
+                    <div class="den">CLEAR</div>
+                  </div>
+                </div>
+              </div>
+              <div class="ring-label">Alexa answerability</div>
+              <div class="ring-projected" id="ring-projected"></div>
+            </div>
+            <div class="risk-count" id="risk-count"></div>
+            <span class="badge badge-trust" style="background:var(--forest-050);color:var(--forest-700);border-color:var(--forest-100)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg>
+              Evidence-gated · brand-aware
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== 2. EXECUTIVE SUMMARY ===================== -->
+      <section class="card card-pad exec-card" data-reveal>
+        <div class="sec-head">
+          <span class="eyebrow">Executive summary</span>
+          <h2>What the audit <span class="ser-accent">found</span></h2>
+        </div>
+        <p class="summary-prose" id="exec-summary"></p>
+      </section>
+
+      <!-- ===================== 3. RISK / GAP / IMPACT ===================== -->
+      <section data-reveal>
+        <div class="sec-head">
+          <span class="eyebrow">Where you lose the answer</span>
+          <h2>Risk, gap &amp; <span class="ser-accent">impact</span></h2>
+          <p class="sub">Each gap is a question Alexa for Shopping cannot answer from your page — ranked by what it costs you at decision time.</p>
+        </div>
+        <div class="table-card table-scroll">
+          <table class="table risk-table">
+            <thead>
+              <tr>
+                <th style="width:90px">Risk</th>
+                <th style="width:26%">Gap</th>
+                <th>Impact</th>
+                <th style="width:170px">Fix area</th>
+              </tr>
+            </thead>
+            <tbody id="risk-rows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ===================== 4. EVIDENCE PACK ===================== -->
+      <section data-reveal>
+        <div class="sec-head">
+          <span class="eyebrow">What we extracted</span>
+          <h2>Evidence <span class="ser-accent">pack</span></h2>
+          <p class="sub">Every finding below is traced to real page evidence — not inferred. Retrieval status per section.</p>
+        </div>
+        <div class="table-card">
+          <div class="table-scroll">
+            <table class="table" id="evidence-table">
+              <thead>
+                <tr>
+                  <th style="width:200px">Section</th>
+                  <th style="width:140px">Retrieval</th>
+                  <th>Summary</th>
+                </tr>
+              </thead>
+              <tbody id="evidence-rows"></tbody>
+            </table>
+          </div>
+
+          <!-- inventory strip -->
+          <div class="inv-strip">
+            <div class="inv-col">
+              <div class="inv-k">Product type</div>
+              <div class="inv-v" id="inv-type"></div>
+              <div class="inv-k">Likely category</div>
+              <div class="inv-v" id="inv-cat" style="margin-bottom:0"></div>
+            </div>
+            <div class="inv-col">
+              <div class="inv-k">Strong areas</div>
+              <div class="chip-row" id="inv-strong" style="margin-bottom:16px"></div>
+              <div class="inv-k">Missing dimensions</div>
+              <div class="chip-row" id="inv-missing"></div>
+            </div>
+          </div>
+
+          <!-- evidence-gated note -->
+          <div class="ev-note" id="ev-note"></div>
+        </div>
+      </section>
+
+      <!-- ===================== 5. ALEXA SHOPPING Q&A SIMULATION ===================== -->
+      <section data-reveal>
+        <div class="sec-head">
+          <span class="eyebrow">20+ simulated shopper questions</span>
+          <h2>Alexa Shopping Q&amp;A <span class="ser-accent">simulation</span></h2>
+          <p class="sub">We modeled how Alexa for Shopping would answer real pre-purchase questions from your page evidence. Click any question to read the simulated answer.</p>
+          <span class="qa-meta"><span class="countpill" id="qa-total">20 questions</span> across 5 decision areas · click to expand</span>
+        </div>
+        <div id="qa-groups"></div>
+      </section>
+
+      <!-- ===================== 6. COMPETITOR BENCHMARK ===================== -->
+      <section data-reveal>
+        <div class="sec-head">
+          <span class="eyebrow">Top-competitor coverage</span>
+          <h2>Competitor <span class="ser-accent">benchmark</span></h2>
+          <p class="sub">Module coverage vs. the top competitors. Highlighted rows are gaps competitors cover and you don't.</p>
+        </div>
+        <div class="table-card">
+          <div class="table-scroll">
+            <table class="table bench-table" id="bench-table">
+              <thead><tr id="bench-head"></tr></thead>
+              <tbody id="bench-rows"></tbody>
+            </table>
+          </div>
+          <div class="bench-legend">
+            <span><span style="color:var(--success-600);font-weight:700">●</span> Covered</span>
+            <span><span style="color:var(--warning-600);font-weight:700">◐</span> Partial</span>
+            <span><span style="color:var(--error-600);font-weight:700">○</span> Missing</span>
+            <span style="margin-left:auto;color:var(--error-600)">Shaded rows = competitor-covered gaps you should close.</span>
+          </div>
+          <div class="bench-source" id="bench-source"></div>
+        </div>
+      </section>
+
+      <!-- ===================== 7. PRIORITY ACTIONS ===================== -->
+      <section data-reveal>
+        <div class="sec-head">
+          <span class="eyebrow">Your fix queue</span>
+          <h2>Priority <span class="ser-accent">actions</span></h2>
+          <p class="sub" id="actions-sub">The shortest path to more answerable questions — sequenced by impact, placed in the exact listing field.</p>
+        </div>
+        <div class="action-list" id="action-list"></div>
+      </section>
+
+    </div>
+
+    <!-- ===================== 8. STICKY CLOSING CTA ===================== -->
+    <div class="cta-bar grain">
+      <div class="cta-bar-inner">
+        <div class="cta-copy">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></svg>
+          <div>
+            <div class="t">Ready to fix these?</div>
+            <div class="s">Generate the optimization bundle — every gap becomes a ready-to-paste rewrite.</div>
+          </div>
+        </div>
+        <a class="btn btn-on-dark btn-lg" href="workspace.html" data-credit-action="optimize">
+          Generate optimization bundle
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <script src="data.js"></script>
+  <script src="analytics-config.js"></script>
+  <script src="analytics-sdk.js"></script>
+  <script src="tracking.js"></script>
+  <script src="auth.js"></script>
+  <script src="app.js"></script>
+  <script src="ws.js"></script>
+  <script>
+    (function () {
+      const DASHBOARD_SESSION_KEY = 'luckee-listing:latest-dashboard';
+      const USER_STORAGE_KEY = 'luckee-listing:user';
+      const LEGACY_USER_STORAGE_KEY = 'user';
+      const params = new URLSearchParams(window.location.search || '');
+      const isSampleMode = params.get('sample') === '1';
+      const replayThreadId = params.get('replay_thread_id') || (params.get('replay') === '1' ? params.get('thread_id') : '');
+      const requestedThreadId = params.get('thread_id') || '';
+      const historyThreadId = replayThreadId || requestedThreadId || '';
+      const L = window.Luckee;
+
+      function parseJsonMaybe(value) {
+        if (!value) return null;
+        if (typeof value === 'object') return value;
+        if (typeof value !== 'string') return null;
+        try { return JSON.parse(value); } catch (err) { return null; }
+      }
+
+      function readLatestDashboardArtifact() {
+        try {
+          const raw = window.sessionStorage.getItem(DASHBOARD_SESSION_KEY);
+          const parsed = raw ? JSON.parse(raw) : null;
+          const dashboard = parsed?.dashboard || parsed;
+          if (!parsed && !dashboard) return null;
+          if (historyThreadId && parsed?.threadId !== historyThreadId) return null;
+          return {
+            reportId: parsed?.reportId || dashboard?.report_meta?.report_id || '',
+            path: parsed?.path || '',
+            threadId: parsed?.threadId || '',
+            content: parsed?.content || '',
+            dashboard
+          };
+        } catch (err) {
+          return null;
+        }
+      }
+
+      function readLatestDashboard() {
+        const record = readLatestDashboardArtifact();
+        return record?.dashboard?.type === 'listing_diagnosis_dashboard' ? record.dashboard : null;
+      }
+
+      function normalizeArtifactPath(msg) {
+        return String(msg?.file_path || msg?.filePath || msg?.path || '').replace(/\\/g, '/');
+      }
+
+      function readFileMonitorJson(msg) {
+        return parseJsonMaybe(msg?.content)
+          || parseJsonMaybe(msg?.data)
+          || parseJsonMaybe(msg?.payload)
+          || parseJsonMaybe(msg?.file_content)
+          || parseJsonMaybe(msg?.fileContent)
+          || null;
+      }
+
+      function isListingDashboardArtifact(path, data) {
+        return path.includes('skill-to-ui/listing_diagnosis_dashboard/')
+          || data?.type === 'listing_diagnosis_dashboard';
+      }
+
+      function extractReportIdFromPath(path) {
+        const name = String(path || '').split('/').pop() || '';
+        const match = name.match(/^(.+)\.json$/);
+        return match ? match[1] : '';
+      }
+
+      function extractPathAfterWorkingDir(path) {
+        const clean = String(path || '').replace(/\\/g, '/');
+        const index = clean.indexOf('/working_dir/');
+        return (index >= 0 ? clean.slice(index + '/working_dir/'.length) : clean).replace(/^\/+/, '');
+      }
+
+      function readSession() {
+        try {
+          return JSON.parse(
+            window.localStorage.getItem(USER_STORAGE_KEY)
+            || window.localStorage.getItem(LEGACY_USER_STORAGE_KEY)
+            || '{}'
+          ) || {};
+        }
+        catch (err) { return {}; }
+      }
+
+      function loadRuntimeConfig() {
+        if (window.appInfo?.services) return Promise.resolve();
+        if (window.__luckeeRuntimeConfigPromise) return window.__luckeeRuntimeConfigPromise;
+        window.__luckeeRuntimeConfigPromise = new Promise(resolve => {
+          const existing = document.querySelector('script[data-luckee-runtime-config="1"], script[src^="/config.js"]');
+          if (existing) {
+            existing.addEventListener('load', resolve, { once: true });
+            existing.addEventListener('error', resolve, { once: true });
+            return;
+          }
+          const script = document.createElement('script');
+          script.setAttribute('data-luckee-runtime-config', '1');
+          script.src = `/config.js?v=${Date.now()}`;
+          script.onload = resolve;
+          script.onerror = resolve;
+          document.head.appendChild(script);
+        });
+        return window.__luckeeRuntimeConfigPromise;
+      }
+
+      function buildDownloadUrl(record) {
+        const session = readSession();
+        const userId = session.userInfo?.id || session.userInfo?.userId || '';
+        const threadId = record?.threadId || historyThreadId || '';
+        if (!userId || !threadId || !record?.path) return '';
+        const domain = window.appInfo?.services?.TASK_API_DOMAIN;
+        if (!domain) return '';
+        const query = new URLSearchParams({
+          thread_id: threadId,
+          user_id: userId,
+          path: extractPathAfterWorkingDir(record.path)
+        });
+        return `${String(domain).replace(/\/+$/, '')}/api/v2/download_file?${query.toString()}`;
+      }
+
+      async function downloadDashboard(record) {
+        await loadRuntimeConfig();
+        const url = buildDownloadUrl(record);
+        if (!url) throw new Error('Missing thread, user, or file path for report artifact.');
+        const session = readSession();
+        const token = session.loginToken || session.userInfo?.loginToken || '';
+        const response = await fetch(url, {
+          headers: token ? {
+            'Luckee-Authorization': token,
+            'x-user-token': token,
+            'X-User-ID': session.userInfo?.id || session.userInfo?.userId || ''
+          } : {}
+        });
+        if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        return response.json();
+      }
+
+      function persistDashboardRecord(record, dashboard) {
+        const reportId = dashboard?.report_meta?.report_id || record?.reportId || extractReportIdFromPath(record?.path) || '';
+        const threadId = record?.threadId || historyThreadId || '';
+        window.Luckee?.setListingTrackContext?.({ reportId, threadId, dataMode: historyThreadId ? 'replay' : 'live' });
+        window.sessionStorage.setItem(DASHBOARD_SESSION_KEY, JSON.stringify({
+          reportId,
+          threadId,
+          path: record?.path || '',
+          content: JSON.stringify(dashboard),
+          dashboard
+        }));
+      }
+
+      function persistDashboardFromMessage(msg) {
+        if (!msg || msg.type !== 'file_monitor') return false;
+        const path = normalizeArtifactPath(msg);
+        const data = readFileMonitorJson(msg);
+        if (!isListingDashboardArtifact(path, data)) return false;
+        try {
+          const reportId = data?.report_meta?.report_id || extractReportIdFromPath(path) || '';
+          const threadId = historyThreadId || '';
+          window.Luckee?.setListingTrackContext?.({ reportId, threadId, dataMode: 'replay' });
+          window.sessionStorage.setItem(DASHBOARD_SESSION_KEY, JSON.stringify({
+            reportId,
+            threadId,
+            path,
+            content: data ? JSON.stringify(data) : '',
+            dashboard: data?.type === 'listing_diagnosis_dashboard' ? data : null
+          }));
+          return true;
+        } catch (err) {
+          return false;
+        }
+      }
+
+      function setReportModeTagSample(isSample) {
+        const tagEl = document.getElementById('report-mode-tag');
+        if (!tagEl) return;
+        tagEl.hidden = !isSample;
+      }
+
+      function renderReportError(message) {
+        document.getElementById('nav').innerHTML = L.appBar('report');
+        L.bootstrapFunnelPage();
+        setReportModeTagSample(false);
+        const noteEl = document.getElementById('report-data-note');
+        if (noteEl) {
+          noteEl.innerHTML = `<b>Report unavailable</b> — ${L.esc(message)}`;
+        }
+        document.querySelector('.cta-bar')?.setAttribute('hidden', 'hidden');
+        document.querySelectorAll('.report-wrap > :not(.sample-banner):not([data-funnel-slot="report"])').forEach(el => {
+          el.setAttribute('hidden', 'hidden');
+        });
+        const wrap = document.querySelector('.report-wrap');
+        if (!wrap || wrap.querySelector('[data-report-error="1"]')) return;
+        const section = document.createElement('section');
+        section.className = 'card card-pad';
+        section.setAttribute('data-report-error', '1');
+        section.innerHTML = `
+          <div class="sec-head">
+            <span class="eyebrow">Live data required</span>
+            <h2>We couldn't render this <span class="ser-accent">report</span></h2>
+          </div>
+          <p class="sub" style="max-width:760px">This page now uses sample data only for explicit sample-entry links. Real audit flows need a valid <span class="mono">listing_diagnosis_dashboard</span> JSON. If the WS run failed, or the expected artifact was never generated, we stop here instead of falling back to mock content.</p>
+          <div class="row wrap" style="gap:12px;margin-top:18px">
+            <a class="btn btn-primary" href="audit.html">Run another live audit</a>
+            <a class="btn btn-outline" href="report.html?sample=1">Open the sample report</a>
+          </div>`;
+        wrap.appendChild(section);
+      }
+
+      function validateDashboard(dashboard) {
+        if (!dashboard) return 'No live diagnosis dashboard is available for this report.';
+        if (dashboard.type !== 'listing_diagnosis_dashboard') return 'The generated artifact is not a listing diagnosis dashboard.';
+        if (!dashboard.report_meta?.report_id && !dashboard.report_meta?.target) return 'The diagnosis dashboard is missing report metadata.';
+        if (!Array.isArray(dashboard.evidence_pack?.sections) || !dashboard.evidence_pack.sections.length) return 'The diagnosis dashboard is missing evidence pack sections.';
+        if (!Array.isArray(dashboard.qa_simulation?.groups) || !dashboard.qa_simulation.groups.length) return 'The diagnosis dashboard is missing Q&A simulation groups.';
+        if (!Array.isArray(dashboard.priority_actions?.items) || !dashboard.priority_actions.items.length) return 'The diagnosis dashboard is missing priority actions.';
+        return '';
+      }
+
+      const dashboardArtifact = isSampleMode ? null : readLatestDashboardArtifact();
+      const dashboardRecord = isSampleMode ? null : readLatestDashboard();
+      window.LuckeeListingTrack?.trackPageView?.('report', {
+        dataMode: isSampleMode ? 'sample' : (historyThreadId ? 'replay' : ((dashboardRecord || dashboardArtifact) ? 'live' : 'sample')),
+        reportId: dashboardArtifact?.reportId || dashboardRecord?.report_meta?.report_id || '',
+        threadId: dashboardArtifact?.threadId || dashboardRecord?.threadId || historyThreadId || ''
+      });
+      if (!isSampleMode && dashboardArtifact && !dashboardRecord && dashboardArtifact.path) {
+        document.getElementById('nav').innerHTML = L.appBar('report');
+        L.bootstrapFunnelPage();
+        setReportModeTagSample(false);
+        const noteEl = document.getElementById('report-data-note');
+        if (noteEl) {
+          noteEl.innerHTML = `<b>Loading report</b> — reading the generated diagnosis JSON from <span class="mono">${L.esc(extractPathAfterWorkingDir(dashboardArtifact.path))}</span>.`;
+        }
+        downloadDashboard(dashboardArtifact).then(dashboard => {
+          const validationError = validateDashboard(dashboard);
+          if (validationError) throw new Error(validationError);
+          persistDashboardRecord(dashboardArtifact, dashboard);
+          window.location.reload();
+        }).catch(err => {
+          renderReportError(err?.message || 'Unable to read generated diagnosis JSON.');
+        });
+        return;
+      }
+
+      if (!isSampleMode && !dashboardRecord && historyThreadId && window.LuckeeAgentWs) {
+        document.getElementById('nav').innerHTML = L.appBar('report');
+        L.bootstrapFunnelPage();
+        setReportModeTagSample(false);
+        const noteEl = document.getElementById('report-data-note');
+        if (noteEl) {
+          noteEl.innerHTML = `<b>Loading replay</b> — waiting for the diagnosis dashboard from <span class="mono">${L.esc(historyThreadId)}</span>.`;
+        }
+        window.LuckeeAgentWs.runTest({
+          threadId: historyThreadId,
+          replayOnly: true,
+          onMessage: msg => {
+            if (!persistDashboardFromMessage(msg)) return;
+            const next = new URL(window.location.href);
+            next.searchParams.delete('replay');
+            next.searchParams.delete('replay_thread_id');
+            next.searchParams.set('replayed', '1');
+            window.location.replace(next.pathname.split('/').pop() + next.search + next.hash);
+          },
+          onStatus: status => {
+            if (noteEl && (status?.state === 'reconnecting' || status?.state === 'reconnect_scheduled')) {
+              noteEl.innerHTML = `<b>Reconnecting replay</b> — still waiting for the diagnosis dashboard from <span class="mono">${L.esc(historyThreadId)}</span>.`;
+            }
+          }
+        }).catch(err => {
+          renderReportError(err?.message || 'Unable to load report dashboard from this thread.');
+        });
+        return;
+      }
+
+      if (!isSampleMode) {
+        const validationError = validateDashboard(dashboardRecord);
+        if (validationError) {
+          renderReportError(validationError);
+          return;
+        }
+      }
+
+      function mapDashboardToLuckeeData(dashboard) {
+        const meta = dashboard.report_meta || {};
+        const score = dashboard.answerability_score || {};
+        const evidence = dashboard.evidence_pack || {};
+        const qa = dashboard.qa_simulation || {};
+        const risks = dashboard.risk_gap_impact || {};
+        const actions = dashboard.priority_actions || {};
+        const benchmark = dashboard.competitor_benchmark || {};
+        const target = meta.target || '';
+        const brand = meta.brand || '';
+        const qaGroups = (qa.groups || []).map(group => ({
+          area: group.area || group.name || 'Questions',
+          items: (group.items || []).map(item => ({
+            q: item.question || '',
+            intent: item.intent || '',
+            support: item.support || 'UNKNOWN',
+            answer: item.answer || '',
+            evidence: item.evidence || '—',
+            gap: item.gap || 'None',
+            risk: item.risk || 'LOW',
+            fix: item.fix || '—'
+          }))
+        }));
+        const competitors = benchmark.competitors || [];
+        const self = competitors.find(c => c.self) || {
+          name: brand ? `${brand} (You)` : 'You',
+          self: true,
+          asin: target,
+          brand,
+          price: '',
+          rating: 0
+        };
+        const otherCompetitors = competitors.filter(c => !c.self);
+        return {
+          product: {
+            asin: target,
+            country: meta.country || '',
+            marketplace: meta.marketplace || '',
+            brand,
+            title: dashboard.title || '',
+            category: evidence.inventory?.likely_category || '',
+            price: self.price || '',
+            rating: Number(self.rating || 0),
+            reviews: Number(self.reviews || 0),
+            reportId: meta.report_id || target
+          },
+          answerability: {
+            clear: Number(score.score ?? 0),
+            total: Number(score.total ?? 0),
+            projectedClear: Number(score.projected_clear ?? 0),
+            high: Number(score.risk_counts?.HIGH ?? score.risk_counts?.high ?? 0),
+            med: Number(score.risk_counts?.MEDIUM ?? score.risk_counts?.MED ?? score.risk_counts?.medium ?? 0),
+            low: Number(score.risk_counts?.LOW ?? score.risk_counts?.low ?? 0)
+          },
+          executiveSummary: dashboard.executive_summary?.summary_text || '',
+          risks: (risks.items || []).map(item => ({
+            level: item.level || 'LOW',
+            gap: item.gap || '',
+            impact: item.impact || '',
+            fix: item.fix_area || item.fix || ''
+          })),
+          evidencePack: {
+            sections: evidence.sections || [],
+            inventory: Object.assign({}, evidence.inventory || {}),
+            notes: evidence.notes || []
+          },
+          qaGroups,
+          benchmarkSource: benchmark.source_note || '',
+          competitors: [self].concat(otherCompetitors),
+          benchmark: (benchmark.modules || []).map(module => ({
+            module: module.module || module.name || '',
+            you: module.you || 'not_available',
+            comp: module.competitors || []
+          })),
+          priorityActions: (actions.items || []).map(item => ({
+            prio: item.priority || 'P2',
+            action: item.action || '',
+            area: item.area || '',
+            why: item.why || '',
+            resolves: item.resolves,
+            effort: item.effort,
+            needsConfirmation: !!item.flags?.needs_confirmation,
+            complianceRisk: !!item.flags?.compliance_risk,
+            assetDependency: !!item.flags?.asset_dependency
+          }))
+        };
+      }
+
+      const D = isSampleMode ? window.LUCKEE_DATA : mapDashboardToLuckeeData(dashboardRecord);
+      const activeDashboardArtifact = isSampleMode ? null : readLatestDashboardArtifact();
+      const activeWorkspaceArtifact = (() => {
+        if (isSampleMode) return null;
+        try { return JSON.parse(window.sessionStorage.getItem('luckee-listing:latest-workspace-bundle') || 'null'); }
+        catch (err) { return null; }
+      })();
+      const linkedWorkspaceArtifact = (() => {
+        if (!activeWorkspaceArtifact) return null;
+        const reportId = D.product.reportId || activeDashboardArtifact?.reportId || '';
+        const threadId = activeDashboardArtifact?.threadId || historyThreadId || '';
+        const reportMatches = reportId && activeWorkspaceArtifact?.reportId === reportId;
+        const threadMatches = threadId && activeWorkspaceArtifact?.threadId === threadId;
+        return (reportMatches || threadMatches) ? activeWorkspaceArtifact : null;
+      })();
+
+      function workspaceHrefForReport() {
+        if (isSampleMode) return 'workspace.html?sample=1';
+        const reportId = D.product.reportId || linkedWorkspaceArtifact?.reportId || activeDashboardArtifact?.reportId || '';
+        const threadId = linkedWorkspaceArtifact?.threadId || activeDashboardArtifact?.threadId || historyThreadId || '';
+        const path = linkedWorkspaceArtifact?.path || '';
+        const shouldReplayWorkspace = !path && threadId && (historyThreadId || params.get('replayed') === '1');
+        const query = new URLSearchParams();
+        if (reportId) query.set('report_id', reportId);
+        if (threadId) query.set('thread_id', threadId);
+        if (shouldReplayWorkspace) query.set('replay_thread_id', threadId);
+        if (path) query.set('path', path);
+        return query.toString() ? `workspace.html?${query.toString()}` : 'workspace.html';
+      }
+
+      /* ---- app bar (product identity + step progress + Open workspace) ---- */
+      document.getElementById('nav').innerHTML = L.appBar('report');
+      const reportDataMode = dashboardRecord ? 'live' : (historyThreadId ? 'replay' : 'sample');
+      L.setListingTrackContext({
+        reportId: D.product.reportId || activeDashboardArtifact?.reportId || '',
+        threadId: activeDashboardArtifact?.threadId || historyThreadId || '',
+        asin: D.product.asin || '',
+        marketplace: D.product.country || D.product.marketplace || '',
+        dataMode: reportDataMode
+      });
+      document.querySelectorAll('[data-credit-action="optimize"]').forEach(link => {
+        link.setAttribute('href', workspaceHrefForReport());
+      });
+      L.bootstrapFunnelPage();
+      L.trackListingEvent('LISTING_REPORT_VIEW', {
+        reportId: D.product.reportId || activeDashboardArtifact?.reportId || '',
+        threadId: activeDashboardArtifact?.threadId || historyThreadId || '',
+        asin: D.product.asin || '',
+        marketplace: D.product.country || D.product.marketplace || '',
+        dataMode: reportDataMode
+      }, { immediate: true });
+      const noteEl = document.getElementById('report-data-note');
+      setReportModeTagSample(isSampleMode);
+      if (!isSampleMode && dashboardRecord && noteEl) {
+        noteEl.innerHTML = `<b>Live report</b> — rendered from generated diagnosis JSON for <span class="mono">${L.esc(D.product.asin || D.product.reportId || 'this listing')}</span>.`;
+      }
+
+      /* ---- LIVE SCORE: compute from qaGroups so numbers can never drift ---- */
+      const allItems = D.qaGroups.reduce((acc, g) => acc.concat(g.items), []);
+      const score = {
+        total: allItems.length,
+        clear: allItems.filter(i => i.support === 'CLEAR').length,
+        high:  allItems.filter(i => i.risk === 'HIGH').length,
+        med:   allItems.filter(i => i.risk === 'MED' || i.risk === 'MEDIUM').length,
+        low:   allItems.filter(i => i.risk === 'LOW').length,
+        projectedClear: D.answerability.projectedClear
+      };
+      const scorePct = score.total ? Math.round(score.clear / score.total * 100) : 0;
+
+      /* ===================== 0b. TOP-LINE SUMMARY (3 things at a glance) ===================== */
+      // (a) score — reuse the live computed clear/total so it can never drift
+      document.getElementById('tl-score-num').textContent = score.clear + ' / ' + score.total;
+      document.getElementById('tl-score-note').innerHTML =
+        'Projected after fixes: <span class="mono">' + L.esc(score.projectedClear + ' / ' + score.total) + '</span> CLEAR.';
+
+      // (b) biggest problem — first HIGH-risk gap from the risk table (source of truth)
+      const topRisk = (D.risks.find(r => r.level === 'HIGH') || D.risks[0]);
+      if (topRisk) {
+        document.getElementById('tl-problem-v').textContent = topRisk.gap;
+        document.getElementById('tl-problem-note').textContent =
+          score.high + ' high-risk gap' + (score.high === 1 ? '' : 's') + ' · fix area: ' + topRisk.fix;
+      }
+
+      // (c) first priority action — top of the fix queue (headline stays the seller-facing
+      // shorthand; the note is data-driven from the actual P0 action so it can't drift)
+      const topAction = D.priorityActions[0];
+      if (topAction) {
+        document.getElementById('tl-action-note').innerHTML =
+          L.prioChip(topAction.prio) + ' ' + L.esc(topAction.action) + '.';
+      }
+
+      /* ============================ 1. HEADER ============================ */
+      const p = D.product;
+      document.getElementById('brand-tile').textContent = (p.brand || 'F').slice(0, 1).toUpperCase();
+      document.getElementById('prod-title').textContent = p.title;
+
+      // star string from rating
+      function stars(r) {
+        const full = Math.round(r);
+        return '★★★★★'.slice(0, full) + '☆☆☆☆☆'.slice(0, 5 - full);
+      }
+      document.getElementById('prod-meta').innerHTML = `
+        <span class="mono">${L.esc(p.asin)}</span>
+        <span class="sep">·</span>
+        <span>${L.esc(p.marketplace)}</span>
+        <span class="sep">·</span>
+        <span class="price">${L.esc(p.price)}</span>
+        <span class="sep">·</span>
+        <span><span class="stars">${stars(p.rating)}</span> <span class="mono">${L.esc(p.rating)}</span> <span class="muted">(${L.esc(p.reviews.toLocaleString())} reviews)</span></span>
+        <span class="sep">·</span>
+        <span class="muted">${L.esc(p.category)}</span>`;
+
+      // score ring — clear / total computed live, --p = round(clear/total*100)
+      const ring = document.getElementById('score-ring');
+      ring.style.setProperty('--p', scorePct);
+      document.getElementById('score-num').textContent = score.clear + '/' + score.total;
+      document.getElementById('ring-projected').innerHTML =
+        'Projected after fixes: <b>' + L.esc(score.projectedClear + '/' + score.total) + '</b>';
+
+      // risk count chips from the COMPUTED item risks (HIGH / MED / LOW)
+      function countChip(level, n) {
+        return L.riskChip(level).replace('</span>', ` <b>×${n}</b></span>`);
+      }
+      document.getElementById('risk-count').innerHTML =
+        countChip('HIGH', score.high) + countChip('MED', score.med) + countChip('LOW', score.low);
+
+      /* ============================ 2. SUMMARY ============================ */
+      // light emphasis on the lead gap phrase without altering source prose
+      const summaryEl = document.getElementById('exec-summary');
+      const summaryText = D.executiveSummary;
+      summaryEl.innerHTML = L.esc(summaryText)
+        .replace('hair-type suitability', '<span class="hl">hair-type suitability</span>')
+        .replace('3/21 to about 14/21', '<span class="hl">3/21 to about 14/21</span>');
+
+      // keep the priority-actions sub-line consistent with the live score
+      document.getElementById('actions-sub').textContent =
+        'The shortest path from ' + score.clear + '/' + score.total + ' to about ' +
+        score.projectedClear + '/' + score.total +
+        ' — sequenced by impact, placed in the exact listing field.';
+
+      /* ============================ 3. RISK TABLE ============================ */
+      document.getElementById('risk-rows').innerHTML = D.risks.map(r => `
+        <tr class="lvl-${L.esc(r.level)}">
+          <td>${L.riskChip(r.level)}</td>
+          <td class="gap-txt">${L.esc(r.gap)}</td>
+          <td class="impact-txt">${L.esc(r.impact)}</td>
+          <td><span class="fix-pill">${L.esc(r.fix)}</span></td>
+        </tr>`).join('');
+
+      /* ============================ 4. EVIDENCE PACK ============================ */
+      const RETRIEVAL = {
+        retrieved: { cls: 'chip-clear', label: 'Retrieved' },
+        partially_retrieved: { cls: 'chip-partial', label: 'Partial' },
+        not_available: { cls: 'chip-conflict', label: 'Not available' }
+      };
+      function retrievalChip(status) {
+        const r = RETRIEVAL[status] || RETRIEVAL.not_available;
+        return `<span class="chip ${r.cls}"><span class="dot"></span>${r.label}</span>`;
+      }
+      const ep = D.evidencePack;
+      document.getElementById('evidence-rows').innerHTML = ep.sections.map(s => `
+        <tr>
+          <td><span style="font-weight:600">${L.esc(s.section)}</span></td>
+          <td>${retrievalChip(s.status)}</td>
+          <td class="impact-txt">${L.esc(s.summary)}</td>
+        </tr>`).join('');
+
+      // inventory strip
+      const inv = ep.inventory;
+      document.getElementById('inv-type').textContent = inv.product_type;
+      document.getElementById('inv-cat').textContent = inv.likely_category;
+      document.getElementById('inv-strong').innerHTML =
+        inv.strong_areas.map(s => `<span class="chip chip-clear"><span class="dot"></span>${L.esc(s)}</span>`).join('');
+      document.getElementById('inv-missing').innerHTML =
+        inv.missing_dimensions.map(s => `<span class="chip chip-conflict"><span class="dot"></span>${L.esc(s)}</span>`).join('');
+
+      // evidence-gated note (join notes)
+      document.getElementById('ev-note').innerHTML = `
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        <span><b>How we read this listing.</b> ${ep.notes.map(n => L.esc(n)).join(' ')}</span>`;
+
+      /* ============================ 5. Q&A SIMULATION ============================ */
+      const qaWrap = document.getElementById('qa-groups');
+      let runningIndex = 0;
+      let totalQ = 0;
+      D.qaGroups.forEach(g => totalQ += g.items.length);
+      document.getElementById('qa-total').textContent = totalQ + ' questions';
+
+      const groupHtml = D.qaGroups.map((g, gi) => {
+        const rows = g.items.map(item => {
+          runningIndex++;
+          const idx = runningIndex;
+          const detailId = 'qa-det-' + idx;
+          return `
+            <tr class="qa-row" data-target="${detailId}" tabindex="0" role="button" aria-expanded="false" aria-controls="${detailId}">
+              <td class="col-n">${idx}</td>
+              <td class="q-cell"><span class="chev">›</span>${L.esc(item.q)}</td>
+              <td><span class="tag tag-scn" style="font-family:var(--mono)">${L.esc(item.intent)}</span></td>
+              <td>${L.supportChip(item.support)}</td>
+              <td><span class="ev-tag">${L.esc(item.evidence)}</span></td>
+              <td class="gap-cell">${L.esc(item.gap)}</td>
+              <td>${L.riskChip(item.risk)}</td>
+            </tr>
+            <tr class="qa-detail-row" id="${detailId}" hidden>
+              <td colspan="7">
+                <div class="qa-detail">
+                  <div class="det-block">
+                    <div class="det-k">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+                      Simulated Alexa answer
+                    </div>
+                    <div class="det-answer">${L.esc(item.answer)}</div>
+                  </div>
+                  <div class="det-block">
+                    <div class="det-k">Recommended fix area</div>
+                    <div class="det-fix">${L.esc(item.gap)}${item.fix && item.fix !== '—' ? `<br><span class="fix-pill">${L.esc(item.fix)}</span>` : '<br><span class="muted" style="font-size:.8rem">No fix needed — already answerable.</span>'}</div>
+                  </div>
+                </div>
+              </td>
+            </tr>`;
+        }).join('');
+
+        return `
+          <div class="qa-group">
+            <div class="qa-group-hd">
+              <span class="gidx">${String(gi + 1).padStart(2, '0')}</span>
+              <span class="gtitle">${L.esc(g.area)}</span>
+              <span class="gcount">${g.items.length} questions</span>
+            </div>
+            <div class="table-card table-scroll">
+              <table class="table qa-table">
+                <thead>
+                  <tr>
+                    <th class="col-n">#</th>
+                    <th class="col-q">Question</th>
+                    <th style="width:130px">Intent</th>
+                    <th style="width:110px">Support</th>
+                    <th style="width:120px">Evidence</th>
+                    <th>Gap</th>
+                    <th style="width:70px">Risk</th>
+                  </tr>
+                </thead>
+                <tbody>${rows}</tbody>
+              </table>
+            </div>
+          </div>`;
+      }).join('');
+      qaWrap.innerHTML = groupHtml;
+
+      // expand / collapse — click + keyboard (Enter/Space), with aria-expanded
+      qaWrap.querySelectorAll('tr.qa-row').forEach(row => {
+        function toggle() {
+          const det = document.getElementById(row.getAttribute('data-target'));
+          if (!det) return;
+          const willOpen = det.hidden;
+          det.hidden = !willOpen;
+          row.classList.toggle('open', willOpen);
+          row.setAttribute('aria-expanded', String(willOpen));
+          L.trackListingEvent('LISTING_REPORT_ENGAGE', {
+            sectionId: 'qa_simulation',
+            action: willOpen ? 'expand_question' : 'collapse_question',
+            questionIndex: row.querySelector('.col-n')?.textContent || '',
+            reportId: D.product.reportId || activeDashboardArtifact?.reportId || '',
+            threadId: activeDashboardArtifact?.threadId || historyThreadId || '',
+            dataMode: reportDataMode
+          });
+        }
+        row.addEventListener('click', toggle);
+        row.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+        });
+      });
+
+      /* ============================ 6. BENCHMARK ============================ */
+      const comps = D.competitors;
+      function benchHeadCell(c) {
+        const display = c.self ? 'You' : (c.brand || c.name);
+        const rating = (c.rating != null) ? `★${L.esc(c.rating)}` : '';
+        return `
+          <th class="${c.self ? 'you-col' : ''}">
+            <span class="bench-name">${L.esc(display)}</span>
+            <span class="bench-id mono">${L.esc(c.asin)}</span>
+            <span class="bench-pr">${L.esc(c.price)}${rating ? ` · ${rating}` : ''}</span>
+          </th>`;
+      }
+      const headHtml = `<th class="col-mod">Module</th>` + comps.map(benchHeadCell).join('');
+      document.getElementById('bench-head').innerHTML = headHtml;
+
+      const COVER_LABEL = { available: 'Covered', partial: 'Partial', not_available: 'Missing' };
+      function coverCell(status) {
+        return `<span class="cover-cell">${L.coverIcon(status)}<span class="cl">${COVER_LABEL[status] || 'Missing'}</span></span>`;
+      }
+      document.getElementById('bench-rows').innerHTML = D.benchmark.map(b => {
+        // gap row: You is not_available while at least one competitor is available
+        const compAvail = b.comp.some(s => s === 'available');
+        const isGap = b.you === 'not_available' && compAvail;
+        const compCells = b.comp.map(s => `<td>${coverCell(s)}</td>`).join('');
+        return `
+          <tr class="${isGap ? 'gap-row' : ''}">
+            <td class="mod-cell">${L.esc(b.module)}</td>
+            <td class="you-col">${coverCell(b.you)}</td>
+            ${compCells}
+          </tr>`;
+      }).join('');
+
+      // source / capture caption so the benchmark is auditable
+      if (D.benchmarkSource) {
+        document.getElementById('bench-source').textContent = D.benchmarkSource;
+      }
+
+      /* ============================ 7. PRIORITY ACTIONS ============================ */
+      const iInput = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>';
+      const iCompliance = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>';
+      const iDesign = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="m9 13 2 2 4-5"/></svg>';
+      document.getElementById('action-list').innerHTML = D.priorityActions.map((act, i) => `
+        <div class="action-card">
+          <div class="ac-num">${i + 1}</div>
+          <div>
+            <div class="ac-action">${L.esc(act.action)}</div>
+            <div class="ac-bar">
+              ${L.prioChip(act.prio)}
+              <span class="fix-pill">${L.esc(act.area)}</span>
+              ${act.resolves != null ? `<span class="ac-resolves">+${L.esc(act.resolves)} answers</span>` : ''}
+              ${act.effort ? `<span class="tag">Effort: ${L.esc(act.effort)}</span>` : ''}
+              ${act.needsConfirmation ? `<span class="ac-flag ac-flag-input">${iInput}Needs seller input</span>` : ''}
+              ${act.complianceRisk ? `<span class="ac-flag ac-flag-compliance">${iCompliance}Compliance check</span>` : ''}
+              ${act.assetDependency ? `<span class="ac-flag ac-flag-design">${iDesign}Needs design</span>` : ''}
+            </div>
+            <div class="ac-why">${L.esc(act.why)}</div>
+          </div>
+        </div>`).join('');
+
+      /* ---- re-run reveal stagger now that DOM is built ---- */
+      L.initReveal(document.querySelector('.blocks'));
+    })();
+  </script>
+</body>
+</html>

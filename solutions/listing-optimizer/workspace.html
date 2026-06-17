@@ -1,0 +1,3157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Optimization workspace · Luckee Listing</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="tokens.css">
+  <script src="google-ads-tag.js"></script>
+  <style>
+    /* ============================================================
+       Workspace — page-local layout
+       Polish pass: matches homepage (index.html) art-direction B —
+       elevated-card vocabulary, eyebrow+rule, serif accents, warm rhythm.
+       All styling is page-local. No edits to tokens.css/data.js/app.js.
+       ============================================================ */
+
+    /* ---- shared polish vocabulary (mirrors index.html) ---- */
+    :root {
+      --b-ease: cubic-bezier(.22,.61,.36,1);
+      --b-hair: rgba(28,43,29,.08);
+      --b-shadow-card: 0 1px 2px rgba(28,43,29,.05), 0 8px 28px -12px rgba(28,43,29,.18);
+      --b-shadow-card-hover: 0 2px 4px rgba(28,43,29,.06), 0 24px 56px -20px rgba(28,43,29,.34);
+    }
+
+    /* serif italic emphasis inside Montserrat-led headings (homepage .ser-accent) */
+    .ser-accent { font-family: var(--serif); font-weight: 400; font-style: italic; }
+
+    .ws-wrap { width: 100%; max-width: 1180px; margin: 0 auto; padding: 0 28px; }
+    .ws-main { padding: 36px 0 120px; }
+
+    /* ---- Sample / live data banner (mirrors report.html) ---- */
+    .sample-banner {
+      display: flex; align-items: flex-start; gap: 11px;
+      padding: 13px 18px; border-radius: var(--r-input); margin-bottom: 4px;
+      background: var(--info-bg); border: 1px solid color-mix(in srgb, var(--info-600) 22%, white);
+      color: var(--neutral-700); font-size: .86rem; line-height: 1.55;
+    }
+    .sample-banner svg { flex-shrink: 0; color: var(--info-600); margin-top: 2px; }
+    .sample-banner b { color: var(--info-600); font-weight: 600; }
+    .sample-banner .mono { font-family: var(--mono); color: var(--neutral-900); }
+
+    /* ---- Sticky control bar (below appbar) ---- */
+    .ws-dock-sentinel { height: 1px; }
+    .ws-bar {
+      position: sticky; top: 0; z-index: 30;
+      background: color-mix(in srgb, var(--oat-100) 86%, transparent);
+      backdrop-filter: blur(14px) saturate(120%);
+      border-bottom: 1px solid var(--b-hair);
+      transition: background .28s var(--b-ease), border-color .28s var(--b-ease), box-shadow .28s var(--b-ease);
+    }
+    .ws-bar-inner {
+      display: flex; align-items: center; justify-content: flex-start; gap: 16px;
+      padding: 14px 0 12px;
+      transition: padding .28s var(--b-ease), justify-content .28s var(--b-ease);
+    }
+    .ws-tabs {
+      gap: 8px; flex-wrap: wrap;
+      transition: padding .28s var(--b-ease), border-color .28s var(--b-ease), background .28s var(--b-ease), box-shadow .28s var(--b-ease), transform .28s var(--b-ease);
+    }
+    .ws-tabs .tab {
+      height: 46px; gap: 9px; padding: 0 16px;
+      transition: background .18s var(--b-ease), color .18s var(--b-ease), box-shadow .18s var(--b-ease), transform .18s var(--b-ease), height .24s var(--b-ease), padding .24s var(--b-ease);
+    }
+    .ws-tabs .tab:not(.tab-active):hover { transform: translateY(-1px); }
+    .ws-tabs .tab:focus-visible {
+      outline: 2px solid color-mix(in srgb, var(--forest-600) 42%, transparent);
+      outline-offset: 3px;
+    }
+    .ws-tabs::-webkit-scrollbar { display: none; }
+    .ws-tab-count {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 21px; height: 21px; padding: 0 6px; border-radius: var(--r-pill);
+      font-family: var(--mono); font-size: .72rem; font-weight: 600;
+      background: var(--oat-250); color: var(--neutral-700);
+      font-variant-numeric: tabular-nums;
+    }
+    .tab-active .ws-tab-count { background: rgba(255,255,255,.2); color: var(--oat-100); }
+    .ws-tab-meta { display: inline-flex; align-items: center; gap: 7px; }
+
+    .ws-action-strip {
+      background: color-mix(in srgb, var(--oat-100) 94%, transparent);
+      border-bottom: 1px solid var(--b-hair);
+    }
+    .ws-action-inner {
+      display: flex; align-items: center; justify-content: space-between; gap: 18px;
+      padding: 12px 0 18px; flex-wrap: wrap;
+    }
+    .ws-action-left,
+    .ws-bar-right { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+    .ws-bar-right { justify-content: flex-end; margin-left: auto; }
+    /* a subtle hairline separating the status cluster from the action cluster */
+    .ws-bar-sep { width: 1px; height: 26px; background: var(--b-hair); flex-shrink: 0; }
+    .gen-stamp { font-size: .76rem; color: var(--muted); letter-spacing: .01em; }
+    .progress-pill {
+      display: inline-flex; align-items: center; gap: 8px; height: 38px; padding: 0 16px;
+      border-radius: var(--r-pill); background: var(--forest-050); border: 1px solid var(--forest-100);
+      font-size: .84rem; font-weight: 600; color: var(--forest-700); white-space: nowrap;
+      transition: background .25s var(--b-ease), border-color .25s var(--b-ease);
+    }
+    .progress-pill .pp-num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+    .progress-pill svg { color: var(--forest-600); }
+    /* light up the progress pill once the seller has accepted something */
+    .progress-pill.has-accepts { background: var(--forest-100); border-color: var(--forest-300); }
+    body.ws-tabs-docked .ws-bar {
+      top: 10px;
+      background: transparent;
+      border-bottom-color: transparent;
+      box-shadow: none;
+      pointer-events: none;
+    }
+    body.ws-tabs-docked .ws-bar-inner {
+      justify-content: center;
+      padding: 8px 28px;
+    }
+    body.ws-tabs-docked .ws-tabs {
+      max-width: min(100%, 940px);
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      scrollbar-width: none;
+      padding: 6px;
+      border-radius: var(--r-pill);
+      border: 1px solid rgba(28,43,29,.12);
+      background: color-mix(in srgb, var(--card) 88%, transparent);
+      backdrop-filter: blur(18px) saturate(130%);
+      box-shadow: 0 14px 40px -24px rgba(28,43,29,.45), 0 1px 2px rgba(28,43,29,.06);
+      pointer-events: auto;
+      transform: translateY(-1px);
+    }
+    body.ws-tabs-docked .ws-tabs .tab {
+      height: 36px;
+      padding: 0 13px;
+      flex-shrink: 0;
+    }
+
+    /* ---- Panels ---- */
+    .ws-panel { padding-top: 38px; }
+    .ws-panel[hidden] { display: none; }
+
+    .panel-intro { margin-bottom: 30px; max-width: 820px; }
+    /* homepage eyebrow + hairline rule treatment */
+    .panel-intro .eyebrow {
+      display: inline-flex; align-items: center; gap: 9px; margin-bottom: 14px;
+    }
+    .panel-intro .eyebrow::before {
+      content: ""; width: 22px; height: 1px; background: currentColor; opacity: .55; display: inline-block;
+    }
+    .panel-intro h1 { font-size: clamp(2rem, 3.4vw, 2.7rem); margin-bottom: 10px; letter-spacing: -.014em; }
+    .panel-intro .lede { max-width: 760px; }
+    .panel-intro .sug-impact { margin-top: 12px; }
+
+    /* ---- Suggestion card (elevated-card vocabulary, mirrors homepage .e-card) ---- */
+    .sug-card {
+      overflow: hidden; border: 1px solid var(--b-hair); box-shadow: var(--b-shadow-card);
+      transition: border-color .32s var(--b-ease), box-shadow .32s var(--b-ease), transform .32s var(--b-ease), opacity .25s var(--b-ease);
+    }
+    .sug-card + .sug-card { margin-top: 22px; }
+    /* lift on hover while still in the pending state — premium, calm */
+    .sug-card:not(.is-accepted):not(.is-rejected):not(.is-edited):hover {
+      transform: translateY(-3px); box-shadow: var(--b-shadow-card-hover); border-color: rgba(62,91,63,.22);
+    }
+    .sug-card.is-accepted { border-color: var(--forest-300); box-shadow: 0 0 0 2px rgba(61,90,62,.14), var(--b-shadow-card); }
+    .sug-card.is-rejected { opacity: .52; }
+
+    .sug-head {
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 18px;
+      padding: 22px 26px; border-bottom: 1px solid var(--b-hair);
+      background: linear-gradient(180deg, var(--oat-100), color-mix(in srgb, var(--oat-100) 70%, var(--card)));
+    }
+    .sug-head .sh-left { display: flex; flex-direction: column; gap: 10px; flex: 1; min-width: 0; }
+    .sug-title-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .sug-kicker { font-size: .72rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+    .sug-h { font-size: 1.32rem; }
+    .sug-reason { font-size: .9rem; color: var(--neutral-700); line-height: 1.58; max-width: 760px; }
+    .sug-impact {
+      display: inline-flex; align-items: center; gap: 7px; margin-top: 2px;
+      font-size: .82rem; font-weight: 600; color: var(--forest-700);
+    }
+    .sug-impact svg { color: var(--forest-600); flex-shrink: 0; }
+
+    .accepted-flag {
+      display: none; align-items: center; gap: 6px; height: 30px; padding: 0 13px;
+      border-radius: var(--r-pill); background: var(--success-bg); color: var(--success-600);
+      font-size: .8rem; font-weight: 700; white-space: nowrap; flex-shrink: 0;
+    }
+    .is-accepted .accepted-flag { display: inline-flex; }
+    .validation-gate {
+      display: none; align-items: flex-start; gap: 9px; margin: 0 26px 24px;
+      padding: 12px 15px; border-radius: var(--r-input);
+      background: color-mix(in srgb, var(--error-600) 8%, white);
+      border: 1px solid color-mix(in srgb, var(--error-600) 24%, white);
+      font-size: .84rem; font-weight: 600; color: var(--error-600); line-height: 1.5;
+    }
+    .validation-gate svg { flex-shrink: 0; margin-top: 1px; }
+    .sug-card.has-validation-gate { border-color: color-mix(in srgb, var(--error-600) 36%, var(--b-hair)); }
+    .sug-card.has-validation-gate .validation-gate:not([hidden]) { display: flex; }
+    .copy-feedback {
+      display: none; align-items: center; gap: 7px; margin: 0 26px 20px;
+      padding: 10px 14px; border-radius: var(--r-pill);
+      background: var(--success-bg); border: 1px solid color-mix(in srgb, var(--success-600) 22%, white);
+      color: var(--success-600); font-size: .82rem; font-weight: 700;
+    }
+    .copy-feedback svg { width: 14px; height: 14px; flex-shrink: 0; }
+    .sug-card.has-copy-feedback .copy-feedback { display: inline-flex; }
+
+    .sug-body { padding: 26px; }
+    .sug-card.is-edited { border-color: var(--info-600); box-shadow: 0 0 0 2px rgba(37,99,235,.1), var(--sh-md); }
+
+    /* ---- Evidence-gating / fact status ---- */
+    .fact-chip {
+      display: inline-flex; align-items: center; gap: 5px; height: 24px; padding: 0 10px;
+      border-radius: var(--r-pill); font-size: .72rem; font-weight: 600; letter-spacing: .02em;
+      white-space: nowrap;
+    }
+    .fact-chip svg { width: 12px; height: 12px; }
+    .fact-chip.verified { background: var(--success-bg); color: var(--success-600); }
+    .fact-chip.needs { background: var(--warning-bg); color: var(--warning-600); }
+    .fact-note {
+      display: flex; align-items: flex-start; gap: 9px; margin-top: 14px;
+      padding: 12px 15px; border-radius: var(--r-input);
+      background: var(--warning-bg); border: 1px solid color-mix(in srgb, var(--warning-600) 26%, white);
+      font-size: .84rem; color: #8a5108; line-height: 1.55;
+    }
+    .fact-note svg { flex-shrink: 0; color: var(--warning-600); margin-top: 1px; }
+
+    /* ---- Inline "[confirm …]" placeholder token ---- */
+    .confirm-token {
+      display: inline; font-family: var(--mono); font-size: .82em; font-weight: 500;
+      background: color-mix(in srgb, var(--warning-600) 12%, white); color: #8a5108;
+      border: 1px dashed var(--warning-600); border-radius: 6px; padding: 0 5px;
+      box-decoration-break: clone; -webkit-box-decoration-break: clone; white-space: normal;
+    }
+
+    /* ---- Field counters (char / byte) ---- */
+    .field-counter {
+      display: inline-flex; align-items: center; gap: 6px; margin-top: 14px;
+      font-family: var(--mono); font-size: .76rem; font-weight: 500; color: var(--muted);
+    }
+    .field-counter.over { color: var(--error-600); }
+    .field-counter.amber { color: var(--warning-600); }
+    .field-counter.ok { color: var(--success-600); }
+
+    .title-suggested-view { display: block; }
+    .title-edit-shell {
+      display: none; margin-top: 18px; padding: 18px;
+      border: 1px solid color-mix(in srgb, var(--info-600) 18%, white);
+      border-radius: var(--r-card);
+      background: linear-gradient(180deg, color-mix(in srgb, var(--info-600) 6%, white), color-mix(in srgb, var(--info-600) 2%, white));
+    }
+    .title-edit-head {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px;
+    }
+    .title-edit-kicker {
+      display: inline-flex; align-items: center; gap: 7px;
+      font-size: .76rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+      color: var(--info-600);
+    }
+    .title-edit-status { font-size: .82rem; color: var(--neutral-700); }
+    .title-editor {
+      width: 100%; min-height: 126px; resize: vertical;
+      border: 1px solid color-mix(in srgb, var(--info-600) 28%, white);
+      border-radius: var(--r-input); background: white; color: var(--neutral-900);
+      padding: 14px 16px; font: inherit; font-family: var(--serif); font-size: 1.08rem; line-height: 1.5;
+      box-shadow: inset 0 1px 2px rgba(15,23,42,.04);
+    }
+    .title-editor:focus {
+      outline: none; border-color: var(--info-600);
+      box-shadow: 0 0 0 4px rgba(37,99,235,.12);
+    }
+    .title-edit-help {
+      margin-top: 10px; font-size: .84rem; line-height: 1.5; color: var(--neutral-700);
+    }
+    .title-edit-actions {
+      display: flex; align-items: center; justify-content: flex-end; gap: 10px; margin-top: 14px;
+    }
+    .sug-card.is-editing {
+      border-color: var(--info-600);
+      box-shadow: 0 0 0 2px rgba(37,99,235,.12), var(--b-shadow-card-hover);
+    }
+    .sug-card.is-editing .title-suggested-view { display: none; }
+    .sug-card.is-editing .title-edit-shell { display: block; }
+
+    /* ---- Answerability indicator in control bar ---- */
+    .answer-pill {
+      display: inline-flex; align-items: center; gap: 7px; height: 38px; padding: 0 15px;
+      border-radius: var(--r-pill); background: var(--oat-200); border: 1px solid var(--border-soft);
+      font-size: .82rem; font-weight: 600; color: var(--neutral-700); white-space: nowrap;
+      transition: background .3s var(--b-ease), border-color .3s var(--b-ease), color .3s var(--b-ease);
+    }
+    .answer-pill .ap-label { color: var(--muted); font-weight: 600; }
+    .answer-pill .ap-mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+    .answer-pill .ap-proj { color: var(--forest-700); font-weight: 700; }
+    .answer-pill.reaudited { background: var(--forest-050); border-color: var(--forest-300); color: var(--forest-700); }
+    .answer-pill.reaudited .ap-label { color: var(--forest-600); }
+    .answer-pill .ap-arrow { color: var(--forest-300); }
+    .reaudit-btn { height: 38px; }
+
+    /* ---- Diff layout (centerpiece) ---- */
+    .diff-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: stretch; }
+    .diff-grid .pdp-pane { display: flex; flex-direction: column; }
+    .pdp-pane .pane-label { display: flex; align-items: center; gap: 8px; }
+    .pdp-pane .pane-label .pl-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); }
+    .pdp-pane.optimized .pane-label { color: var(--forest-600); }
+    .pdp-pane.optimized .pane-label .pl-dot { background: var(--forest-600); }
+    .diff-text { font-size: .98rem; line-height: 1.62; color: var(--neutral-900); }
+    .diff-text.title-text { font-family: var(--serif); font-size: 1.18rem; line-height: 1.4; }
+    .diff-mono { font-family: var(--mono); font-size: .86rem; line-height: 1.7; word-break: break-word; }
+
+    /* ---- Tag rows ---- */
+    .tag-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .tag-row + .tag-row { margin-top: 10px; }
+    .tag-row .tr-label {
+      font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--muted); margin-right: 4px;
+    }
+    .tag-block { margin-top: 20px; padding-top: 18px; border-top: 1px dashed var(--border); }
+
+    /* ---- Card actions ---- */
+    .sug-actions {
+      display: flex; align-items: center; justify-content: flex-end; gap: 10px;
+      padding: 16px 26px; border-top: 1px solid var(--b-hair); background: var(--oat-100);
+    }
+    .sug-actions .act-note { margin-right: auto; font-size: .8rem; color: var(--muted); }
+
+    /* ---- Bullet block ---- */
+    .bullet-block + .bullet-block { margin-top: 22px; }
+    .bullet-num {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 26px; height: 26px; border-radius: 8px; background: var(--forest-600); color: var(--oat-100);
+      font-family: var(--mono); font-size: .8rem; font-weight: 600; flex-shrink: 0;
+    }
+
+    /* ---- A+ metric strip (elevated tiles) ---- */
+    .metric-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-bottom: 26px; }
+    .stat-tile {
+      background: var(--card); border: 1px solid var(--b-hair); border-radius: var(--r-card);
+      padding: 24px 26px; box-shadow: var(--b-shadow-card);
+      transition: transform .32s var(--b-ease), box-shadow .32s var(--b-ease), border-color .32s var(--b-ease);
+    }
+    .stat-tile:hover { transform: translateY(-3px); box-shadow: var(--b-shadow-card-hover); border-color: rgba(62,91,63,.22); }
+    .stat-tile .st-num { font-family: var(--serif); font-size: 2.5rem; line-height: 1; color: var(--forest-700); font-variant-numeric: tabular-nums; }
+    .stat-tile .st-num .st-den { font-size: 1.2rem; color: var(--muted); }
+    .stat-tile .st-label { font-size: .82rem; color: var(--muted); margin-top: 9px; font-weight: 500; }
+
+    /* ---- A+ module card ---- */
+    .ap-card + .ap-card { margin-top: 22px; }
+    .ap-head {
+      display: flex; align-items: center; gap: 11px; flex-wrap: wrap;
+      padding: 18px 26px; border-bottom: 1px solid var(--b-hair);
+      background: linear-gradient(180deg, var(--oat-100), color-mix(in srgb, var(--oat-100) 70%, var(--card)));
+    }
+    .ap-id { font-size: 1.02rem; font-weight: 600; color: var(--neutral-900); }
+    .ap-id .ap-mono { font-family: var(--mono); color: var(--forest-600); }
+    .ap-badge {
+      display: inline-flex; align-items: center; gap: 5px; height: 24px; padding: 0 10px;
+      border-radius: var(--r-pill); font-size: .72rem; font-weight: 600;
+    }
+    .ap-badge.keep { background: var(--forest-050); color: var(--forest-700); border: 1px solid var(--forest-100); }
+    .ap-badge.redesign { background: var(--warning-bg); color: var(--warning-600); }
+    .ap-badge.ok { background: var(--success-bg); color: var(--success-600); }
+    .ap-body { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+    .ap-col { padding: 24px 26px; }
+    .ap-col.left { border-right: 1px solid var(--b-hair); }
+    .ap-col.right { background: linear-gradient(180deg, var(--forest-050), color-mix(in srgb, var(--forest-050) 55%, var(--card))); }
+    .ap-sub { font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 16px 0 7px; }
+    .ap-col .ap-sub:first-child { margin-top: 0; }
+    .ap-thumb {
+      position: relative; height: 150px; border-radius: var(--r-input); overflow: hidden;
+      background: linear-gradient(135deg, var(--forest-600), var(--forest-800));
+      display: grid; place-items: center; color: var(--oat-100); margin-bottom: 6px;
+      box-shadow: 0 1px 2px rgba(28,43,29,.06), 0 10px 26px -16px rgba(28,43,29,.4);
+    }
+    .ap-thumb .thumb-img {
+      position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+      transition: transform .5s var(--b-ease);
+    }
+    .ap-card:hover .ap-thumb .thumb-img { transform: scale(1.035); }
+    .ap-thumb::after { content: ""; position: absolute; inset: 0; pointer-events: none;
+      background: linear-gradient(180deg, rgba(0,0,0,.22), transparent 36%, transparent 60%, rgba(0,0,0,.5)); }
+    .ap-thumb .thumb-label { font-size: .76rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; opacity: .92; position: relative; z-index: 2; }
+    .ap-thumb .thumb-label.on-img { position: absolute; bottom: 10px; left: 13px; opacity: 1; text-shadow: 0 1px 5px rgba(0,0,0,.7); }
+    .ap-thumb .thumb-tag {
+      position: absolute; top: 11px; left: 13px; font-size: .62rem; font-weight: 700; z-index: 2;
+      letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.92); text-shadow: 0 1px 4px rgba(0,0,0,.6);
+      background: rgba(28,43,29,.34); backdrop-filter: blur(3px); padding: 3px 9px; border-radius: var(--r-pill);
+    }
+    .ap-visible-list { margin: 0; padding-left: 0; list-style: none; }
+    .ap-visible-list li {
+      font-size: .85rem; color: var(--neutral-700); padding: 3px 0 3px 16px; position: relative; line-height: 1.4;
+    }
+    .ap-visible-list li::before { content: "—"; position: absolute; left: 0; color: var(--muted); }
+    .ap-text { font-size: .9rem; color: var(--neutral-700); line-height: 1.55; }
+    .ap-issue {
+      background: var(--error-bg); border: 1px solid #f4d3d3; border-radius: var(--r-input);
+      padding: 12px 15px; font-size: .85rem; color: #9a2222; line-height: 1.55;
+      display: flex; gap: 9px; align-items: flex-start;
+    }
+    .ap-issue svg { color: var(--error-600); flex-shrink: 0; margin-top: 1px; }
+    .ap-sug-h { font-family: var(--serif); font-size: 1.22rem; color: var(--forest-800); line-height: 1.25; margin-bottom: 8px; }
+    .ap-sug-body { font-size: .92rem; color: var(--neutral-900); line-height: 1.55; margin-bottom: 12px; }
+    .ap-sug-dir { font-size: .84rem; color: var(--muted); line-height: 1.5; font-style: italic; }
+
+    /* ---- Search terms note ---- */
+    .st-note {
+      display: flex; align-items: flex-start; gap: 10px; margin-top: 16px; padding: 13px 16px;
+      background: var(--info-bg); border: 1px solid #d4e1fb; border-radius: var(--r-input);
+      font-size: .86rem; color: #1f4fb0; line-height: 1.5;
+    }
+    .st-note svg { color: var(--info-600); flex-shrink: 0; margin-top: 1px; }
+
+    /* ---- Search Terms safety panel ---- */
+    .st-safety { margin-top: 18px; display: grid; gap: 10px; }
+    .st-safety-row {
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+      padding: 13px 16px; border-radius: var(--r-input);
+      background: var(--oat-100); border: 1px solid var(--b-hair); font-size: .85rem;
+    }
+    .st-safety-row .ssr-label {
+      font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--muted); margin-right: 2px;
+    }
+    .st-byte { font-family: var(--mono); font-weight: 600; color: var(--forest-700); }
+    .st-byte.over { color: var(--error-600); }
+    .st-check-ok { color: var(--success-600); font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
+    .st-check-bad { color: var(--error-600); font-weight: 600; display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .st-check-bad .tag { background: var(--error-bg); color: var(--error-600); border-color: #f4d3d3; }
+
+    /* ---- Export modal ---- */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 80; display: none;
+      align-items: flex-start; justify-content: center; padding: 56px 24px;
+      background: rgba(28,43,29,.42); backdrop-filter: blur(4px); overflow-y: auto;
+    }
+    .modal-overlay.open { display: flex; animation: fadeUp .28s var(--ease); }
+    .modal {
+      width: 100%; max-width: 720px; position: relative; max-height: calc(100vh - 112px); overflow-y: auto;
+      border: 1px solid var(--b-hair);
+      box-shadow: 0 2px 6px rgba(28,43,29,.08), 0 40px 90px -34px rgba(28,43,29,.5);
+    }
+    .modal-close {
+      position: absolute; top: 20px; right: 20px; width: 38px; height: 38px; border-radius: 50%;
+      display: grid; place-items: center; background: var(--oat-200); border: 1px solid var(--b-hair);
+      color: var(--neutral-700); cursor: pointer; transition: .15s var(--b-ease); z-index: 2;
+    }
+    .modal-close:hover { background: var(--oat-250); color: var(--neutral-900); transform: rotate(90deg); }
+    .modal-tagline {
+      display: inline-flex; align-items: center; gap: 8px; margin: 14px 0 0; padding: 8px 14px;
+      background: var(--forest-050); border: 1px solid var(--forest-100); border-radius: var(--r-pill);
+      font-size: .82rem; font-weight: 600; color: var(--forest-700);
+    }
+    .copy-block { margin-top: 22px; }
+    .copy-block-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 9px; }
+    .copy-block-head .cb-label { font-size: .74rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+    .copy-box {
+      background: var(--oat-100); border: 1px solid var(--b-hair); border-radius: var(--r-input);
+      padding: 16px 18px; font-size: .9rem; line-height: 1.6; color: var(--neutral-900);
+      white-space: pre-wrap; max-height: 220px; overflow-y: auto;
+    }
+    .copy-box.mono { font-family: var(--mono); font-size: .82rem; }
+    /* keep confirm tokens legible inside the export copy boxes */
+    .copy-box .confirm-token { font-size: .82em; }
+    .copy-box .copy-empty { color: var(--muted); font-style: italic; }
+
+    /* ---- Export decision counts + warnings ---- */
+    .export-counts {
+      display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 18px;
+    }
+    .export-counts .ec-pill {
+      display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 12px;
+      border-radius: var(--r-pill); font-size: .78rem; font-weight: 600;
+      font-family: var(--mono); background: var(--oat-200); color: var(--neutral-700);
+      border: 1px solid var(--border-soft);
+    }
+    .export-counts .ec-pill.acc { background: var(--success-bg); color: var(--success-600); }
+    .export-counts .ec-pill.edt { background: var(--info-bg); color: var(--info-600); }
+    .export-counts .ec-pill.rej { background: var(--error-bg); color: var(--error-600); }
+    .export-warn {
+      display: flex; align-items: flex-start; gap: 11px; margin-top: 18px;
+      padding: 14px 17px; border-radius: var(--r-input);
+      background: var(--warning-bg); border: 1px solid color-mix(in srgb, var(--warning-600) 30%, white);
+      font-size: .88rem; color: #8a5108; line-height: 1.55; font-weight: 500;
+    }
+    .export-warn svg { flex-shrink: 0; color: var(--warning-600); margin-top: 1px; }
+    .export-warn.high {
+      background: var(--error-bg); border-color: #f4d3d3; color: #9a2222;
+    }
+    .export-warn.high svg { color: var(--error-600); }
+
+    /* ---- Responsive ---- */
+    @media (max-width: 860px) {
+      .diff-grid { grid-template-columns: 1fr; }
+      .ap-body { grid-template-columns: 1fr; }
+      .ap-col.left { border-right: 0; border-bottom: 1px solid var(--border-soft); }
+      .metric-strip { grid-template-columns: 1fr; }
+      .ws-bar { top: 0; }
+      .ws-bar-inner { padding: 10px 0; }
+      .ws-tabs { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+      .ws-tabs .tab { flex-shrink: 0; }
+      .ws-action-inner { flex-direction: column; align-items: stretch; }
+      .ws-action-left, .ws-bar-right { justify-content: flex-start; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+      .ws-bar-right { margin-left: 0; }
+    }
+  </style>
+</head>
+<body class="has-atmos">
+  <div id="nav"></div>
+
+  <!-- ============================ STICKY CONTROL BAR ============================ -->
+  <div class="ws-dock-sentinel" id="ws-dock-sentinel" aria-hidden="true"></div>
+  <div class="ws-bar" id="ws-bar" aria-label="Workspace shortcuts">
+    <div class="ws-wrap ws-bar-inner">
+      <div class="tabs ws-tabs" data-tabs data-tab-scroll="panel" id="ws-tabs"></div>
+    </div>
+  </div>
+  <div class="ws-action-strip">
+    <div class="ws-wrap ws-action-inner">
+      <div class="ws-action-left">
+        <span class="gen-stamp mono" id="gen-stamp">Generated 2026-06-02</span>
+        <span class="progress-pill" id="progress-pill">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg>
+          <span class="pp-num"><span id="accepted">0</span> / <span id="total-sug">0</span></span>
+          accepted
+        </span>
+        <span class="answer-pill" id="answer-pill" title="Projected clearly-answered shopper questions if you accept these changes">
+          <span class="ap-label">Answerability</span>
+          <span class="ap-mono"><span id="answer-base">3</span>/<span id="answer-total">21</span></span>
+          <span class="ap-arrow">→</span>
+          <span class="ap-mono ap-proj"><span id="answer-proj">3</span>/21</span>
+        </span>
+      </div>
+      <div class="ws-bar-right">
+        <span class="ws-bar-sep" aria-hidden="true"></span>
+        <button class="btn btn-ghost btn-sm reaudit-btn" id="reaudit-btn" type="button" title="Project a re-audit with your accepted changes">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
+          Re-audit
+        </button>
+        <button class="btn btn-primary" id="open-export" type="button">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
+          Export Seller Central fields
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <main class="ws-main">
+    <div class="ws-wrap">
+
+      <!-- ============================ SAMPLE / LIVE BANNER ============================ -->
+      <div class="sample-banner" role="note" data-reveal>
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        <span id="workspace-data-note"><b>Sample optimization</b> — pre-computed bundle for Funflow (<span class="mono">B0G1MJWK3Z</span>). In production this bundle is generated after credit confirmation.</span>
+      </div>
+      <div data-funnel-slot="workspace" data-reveal style="margin-top:16px"></div>
+
+      <!-- ============================ TITLE PANEL ============================ -->
+      <section class="ws-panel" data-panel="title"></section>
+
+      <!-- ============================ BULLETS PANEL ============================ -->
+      <section class="ws-panel" data-panel="bullets" style="display:none"></section>
+
+      <!-- ============================ A+ PANEL ============================ -->
+      <section class="ws-panel" data-panel="aplus" style="display:none"></section>
+
+      <!-- ============================ SEARCH TERMS PANEL ============================ -->
+      <section class="ws-panel" data-panel="searchTerms" style="display:none"></section>
+
+    </div>
+  </main>
+
+  <!-- ============================ EXPORT MODAL ============================ -->
+  <div class="modal-overlay" id="export-overlay">
+    <div class="modal card card-pad-lg" id="export-modal" role="dialog" aria-modal="true" aria-labelledby="export-title">
+      <button class="modal-close" id="export-close" type="button" aria-label="Close export brief">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+      <span class="eyebrow">Last-mile execution</span>
+      <h2 id="export-title" style="margin:12px 0 0;font-size:2rem">Export Seller Central-ready fields</h2>
+      <p class="muted" style="margin:8px 0 0;font-size:.92rem;line-height:1.5;max-width:560px">Your finished deliverable — the exact Title, Bullets and Search Terms you accepted, written for the precise Seller Central fields and ready to paste, with every <span class="confirm-token" style="border-style:dashed">[confirm …]</span> spec you still owe flagged so nothing ships unverified.</p>
+      <span class="modal-tagline">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg>
+        Claim placeholders and Amazon field limits stay visible until they are ready to paste.
+      </span>
+      <div id="export-body"></div>
+      <div id="copy-status" class="sr-only" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="analytics-config.js"></script>
+  <script src="analytics-sdk.js"></script>
+  <script src="tracking.js"></script>
+  <script src="auth.js"></script>
+  <script src="app.js"></script>
+  <script src="ws.js"></script>
+  <script>
+    (function () {
+      const WORKSPACE_SESSION_KEY = 'luckee-listing:latest-workspace-bundle';
+      const DASHBOARD_SESSION_KEY = 'luckee-listing:latest-dashboard';
+      const THREAD_SESSION_KEY = 'luckee-listing:latest-thread-id';
+      const USER_STORAGE_KEY = 'luckee-listing:user';
+      const LEGACY_USER_STORAGE_KEY = 'user';
+      const params = new URLSearchParams(window.location.search || '');
+      const isSampleMode = params.get('sample') === '1';
+      const replayThreadId = params.get('replay_thread_id') || (params.get('replay') === '1' ? params.get('thread_id') : '');
+      const requestedThreadId = params.get('thread_id') || '';
+      const historyThreadId = replayThreadId || requestedThreadId || '';
+      const requestedReportId = params.get('report_id') || params.get('reportId') || '';
+      const requestedPath = String(params.get('path') || '').replace(/\\/g, '/');
+      const L = window.Luckee;
+
+      function readJsonStorage(key, storage) {
+        try {
+          const raw = storage.getItem(key);
+          return raw ? JSON.parse(raw) : null;
+        } catch (err) {
+          return null;
+        }
+      }
+
+      function readDashboardRecord() {
+        const parsed = readJsonStorage(DASHBOARD_SESSION_KEY, window.sessionStorage);
+        const dashboard = parsed?.dashboard || parsed;
+        return dashboard ? {
+          reportId: parsed?.reportId || dashboard?.report_meta?.report_id || dashboard?.report_meta?.target || '',
+          threadId: parsed?.threadId || ''
+        } : null;
+      }
+
+      function readLatestThreadId() {
+        try { return window.sessionStorage.getItem(THREAD_SESSION_KEY) || ''; }
+        catch (err) { return ''; }
+      }
+
+      function isAlexaSuggestPath(path) {
+        return String(path || '').replace(/\\/g, '/').includes('skill-to-ui/alexa_suggest_checklist/');
+      }
+
+      function readLatestWorkspaceArtifact() {
+        try {
+          const dashboardRecord = readDashboardRecord();
+          const raw = window.sessionStorage.getItem(WORKSPACE_SESSION_KEY);
+          const parsed = raw ? JSON.parse(raw) : null;
+          const bundle = parsed?.bundle || parsed?.block || parsed;
+          const sessionPath = String(parsed?.path || '').replace(/\\/g, '/');
+          const path = requestedPath || sessionPath;
+          if (historyThreadId && !requestedPath && parsed?.threadId !== historyThreadId) return null;
+          const reportId = parsed?.reportId
+            || bundle?.report_id
+            || bundle?.reportId
+            || bundle?.metadata?.extra?.reportId
+            || extractReportIdFromPath(path)
+            || dashboardRecord?.reportId
+            || requestedReportId
+            || '';
+          if (!path && !bundle) return null;
+          return {
+            reportId,
+            bundleId: parsed?.bundleId || bundle?.bundle_id || '',
+            path,
+            threadId: historyThreadId || parsed?.threadId || dashboardRecord?.threadId || readLatestThreadId() || '',
+            content: parsed?.content || '',
+            bundle: path === sessionPath ? bundle : null
+          };
+        } catch (err) {
+          return null;
+        }
+      }
+
+      function readLatestWorkspaceBundle() {
+        const record = readLatestWorkspaceArtifact();
+        if (!record || !isAlexaSuggestPath(record.path)) return null;
+        if (record.bundle?.type === 'alexa_suggest_checklist_bundle') return record;
+        const adapted = adaptChecklistPayloadToBundle(extractChecklistPayload(record.bundle), record);
+        return adapted ? Object.assign({}, record, { bundle: adapted }) : null;
+      }
+
+      function parseJsonMaybe(value) {
+        if (!value) return null;
+        if (typeof value === 'object') return value;
+        if (typeof value !== 'string') return null;
+        try { return JSON.parse(value); } catch (err) { return null; }
+      }
+
+      function normalizeArtifactPath(msg) {
+        return String(msg?.file_path || msg?.filePath || msg?.path || '').replace(/\\/g, '/');
+      }
+
+      function readFileMonitorJson(msg) {
+        return parseJsonMaybe(msg?.content)
+          || parseJsonMaybe(msg?.data)
+          || parseJsonMaybe(msg?.payload)
+          || parseJsonMaybe(msg?.file_content)
+          || parseJsonMaybe(msg?.fileContent)
+          || null;
+      }
+
+      function isAlexaSuggestBundleArtifact(path, data) {
+        return path.includes('skill-to-ui/alexa_suggest_checklist/')
+          || data?.type === 'alexa_suggest_checklist_bundle';
+      }
+
+      function isChecklistPayload(value) {
+        return value && ['alexa_suggest_checklist', 'rufus_suggest_checklist', 'alexa_suggest_checklist_bundle', 'rufus_suggest_checklist_bundle'].includes(value.type);
+      }
+
+      function extractChecklistPayload(raw) {
+        const parsedContent = parseJsonMaybe(raw?.content);
+        const candidates = [
+          raw,
+          raw?.payload,
+          raw?.data?.payload,
+          raw?.data,
+          parsedContent,
+          parsedContent?.payload,
+          parsedContent?.data?.payload
+        ];
+        for (const candidate of candidates) {
+          if (isChecklistPayload(candidate)) return candidate;
+          const blocks = candidate?.metadata?.structured_blocks;
+          if (Array.isArray(blocks)) {
+            const block = blocks.find(isChecklistPayload);
+            if (block) return block;
+          }
+        }
+        return null;
+      }
+
+      function firstText() {
+        return Array.from(arguments).find(value => typeof value === 'string' && value.trim())?.trim() || '';
+      }
+
+      function readArray(value) {
+        if (!Array.isArray(value)) return [];
+        return value.map(item => {
+          if (typeof item === 'string') return item.trim();
+          if (item && typeof item === 'object') return firstText(item.url, item.text, item.title, item.value);
+          return '';
+        }).filter(Boolean);
+      }
+
+      function readCurrentText(value) {
+        if (typeof value === 'string') return value.trim();
+        if (!value || typeof value !== 'object') return '';
+        return firstText(value.text, value.summary, value.backend_keywords, value.keywords);
+      }
+
+      function readRecordStringValues(value) {
+        if (!value || typeof value !== 'object' || Array.isArray(value)) return [];
+        return Object.keys(value).sort().map(key => typeof value[key] === 'string' ? value[key].trim() : '').filter(Boolean);
+      }
+
+      function normalizeRisk(value) {
+        const v = String(value || '').toLowerCase();
+        if (['critical', 'p0', 'p1', 'high', '严重'].includes(v)) return 'high';
+        if (['p2', 'medium', 'moderate', 'med', '中'].includes(v)) return 'medium';
+        return 'low';
+      }
+
+      function strongestRisk(suggestions) {
+        const risks = (suggestions || []).map(item => normalizeRisk(item?.priority || item?.riskLevel || item?.risk_level));
+        return risks.includes('high') ? 'high' : risks.includes('medium') ? 'medium' : 'low';
+      }
+
+      function suggestionCopy(entry) {
+        return firstText(entry?.suggestedContent, entry?.suggested_content, entry?.suggested_draft, entry?.suggested_text, entry?.suggested_fix, entry?.suggestion, entry?.suggested_addition, entry?.term, entry?.keyword);
+      }
+
+      function currentCopy(entry) {
+        return firstText(entry?.currentContent, entry?.current_content, entry?.current_text, entry?.original_text);
+      }
+
+      function readBulletIndex(entry, fallback) {
+        if (typeof entry?.bulletIndex === 'number') return entry.bulletIndex;
+        if (typeof entry?.bullet_index === 'number') return entry.bullet_index;
+        const n = firstText(entry?.bullet).match(/\d+/)?.[0];
+        return n ? Number(n) : fallback;
+      }
+
+      function stripSuggestionPrefix(value) {
+        const quoted = String(value || '').match(/'([^']{12,})'/)?.[1]?.trim();
+        if (quoted) return quoted;
+        return String(value || '')
+          .replace(/^add\s+[^:：]+[:：]\s*/i, '')
+          .replace(/^enhance[:：]\s*/i, '')
+          .replace(/^clarify\s+[^:：]+[:：]\s*/i, '')
+          .replace(/^replace\s+[^:：]+[:：]\s*/i, '')
+          .trim();
+      }
+
+      function readPayloadTitle(payload) { return payload.title || payload.modules?.title || null; }
+      function readPayloadBullets(payload) { return payload.bullets || payload.modules?.bullets || null; }
+      function readPayloadAplus(payload) { return payload.aplus || payload.modules?.aplus || null; }
+      function readPayloadSearchTerms(payload) { return payload.searchTerms || payload.modules?.searchTerms || payload.modules?.search_terms || null; }
+
+      function adaptTitleModule(payload) {
+        const title = readPayloadTitle(payload) || {};
+        if (title.type === 'title' && title.currentValue && title.suggestedValue) return title;
+        const suggestions = title.suggestions || [];
+        const currentValue = firstText(title.currentValue, readCurrentText(title.current), title.current_text, title.currentContent, title.current_content, currentCopy(suggestions[0]));
+        const suggestedValue = firstText(title.suggestedValue, suggestionCopy(suggestions[0]));
+        if (!currentValue || !suggestedValue) return null;
+        const reason = firstText(title.reason, suggestions[0]?.reason, title.current?.summary);
+        return {
+          id: 'title-module',
+          type: 'title',
+          label: '标题',
+          description: firstText(title.description, reason),
+          reason,
+          impact: firstText(title.impact, suggestions[0]?.change_type, suggestions[0]?.changeType),
+          riskLevel: normalizeRisk(title.riskLevel || title.risk_level || strongestRisk(suggestions)),
+          status: firstText(title.status),
+          priorityLabel: firstText(title.priority, suggestions[0]?.priority),
+          suggestionCount: Math.max(1, suggestions.length),
+          currentValue,
+          suggestedValue
+        };
+      }
+
+      function adaptBulletsModule(payload) {
+        const bullets = readPayloadBullets(payload) || {};
+        if (bullets.type === 'bullets' && Array.isArray(bullets.currentItems) && Array.isArray(bullets.suggestedItems)) return bullets;
+        const suggestions = bullets.suggestions || [];
+        const currentItems = (bullets.currentItems || bullets.current_bullets || bullets.currentBullets || bullets.current_bullet_points || readRecordStringValues(bullets.current)).filter(Boolean);
+        let resolvedCurrent = currentItems.length ? currentItems : suggestions.map(currentCopy).filter(Boolean);
+        let suggestedItems = (bullets.suggestedItems || []).filter(Boolean);
+        if (!suggestedItems.length && resolvedCurrent.length) {
+          suggestedItems = resolvedCurrent.slice();
+          suggestions.forEach((entry, index) => {
+            const idx = Math.max(0, readBulletIndex(entry, index + 1) - 1);
+            while (suggestedItems.length <= idx) suggestedItems.push('');
+            suggestedItems[idx] = stripSuggestionPrefix(suggestionCopy(entry));
+          });
+        }
+        if (!suggestedItems.length) {
+          const rows = suggestions.map((entry, index) => ({
+            current: currentCopy(entry),
+            suggested: stripSuggestionPrefix(suggestionCopy(entry)),
+            index: readBulletIndex(entry, index + 1)
+          })).filter(row => row.current && row.suggested);
+          resolvedCurrent = rows.map(row => row.current);
+          suggestedItems = rows.map(row => row.suggested);
+        }
+        if (!resolvedCurrent.length || !suggestedItems.length) return null;
+        const reason = firstText(bullets.reason, suggestions.map(item => item.reason).filter(Boolean).join('\n'));
+        return {
+          id: 'bullets-module',
+          type: 'bullets',
+          label: '五点描述',
+          description: firstText(bullets.description, reason),
+          reason,
+          impact: firstText(bullets.impact, suggestions[0]?.change_type, suggestions[0]?.changeType),
+          riskLevel: normalizeRisk(bullets.riskLevel || bullets.risk_level || strongestRisk(suggestions)),
+          status: firstText(bullets.status),
+          priorityLabel: firstText(bullets.priority, suggestions[0]?.priority),
+          suggestionCount: Math.max(suggestions.length, suggestedItems.length),
+          currentItems: resolvedCurrent,
+          suggestedItems,
+          itemLabels: resolvedCurrent.map((_, index) => `Bullet ${index + 1}`)
+        };
+      }
+
+      function imageFields(source) {
+        const urls = [
+          firstText(source?.url, source?.imageUrl, source?.image_url),
+          ...readArray(source?.imageUrls),
+          ...readArray(source?.image_urls),
+          ...readArray(source?.images)
+        ].filter(Boolean);
+        const currentImageUrl = firstText(source?.currentImageUrl, source?.current_image_url, urls[0]);
+        const suggestedImageUrl = firstText(source?.suggestedImageUrl, source?.suggested_image_url, urls[1], urls[0]);
+        const featureImages = readArray(source?.featureImages).concat(readArray(source?.feature_images));
+        return {
+          currentImageUrl: currentImageUrl || undefined,
+          suggestedImageUrl: suggestedImageUrl || undefined,
+          featureImages: featureImages.length ? featureImages : urls.slice(currentImageUrl ? 1 : 0)
+        };
+      }
+
+      function adaptAplusModule(payload) {
+        const aplus = readPayloadAplus(payload) || {};
+        if (aplus.type === 'aplus' && Array.isArray(aplus.blocks)) return aplus;
+        const blocks = [];
+        if (aplus.current && typeof aplus.current === 'object' && !Array.isArray(aplus.current)) {
+          Object.keys(aplus.current).sort().forEach((key, index) => {
+            const cur = aplus.current[key] || {};
+            const title = firstText(cur.title, `A+ 模块 ${index + 1}`);
+            const body = firstText(cur.visualSummary, cur.visual_summary, cur.strength);
+            const issue = firstText(cur.issue);
+            if (!title && !body && !issue && !cur.url) return;
+            blocks.push({
+              id: `aplus-current-${key}`,
+              blockType: firstText(cur.type, title),
+              currentHeadline: title,
+              currentBody: body,
+              currentVisual: firstText(cur.type, cur.visualSummary, cur.visual_summary),
+              suggestedHeadline: '',
+              suggestedBody: '',
+              suggestedVisual: '',
+              issues: issue ? [{ severity: '', issue, evidence: body }] : undefined,
+              ...imageFields(cur)
+            });
+          });
+        }
+        (aplus.modules || []).forEach((module, index) => {
+          const current = module.current || {};
+          const suggestion = module.suggestion || {};
+          const diagnosis = module.diagnosis || {};
+          const currentHeadline = firstText(current.title, readArray(current.visibleText)[0], readArray(current.visible_text)[0], readArray(current.claims)[0], current.visualSummary, current.visual_summary, module.name, module.label);
+          const suggestedHeadline = firstText(suggestion.suggestedHeadline, suggestion.suggested_headline, readArray(module.suggestions)[0]);
+          const suggestedBody = firstText(suggestion.suggestedBody, suggestion.suggested_body, readArray(module.suggestions).join('\n'));
+          const currentBody = firstText(current.visualSummary, current.visual_summary, current.strength, readArray(current.claims).join('；'));
+          const issues = (diagnosis.issues || []).map(issue => ({
+            severity: firstText(issue.severity, issue.priority),
+            issue: firstText(issue.issue, issue.title, issue.description),
+            evidence: firstText(issue.evidence, issue.description)
+          })).filter(issue => issue.issue);
+          if (!currentHeadline && !suggestedHeadline && !suggestedBody && !currentBody && !issues.length) return;
+          blocks.push({
+            id: firstText(module.id, `aplus-module-${index + 1}`),
+            blockType: firstText(module.name, module.label, module.moduleType, module.module_type),
+            currentHeadline,
+            currentBody,
+            currentVisual: readArray(current.visibleText).concat(readArray(current.visible_text), readArray(current.claims)).join(' / '),
+            currentVisibleText: readArray(current.visibleText).concat(readArray(current.visible_text)),
+            currentClaims: readArray(current.claims),
+            suggestedHeadline,
+            suggestedBody,
+            suggestedVisual: firstText(suggestion.suggestedVisualDirection, suggestion.suggested_visual_direction),
+            suggestionReason: firstText(suggestion.reason, module.reason),
+            priorityLabel: firstText(module.priority),
+            issues: issues.length ? issues : undefined,
+            relatedQuestions: readArray(diagnosis.relatedQuestions).concat(readArray(diagnosis.related_questions)),
+            keepImage: suggestion.keepImage ?? suggestion.keep_image,
+            needsRedesign: suggestion.needsRedesign ?? suggestion.needs_redesign,
+            ...imageFields(module)
+          });
+        });
+        (aplus.suggestions || []).forEach((entry, index) => {
+          const suggested = suggestionCopy(entry);
+          if (!suggested) return;
+          blocks.push({
+            id: `aplus-${index + 1}`,
+            blockType: firstText(entry.targetModule, entry.target_module, `A+ 模块 #${index + 1}`),
+            currentHeadline: currentCopy(entry),
+            currentBody: '',
+            currentVisual: currentCopy(entry),
+            suggestedHeadline: suggested,
+            suggestedBody: '',
+            suggestedVisual: '',
+            suggestionReason: firstText(entry.reason),
+            priorityLabel: firstText(entry.priority),
+            ...imageFields(Object.assign({}, aplus, entry))
+          });
+        });
+        if (!blocks.length) return null;
+        const reason = firstText(aplus.summary, aplus.reason, aplus.conflict_detail?.impact, aplus.sourceEvidence);
+        return {
+          id: 'aplus-module',
+          type: 'aplus',
+          label: 'A+ 页面',
+          description: reason,
+          reason,
+          impact: firstText(aplus.impact, aplus.conflict_detail?.impact, aplus.analysisFile, aplus.summary),
+          riskLevel: normalizeRisk(aplus.riskLevel || aplus.risk_level || aplus.priority),
+          status: firstText(aplus.status),
+          priorityLabel: firstText(aplus.priority),
+          suggestionCount: blocks.length,
+          blocks
+        };
+      }
+
+      function adaptSearchTermsModule(payload) {
+        const searchTerms = readPayloadSearchTerms(payload) || {};
+        if (searchTerms.type === 'searchTerms' && (searchTerms.suggestedValue || searchTerms.suggestedTerms)) return searchTerms;
+        const suggestions = searchTerms.suggestions || [];
+        const suggestedTerms = (searchTerms.suggestedTerms || suggestions.map(suggestionCopy)).filter(Boolean);
+        const currentValue = firstText(searchTerms.currentValue, readCurrentText(searchTerms.current), searchTerms.current_text, searchTerms.currentContent, searchTerms.current_content);
+        const suggestedValue = firstText(suggestedTerms.join(', '), suggestionCopy(suggestions[0]));
+        if (!currentValue && !suggestedValue && !searchTerms.notes) return null;
+        const reason = firstText(searchTerms.reason, suggestions.map(item => item.reason).filter(Boolean).join('\n'), searchTerms.notes);
+        return {
+          id: 'search-terms-module',
+          type: 'searchTerms',
+          label: 'Search Terms',
+          description: reason,
+          reason,
+          impact: firstText(searchTerms.impact, suggestions[0]?.change_type, suggestions[0]?.changeType),
+          riskLevel: normalizeRisk(searchTerms.riskLevel || searchTerms.risk_level || strongestRisk(suggestions)),
+          status: firstText(searchTerms.status),
+          priorityLabel: firstText(searchTerms.priority, suggestions[0]?.priority),
+          suggestionCount: Math.max(1, suggestions.length, suggestedTerms.length),
+          currentValue,
+          suggestedValue,
+          suggestedTerms
+        };
+      }
+
+      function adaptChecklistPayloadToBundle(payload, record) {
+        if (!payload) return null;
+        if (payload.type === 'alexa_suggest_checklist_bundle' && payload.modules && !Array.isArray(payload.modules)) return payload;
+        const moduleList = Array.isArray(payload.modules) ? payload.modules : [];
+        const directModules = {};
+        moduleList.forEach(module => {
+          if (module?.type === 'title') directModules.title = module;
+          if (module?.type === 'bullets') directModules.bullets = module;
+          if (module?.type === 'aplus') directModules.aplus = module;
+          if (module?.type === 'searchTerms' || module?.type === 'search_terms') directModules.searchTerms = Object.assign({}, module, { type: 'searchTerms' });
+        });
+        const modules = {
+          title: directModules.title || adaptTitleModule(payload),
+          bullets: directModules.bullets || adaptBulletsModule(payload),
+          aplus: directModules.aplus || adaptAplusModule(payload),
+          searchTerms: directModules.searchTerms || adaptSearchTermsModule(payload)
+        };
+        Object.keys(modules).forEach(key => { if (!modules[key]) delete modules[key]; });
+        if (!Object.keys(modules).length) return null;
+        return {
+          type: 'alexa_suggest_checklist_bundle',
+          version: payload.version || '1.1',
+          source: payload.source || 'file_monitor',
+          report_id: payload.report_id || payload.reportId || record?.reportId || extractReportIdFromPath(record?.path),
+          asin: payload.asin || '',
+          country: payload.country || payload.marketplace || '',
+          created_at: payload.generated_at || payload.generatedAt || payload.created_at || '',
+          modules
+        };
+      }
+
+      function extractReportIdFromPath(path) {
+        const name = String(path || '').split('/').pop() || '';
+        const match = name.match(/^(.+)\.json$/);
+        return match ? match[1] : '';
+      }
+
+      function extractPathAfterWorkingDir(path) {
+        const clean = String(path || '').replace(/\\/g, '/');
+        const index = clean.indexOf('/working_dir/');
+        return (index >= 0 ? clean.slice(index + '/working_dir/'.length) : clean).replace(/^\/+/, '');
+      }
+
+      function readSession() {
+        try {
+          return JSON.parse(
+            window.localStorage.getItem(USER_STORAGE_KEY)
+            || window.localStorage.getItem(LEGACY_USER_STORAGE_KEY)
+            || '{}'
+          ) || {};
+        }
+        catch (err) { return {}; }
+      }
+
+      function loadRuntimeConfig() {
+        if (window.appInfo?.services) return Promise.resolve();
+        if (window.__luckeeRuntimeConfigPromise) return window.__luckeeRuntimeConfigPromise;
+        window.__luckeeRuntimeConfigPromise = new Promise(resolve => {
+          const existing = document.querySelector('script[data-luckee-runtime-config="1"], script[src^="/config.js"]');
+          if (existing) {
+            existing.addEventListener('load', resolve, { once: true });
+            existing.addEventListener('error', resolve, { once: true });
+            return;
+          }
+          const script = document.createElement('script');
+          script.setAttribute('data-luckee-runtime-config', '1');
+          script.src = `/config.js?v=${Date.now()}`;
+          script.onload = resolve;
+          script.onerror = resolve;
+          document.head.appendChild(script);
+        });
+        return window.__luckeeRuntimeConfigPromise;
+      }
+
+      function buildDownloadUrl(record) {
+        const session = readSession();
+        const userId = session.userInfo?.id || session.userInfo?.userId || '';
+        const threadId = record?.threadId || historyThreadId || '';
+        if (!userId || !threadId || !record?.path) return '';
+        const domain = window.appInfo?.services?.TASK_API_DOMAIN;
+        if (!domain) return '';
+        const query = new URLSearchParams({
+          thread_id: threadId,
+          user_id: userId,
+          path: extractPathAfterWorkingDir(record.path)
+        });
+        return `${String(domain).replace(/\/+$/, '')}/api/v2/download_file?${query.toString()}`;
+      }
+
+      async function downloadWorkspaceBundle(record) {
+        await loadRuntimeConfig();
+        const url = buildDownloadUrl(record);
+        if (!url) throw new Error('Missing thread, user, or file path for workspace artifact.');
+        const session = readSession();
+        const token = session.loginToken || session.userInfo?.loginToken || '';
+        const response = await fetch(url, {
+          headers: token ? {
+            'Luckee-Authorization': token,
+            'x-user-token': token,
+            'X-User-ID': session.userInfo?.id || session.userInfo?.userId || ''
+          } : {}
+        });
+        if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        return response.json();
+      }
+
+      function persistWorkspaceBundleRecord(record, bundle) {
+        const reportId = bundle?.report_id || record?.reportId || extractReportIdFromPath(record?.path) || '';
+        const threadId = record?.threadId || historyThreadId || '';
+        const bundleId = bundle?.bundle_id || record?.bundleId || '';
+        window.Luckee?.setListingTrackContext?.({ reportId, threadId, bundleId, dataMode: historyThreadId ? 'replay' : 'live' });
+        window.sessionStorage.setItem(WORKSPACE_SESSION_KEY, JSON.stringify({
+          reportId,
+          threadId,
+          bundleId,
+          path: record?.path || '',
+          content: JSON.stringify(bundle),
+          bundle
+        }));
+      }
+
+      function persistWorkspaceBundleFromMessage(msg) {
+        if (!msg || msg.type !== 'file_monitor') return false;
+        const path = normalizeArtifactPath(msg);
+        const data = readFileMonitorJson(msg);
+        if (!isAlexaSuggestPath(path)) return false;
+        const bundle = adaptChecklistPayloadToBundle(extractChecklistPayload(data) || data, { path });
+        if (!bundle) return false;
+        try {
+          const reportId = bundle?.report_id || data?.report_id || extractReportIdFromPath(path) || '';
+          const threadId = historyThreadId || '';
+          const bundleId = bundle?.bundle_id || data?.bundle_id || '';
+          window.Luckee?.setListingTrackContext?.({ reportId, threadId, bundleId, dataMode: 'replay' });
+          window.sessionStorage.setItem(WORKSPACE_SESSION_KEY, JSON.stringify({
+            reportId,
+            threadId,
+            bundleId,
+            path,
+            content: msg?.content || '',
+            bundle
+          }));
+          return true;
+        } catch (err) {
+          return false;
+        }
+      }
+
+      function normalizeSearchTerms(module) {
+        const suggestedTerms = Array.isArray(module.suggestedTerms)
+          ? module.suggestedTerms
+          : String(module.suggestedValue || '').split(/[,;\n]/).map(x => x.trim()).filter(Boolean);
+        return Object.assign({}, module, {
+          currentValue: module.currentValue || '(backend Search Terms current value not readable)',
+          suggestedTerms,
+          byteLimit: module.byteLimit || module.safety?.byteLimit || 250,
+          bannedWords: module.bannedWords || module.safety?.bannedWords || ['best seller', '#1', 'guaranteed', 'fda approved', "amazon's choice"],
+          mergeNote: module.mergeNote || module.safety?.mergeNote || "Backend Search Terms can't be read from the page. Paste your existing block to merge & de-dupe, then keep the total under 250 bytes."
+        });
+      }
+
+      function normalizeAplus(module) {
+        const modules = Array.isArray(module.modules) ? module.modules : [];
+        return Object.assign({}, module, {
+          imageCountDetected: module.imageCountDetected || modules.length,
+          imageCountAnalyzed: module.imageCountAnalyzed || modules.length,
+          modules
+        });
+      }
+
+      function hasTitleModule(module) {
+        return !!(module?.currentValue && module?.suggestedValue);
+      }
+
+      function hasBulletsModule(module) {
+        return Array.isArray(module?.currentItems)
+          && Array.isArray(module?.suggestedItems)
+          && module.currentItems.length > 0
+          && module.suggestedItems.length > 0;
+      }
+
+      function hasAplusModule(module) {
+        return Array.isArray(module?.modules) && module.modules.length > 0;
+      }
+
+      function hasSearchTermsModule(module) {
+        const suggestedTerms = Array.isArray(module?.suggestedTerms)
+          ? module.suggestedTerms
+          : String(module?.suggestedValue || '').split(/[,;\n]/).map(x => x.trim()).filter(Boolean);
+        return suggestedTerms.length > 0;
+      }
+
+      function availableWorkspaceModules(modules) {
+        const source = modules || {};
+        return {
+          title: hasTitleModule(source.title),
+          bullets: hasBulletsModule(source.bullets),
+          aplus: hasAplusModule(source.aplus),
+          searchTerms: hasSearchTermsModule(source.searchTerms)
+        };
+      }
+
+      function validateWorkspaceBundle(record) {
+        if (!record?.bundle?.modules) return 'No live workspace bundle is available for this report.';
+        const availability = availableWorkspaceModules(record.bundle.modules || {});
+        if (Object.values(availability).some(Boolean)) return '';
+        return 'The live workspace bundle does not contain any renderable modules.';
+      }
+
+      function renderWorkspaceError(message) {
+        document.getElementById('nav').innerHTML = L.appBar('workspace');
+        L.bootstrapFunnelPage();
+        document.querySelector('.ws-bar')?.setAttribute('hidden', 'hidden');
+        document.querySelector('.ws-action-strip')?.setAttribute('hidden', 'hidden');
+        const noteEl = document.getElementById('workspace-data-note');
+        if (noteEl) {
+          noteEl.innerHTML = `<b>Optimization unavailable</b> — ${L.esc(message)}`;
+        }
+        document.querySelectorAll('.ws-panel').forEach(el => el.setAttribute('hidden', 'hidden'));
+        const wrap = document.querySelector('.ws-wrap');
+        if (!wrap || wrap.querySelector('[data-workspace-error="1"]')) return;
+        const section = document.createElement('section');
+        section.className = 'card card-pad';
+        section.setAttribute('data-workspace-error', '1');
+        section.style.marginTop = '22px';
+        section.innerHTML = `
+          <div class="sec-head">
+            <span class="eyebrow">Live data required</span>
+            <h2>We couldn't open this <span class="ser-accent">workspace</span></h2>
+          </div>
+          <p class="sub" style="max-width:760px">This page now uses mock optimization data only for explicit sample-entry links. Real WS runs need a valid checklist bundle JSON. If the agent did not produce that artifact, or the artifact could not be mapped into workspace modules, we stop here instead of filling the page with sample suggestions.</p>
+          <div class="row wrap" style="gap:12px;margin-top:18px">
+            <a class="btn btn-primary" href="audit.html">Run another live audit</a>
+            <a class="btn btn-outline" href="workspace.html?sample=1">Open the sample workspace</a>
+          </div>`;
+        wrap.appendChild(section);
+      }
+
+      function mapWorkspaceBundleToData(record) {
+        const live = record.bundle;
+        const liveModules = live.modules || {};
+        const modules = {
+          title: hasTitleModule(liveModules.title) ? liveModules.title : null,
+          bullets: hasBulletsModule(liveModules.bullets) ? liveModules.bullets : null,
+          aplus: hasAplusModule(liveModules.aplus) ? normalizeAplus(liveModules.aplus) : null,
+          searchTerms: hasSearchTermsModule(liveModules.searchTerms) ? normalizeSearchTerms(liveModules.searchTerms) : null
+        };
+        return {
+          product: {
+            asin: live.asin || '',
+            country: live.country || '',
+            reportId: live.report_id || record.reportId || ''
+          },
+          bundle: Object.assign({}, live, { modules }),
+          answerability: { clear: 0, total: 0, projectedClear: 0 }
+        };
+      }
+
+      const workspaceArtifact = isSampleMode ? null : readLatestWorkspaceArtifact();
+      const workspaceRecord = isSampleMode ? null : readLatestWorkspaceBundle();
+      window.LuckeeListingTrack?.trackPageView?.('workspace', {
+        dataMode: isSampleMode ? 'sample' : (historyThreadId ? 'replay' : ((workspaceRecord || workspaceArtifact) ? 'live' : 'sample')),
+        reportId: workspaceArtifact?.reportId || workspaceRecord?.reportId || '',
+        threadId: workspaceArtifact?.threadId || workspaceRecord?.threadId || historyThreadId || '',
+        bundleId: workspaceArtifact?.bundleId || workspaceRecord?.bundleId || ''
+      });
+      if (!isSampleMode && workspaceArtifact && !workspaceRecord && workspaceArtifact.path && isAlexaSuggestPath(workspaceArtifact.path)) {
+        document.getElementById('nav').innerHTML = L.appBar('workspace');
+        L.bootstrapFunnelPage();
+        const noteEl = document.getElementById('workspace-data-note');
+        if (noteEl) {
+          noteEl.innerHTML = `<b>Loading optimization</b> — reading the generated Alexa JSON from <span class="mono">${L.esc(extractPathAfterWorkingDir(workspaceArtifact.path))}</span>.`;
+        }
+        downloadWorkspaceBundle(workspaceArtifact).then(raw => {
+          const payload = extractChecklistPayload(raw) || raw;
+          const bundle = adaptChecklistPayloadToBundle(payload, workspaceArtifact);
+          if (!bundle) throw new Error('Downloaded Alexa file could not be mapped to checklist modules.');
+          const validationError = validateWorkspaceBundle({ bundle, reportId: workspaceArtifact.reportId || bundle.report_id || '' });
+          if (validationError) throw new Error(validationError);
+          persistWorkspaceBundleRecord(workspaceArtifact, bundle);
+          window.location.reload();
+        }).catch(err => {
+          renderWorkspaceError(err?.message || 'Unable to read generated Alexa JSON.');
+        });
+        return;
+      }
+
+      if (!isSampleMode && !workspaceRecord && historyThreadId && window.LuckeeAgentWs) {
+        document.getElementById('nav').innerHTML = L.appBar('workspace');
+        L.bootstrapFunnelPage();
+        const noteEl = document.getElementById('workspace-data-note');
+        if (noteEl) {
+          noteEl.innerHTML = `<b>Loading replay</b> — waiting for the agent workspace bundle from <span class="mono">${L.esc(historyThreadId)}</span>.`;
+        }
+        window.LuckeeAgentWs.runTest({
+          threadId: historyThreadId,
+          replayOnly: true,
+          onMessage: msg => {
+            if (!persistWorkspaceBundleFromMessage(msg)) return;
+            const next = new URL(window.location.href);
+            next.searchParams.delete('replay');
+            next.searchParams.delete('replay_thread_id');
+            next.searchParams.set('replayed', '1');
+            window.location.replace(next.pathname.split('/').pop() + next.search + next.hash);
+          },
+          onStatus: status => {
+            if (noteEl && (status?.state === 'reconnecting' || status?.state === 'reconnect_scheduled')) {
+              noteEl.innerHTML = `<b>Reconnecting replay</b> — still waiting for the workspace bundle from <span class="mono">${L.esc(historyThreadId)}</span>.`;
+            }
+          }
+        }).catch(err => {
+          renderWorkspaceError(err?.message || 'Unable to load workspace bundle from this thread.');
+        });
+        return;
+      }
+
+      if (!isSampleMode) {
+        const validationError = validateWorkspaceBundle(workspaceRecord);
+        if (validationError) {
+          renderWorkspaceError(validationError);
+          return;
+        }
+      }
+
+      const D = isSampleMode ? window.LUCKEE_DATA : mapWorkspaceBundleToData(workspaceRecord);
+      const M = D.bundle.modules;
+      const moduleAvailability = availableWorkspaceModules(M);
+
+      /* ---- inject app bar (← Back to report) ---- */
+      document.getElementById('nav').innerHTML = L.appBar('workspace');
+      const workspaceDataMode = workspaceRecord ? 'live' : (historyThreadId ? 'replay' : 'sample');
+      L.setListingTrackContext({
+        reportId: D.product.reportId || workspaceRecord?.reportId || workspaceArtifact?.reportId || '',
+        threadId: workspaceRecord?.threadId || workspaceArtifact?.threadId || historyThreadId || '',
+        asin: D.product.asin || '',
+        marketplace: D.product.country || '',
+        dataMode: workspaceDataMode
+      });
+      L.bootstrapFunnelPage();
+      const dockAfter = 64;
+      let dockTicking = false;
+      function syncWorkspaceDock() {
+        document.body.classList.toggle('ws-tabs-docked', window.scrollY > dockAfter);
+        dockTicking = false;
+      }
+      window.addEventListener('scroll', () => {
+        if (dockTicking) return;
+        dockTicking = true;
+        window.requestAnimationFrame(syncWorkspaceDock);
+      }, { passive: true });
+      syncWorkspaceDock();
+      L.trackListingEvent('LISTING_WORKSPACE_VIEW', {
+        reportId: D.product.reportId || workspaceRecord?.reportId || workspaceArtifact?.reportId || '',
+        threadId: workspaceRecord?.threadId || workspaceArtifact?.threadId || historyThreadId || '',
+        asin: D.product.asin || '',
+        marketplace: D.product.country || '',
+        bundleReady: !!workspaceRecord,
+        dataMode: workspaceDataMode
+      }, { immediate: true });
+      const noteEl = document.getElementById('workspace-data-note');
+      const stampEl = document.getElementById('gen-stamp');
+      if (!isSampleMode && workspaceRecord && noteEl) {
+        noteEl.innerHTML = `<b>Live optimization</b> — generated from agent output for <span class="mono">${L.esc(D.product.asin || workspaceRecord.reportId || 'this ASIN')}</span>. Review each module, then export the accepted changes.`;
+      }
+      if (!isSampleMode && workspaceRecord && stampEl) {
+        const created = D.bundle.created_at ? new Date(D.bundle.created_at) : null;
+        stampEl.textContent = created && !Number.isNaN(created.getTime())
+          ? `Generated ${created.toLocaleString()}`
+          : `Generated ${D.bundle.report_id || workspaceRecord.reportId}`;
+      }
+
+      /* ---- icon helpers (inline, lucide-like) ---- */
+      const icon = {
+        spark: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M3 12h3M18 12h3M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg>',
+        target: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>',
+        x: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>',
+        edit: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>',
+        check: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg>',
+        alert: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>',
+        info: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></svg>',
+        copy: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>',
+        download: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>'
+      };
+
+      /* ---- normalize riskLevel → HIGH/MED/LOW for riskChip ---- */
+      function riskKey(level) {
+        const v = String(level || '').toLowerCase();
+        if (v === 'high') return 'HIGH';
+        if (v === 'medium' || v === 'med') return 'MED';
+        return 'LOW';
+      }
+
+      /* ---- evidence-gating helpers ---- */
+      // Render text, turning [ ... ] placeholders into amber dashed confirm-tokens.
+      // Everything else is HTML-escaped.
+      function renderConfirm(text) {
+        const s = String(text == null ? '' : text);
+        let out = '';
+        const re = /\[[^\]]+\]/g;
+        let last = 0, mm;
+        while ((mm = re.exec(s)) !== null) {
+          out += L.esc(s.slice(last, mm.index));
+          out += `<span class="confirm-token">${L.esc(mm[0])}</span>`;
+          last = mm.index + mm[0].length;
+        }
+        out += L.esc(s.slice(last));
+        return out;
+      }
+      function hasConfirmToken(text) { return /\[[^\]]+\]/.test(String(text == null ? '' : text)); }
+
+      const completedLoopCandidateKeys = new Set();
+      function trackCompletedLoopOnce(payload) {
+        const key = [
+          payload?.completion_source || '',
+          payload?.asin || '',
+          payload?.marketplace || '',
+          payload?.field || '',
+          payload?.copyType || '',
+          payload?.reportId || '',
+          payload?.threadId || ''
+        ].join('|');
+        if (completedLoopCandidateKeys.has(key)) return;
+        completedLoopCandidateKeys.add(key);
+        const eventId = L.trackListingEvent('LISTING_COMPLETED_LOOP', Object.assign({
+          candidate_source: 'frontend'
+        }, payload || {}));
+        // Ads main-conversion dedupe is canonical (actor + asin + marketplace +
+        // report_id, 7-day window) inside google-ads-tag.js. We deliberately do
+        // NOT pass the per-action key here, so Accept / Copy / Export / Download
+        // on the same report collapse to a single Google Ads conversion.
+        window.LuckeeGoogleAds?.trackCompletedLoopConversion?.(Object.assign({
+          event_id: eventId
+        }, payload || {}));
+      }
+
+      // UTF-8 byte length
+      function byteLen(str) {
+        try { return new TextEncoder().encode(String(str)).length; }
+        catch (e) { return unescape(encodeURIComponent(String(str))).length; }
+      }
+      function normalizeSearchTermsText(text) {
+        return String(text == null ? '' : text)
+          .split(/[\n,]+/)
+          .map(part => part.trim())
+          .filter(Boolean)
+          .join(', ');
+      }
+
+      function factChip(status) {
+        if (status === 'verified')
+          return `<span class="fact-chip verified">${icon.check} Evidence-backed</span>`;
+        if (status === 'needs_confirmation')
+          return `<span class="fact-chip needs">${icon.alert} Needs your input</span>`;
+        return '';
+      }
+      function factNoteBox(note) {
+        if (!note) return '';
+        return `<div class="fact-note">${icon.alert}<span>${L.esc(note)}</span></div>`;
+      }
+      function invalidAcceptReason(text, item) {
+        if (hasConfirmToken(text)) return 'confirm_token';
+        if (item?.factStatus === 'needs_confirmation') return 'needs_confirmation';
+        return '';
+      }
+
+      /* ---- DECISIONS MAP (field+index → state) ----
+         state: 'pending' | 'accepted' | 'edited' | 'rejected'
+         meta also tracks the resolved/edited text, base suggested value,
+         risk level, fact status, and answerability weight. */
+      const decisions = {};
+      function decisionId(field, index) { return field + (index != null ? ':' + index : ''); }
+      function registerDecision(id, meta) {
+        decisions[id] = Object.assign({ state: 'pending', editedText: null }, meta);
+      }
+
+      /* ---- suggestion counting / acceptance ---- */
+      // Each accept-able item carries data-accept; total computed after render.
+      let acceptedCount = 0;
+      const acceptedEl = document.getElementById('accepted');
+      const totalEl = document.getElementById('total-sug');
+      const progressPillEl = document.getElementById('progress-pill');
+
+      function refreshTotal() {
+        const total = document.querySelectorAll('[data-accept]').length;
+        totalEl.textContent = total;
+      }
+
+      function bumpAccepted(delta) {
+        acceptedCount += delta;
+        acceptedEl.textContent = acceptedCount;
+        if (progressPillEl) progressPillEl.classList.toggle('has-accepts', acceptedCount > 0);
+      }
+
+      /* ---- answerability projection ----
+         Base = answerability.clear (3). Accepting all Title/Bullet suggestions reaches
+         projectedClear (14). Distribute (14-3)=11 weight across the accept-able
+         Title + Bullet suggestions; clamp the projected total at 14. */
+      const ANS = D.answerability || { clear: 3, total: 21, projectedClear: 14 };
+      const answerBase = ANS.clear;
+      const answerCap = ANS.projectedClear;
+      const answerTotal = ANS.total;
+      // weighted suggestion ids contributing to answerability (title + bullets)
+      const ANSWER_IDS = [];
+      function buildAnswerWeights() {
+        const ids = Object.keys(decisions).filter(id => id === 'title' || id.indexOf('bullet:') === 0);
+        const span = Math.max(0, answerCap - answerBase);
+        const per = ids.length ? span / ids.length : 0;
+        ids.forEach(id => { decisions[id].answerWeight = per; ANSWER_IDS.push(id); });
+      }
+      function projectedAnswerability() {
+        let sum = answerBase;
+        ANSWER_IDS.forEach(id => {
+          const d = decisions[id];
+          if (d && (d.state === 'accepted' || d.state === 'edited')) sum += (d.answerWeight || 0);
+        });
+        return Math.min(answerCap, Math.round(sum));
+      }
+      const answerProjEl = document.getElementById('answer-proj');
+      const answerBaseEl = document.getElementById('answer-base');
+      const answerTotalEl = document.getElementById('answer-total');
+      const answerPillEl = document.getElementById('answer-pill');
+      function refreshAnswerability() {
+        if (answerProjEl) answerProjEl.textContent = projectedAnswerability();
+      }
+
+      /* ---- render tag rows from arrays ---- */
+      function tagRow(label, items, cls) {
+        if (!items || !items.length) return '';
+        const chips = items.map(t => `<span class="tag ${cls}">${L.esc(t)}</span>`).join('');
+        return `<div class="tag-row"><span class="tr-label">${L.esc(label)}</span>${chips}</div>`;
+      }
+      function evidenceRow(items) {
+        if (!items || !items.length) return '';
+        const chips = items.map(t => `<span class="tag">${L.esc(t)}</span>`).join('');
+        return `<div class="tag-row"><span class="tr-label">Evidence</span>${chips}</div>`;
+      }
+
+      /* ---- accept/reject/edit action footer ---- */
+      function actionFooter(note) {
+        return `
+          <div class="sug-actions">
+            ${note ? `<span class="act-note">${L.esc(note)}</span>` : ''}
+            <button class="btn btn-ghost btn-sm" data-action="reject" type="button">${icon.x} Reject</button>
+            <button class="btn btn-outline btn-sm" data-action="edit" type="button">${icon.edit} Edit / confirm</button>
+            <button class="btn btn-primary btn-sm" data-accept data-action="accept" type="button">${icon.check} Accept & copy</button>
+          </div>
+          <div class="copy-feedback" data-copy-feedback role="status" aria-live="polite" hidden></div>
+          <div class="validation-gate" data-validation-gate role="alert" hidden></div>`;
+      }
+
+      /* ============================ PANEL: TITLE ============================ */
+      function renderTitle() {
+        const m = M.title;
+        const id = decisionId('title');
+        const needsConfirm = m.factStatus === 'needs_confirmation';
+        registerDecision(id, {
+          field: 'title', label: 'Final Title',
+          suggestedValue: m.suggestedValue,
+          riskLevel: riskKey(m.riskLevel),
+          factStatus: m.factStatus || null,
+          maxChars: 200
+        });
+        const titleChars = (m.suggestedValue || '').length;
+        const charCls = titleChars > 200 ? 'amber' : '';
+        return `
+          <div class="panel-intro" data-reveal>
+            <span class="eyebrow">Title · most-weighted field</span>
+            <h1>Title</h1>
+            <p class="lede muted">One focused rewrite that surfaces the audience signal without sacrificing the spec-rich structure.</p>
+          </div>
+
+          <div class="card sug-card" data-reveal data-decision="${id}">
+            <div class="sug-head">
+              <div class="sh-left">
+                <div class="sug-title-row">
+                  <span class="sug-kicker">Suggested rewrite</span>
+                  ${L.riskChip(riskKey(m.riskLevel))}
+                  ${needsConfirm ? factChip('needs_confirmation') : ''}
+                  ${L.prioChip(m.priority)}
+                </div>
+                <p class="sug-reason">${L.esc(m.reason)}</p>
+                <span class="sug-impact">${icon.target} ${L.esc(m.impact)}</span>
+              </div>
+              <span class="accepted-flag">${icon.check} Accepted</span>
+            </div>
+
+            <div class="sug-body">
+              <div class="diff-grid">
+                <div class="pdp-pane">
+                  <div class="pane-label"><span class="pl-dot"></span>Amazon PDP preview — Current</div>
+                  <div class="diff-text title-text">${L.diffCurrent(m.currentValue, m.suggestedValue)}</div>
+                </div>
+                <div class="pdp-pane optimized">
+                  <div class="pane-label"><span class="pl-dot"></span>Optimized preview — Suggested</div>
+                  <div class="title-suggested-view">
+                    <div class="diff-text title-text" data-suggested="${id}">${L.diffSuggested(m.currentValue, m.suggestedValue)}</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="title-edit-shell" data-title-editor-shell>
+                <div class="title-edit-head">
+                  <span class="title-edit-kicker">${icon.edit} Editing title draft</span>
+                  <span class="title-edit-status" data-title-edit-status>Changes are local until you save.</span>
+                </div>
+                <textarea
+                  class="title-editor"
+                  data-title-editor
+                  aria-label="Edit optimized title"
+                >${L.esc(m.suggestedValue)}</textarea>
+                <div class="title-edit-help">Refine the wording here, then save to update the optimized preview and export content.</div>
+                <div class="title-edit-actions">
+                  <button class="btn btn-ghost btn-sm" data-action="cancel-edit" data-edit-only type="button">${icon.x} Cancel</button>
+                  <button class="btn btn-primary btn-sm" data-action="save-edit" data-edit-only type="button">${icon.check} Save title</button>
+                </div>
+              </div>
+
+              ${needsConfirm ? factNoteBox(m.factNote) : ''}
+
+              <div class="field-counter ${charCls}" data-char-counter>
+                <span data-char-n>${titleChars}</span> / 200 characters${titleChars > 200 ? ' · over Amazon title limit' : ''}
+              </div>
+
+              <div class="tag-block">
+                ${evidenceRow(m.sourceEvidence)}
+                ${tagRow('Keywords', m.embeddedKeywords, 'tag-kw')}
+                ${tagRow('Scenario', m.scenarioTerms, 'tag-scn')}
+                ${tagRow('USP', m.uspTerms, 'tag-usp')}
+              </div>
+            </div>
+
+            <div class="sug-actions">
+              <span class="act-note">Single title suggestion</span>
+              <button class="btn btn-ghost btn-sm" data-action="reject" type="button">${icon.x} Reject</button>
+              <button class="btn btn-outline btn-sm" data-action="edit" type="button">${icon.edit} Edit / confirm</button>
+              <button class="btn btn-primary btn-sm" data-accept data-action="accept" type="button">${icon.check} Accept & copy</button>
+            </div>
+            <div class="copy-feedback" data-copy-feedback role="status" aria-live="polite" hidden></div>
+            <div class="validation-gate" data-validation-gate role="alert" hidden></div>
+          </div>`;
+      }
+
+      // Wrap any [ ... ] placeholder inside an already-escaped/HTML string as a confirm-token,
+      // without disturbing existing HTML tags. L.esc does NOT escape brackets, so they survive
+      // as literal [ ] in escaped output. Used in the export copy boxes.
+      function wrapConfirmInHtml(html) {
+        // split on tags so we never inject inside a tag
+        return String(html).replace(/(<[^>]+>)|([^<]+)/g, (full, tag, text) => {
+          if (tag) return tag;
+          return text.replace(/\[[^\]]+\]/g, m => `<span class="confirm-token">${m}</span>`);
+        });
+      }
+
+      // Suggested-pane renderer for bullets: the LCS word-diff tokenizes on whitespace,
+      // which would shatter a multi-word [confirm …] token across several diff-add spans.
+      // We replace each token with a space-free sentinel BEFORE diffing (so it stays a single
+      // token), then restore it as one styled confirm-token span — stripping any diff-add
+      // markup the diff wrapped around the sentinel.
+      function renderSuggestedWithTokens(cur, sug) {
+        const tokens = [];
+        const sentinelSug = String(sug).replace(/\[[^\]]+\]/g, (m) => {
+          const i = tokens.push(m) - 1;
+          return '\u0001CONFIRM' + i + '\u0001'; // sentinel: control char survives esc+tokenize
+        });
+        let html = L.diffSuggested(cur, sentinelSug);
+        // remove a diff-add wrapper that landed entirely around a sentinel, then swap in token
+        tokens.forEach((tok, i) => {
+          const sent = '\u0001CONFIRM' + i + '\u0001';
+          const styled = `<span class="confirm-token">${L.esc(tok)}</span>`;
+          // case: <span class="diff-add">...sentinel...</span> -> unwrap, style just the token
+          const wrapped = new RegExp('<span class="diff-add">([^<]*)' + sent + '([^<]*)</span>');
+          if (wrapped.test(html)) {
+            html = html.replace(wrapped, (full, pre, post) =>
+              (pre ? `<span class="diff-add">${pre}</span>` : '') + styled + (post ? `<span class="diff-add">${post}</span>` : ''));
+          } else {
+            html = html.split(sent).join(styled);
+          }
+        });
+        return html;
+      }
+
+      /* ============================ PANEL: BULLETS ============================ */
+      function renderBullets() {
+        const m = M.bullets;
+        const noteByIndex = {};
+        (m.itemNotes || []).forEach(n => { noteByIndex[n.index] = n; });
+        const factByIndex = {};
+        (m.itemFacts || []).forEach(f => { factByIndex[f.index] = f; });
+
+        let blocks = '';
+        const bulletCount = Math.max(m.currentItems?.length || 0, m.suggestedItems?.length || 0);
+        for (let i = 0; i < bulletCount; i++) {
+          const cur = m.currentItems[i] || '';
+          const sug = m.suggestedItems[i] || '';
+          const note = noteByIndex[i + 1];
+          const fact = factByIndex[i + 1];
+          const id = decisionId('bullet', i + 1);
+          // the bullet that closes the HIGH-risk hair-type gap inherits the module's HIGH risk
+          const bulletRisk = (note && /high-?risk/i.test(note.reason || '')) ? riskKey(m.riskLevel) : 'LOW';
+          registerDecision(id, {
+            field: 'bullet', index: i + 1, label: 'Bullet ' + (i + 1),
+            suggestedValue: sug,
+            riskLevel: bulletRisk,
+            factStatus: fact ? fact.status : null
+          });
+          const needsConfirm = fact && fact.status === 'needs_confirmation';
+          const suggestedHtml = renderSuggestedWithTokens(cur, sug);
+          const tagsHtml = note ? `
+            <div class="tag-block">
+              ${tagRow('Keywords', note.embeddedKeywords, 'tag-kw')}
+              ${tagRow('Scenario', note.scenarioTerms, 'tag-scn')}
+              ${tagRow('USP', note.uspTerms, 'tag-usp')}
+              ${note.reason ? `<p class="sug-reason" style="margin-top:12px">${icon.spark} ${L.esc(note.reason)}</p>` : ''}
+            </div>` : '';
+
+          blocks += `
+            <div class="card sug-card bullet-block" data-reveal data-decision="${id}">
+              <div class="sug-head">
+                <div class="sh-left">
+                  <div class="sug-title-row">
+                    <span class="bullet-num">${i + 1}</span>
+                    <span class="sug-kicker">Bullet ${i + 1}</span>
+                    ${note ? `<span class="tag tag-kw" style="font-family:var(--sans)">${L.esc(note.targetPosition)}</span>` : ''}
+                    ${fact ? factChip(fact.status) : ''}
+                  </div>
+                </div>
+                <span class="accepted-flag">${icon.check} Accepted</span>
+              </div>
+              <div class="sug-body">
+                <div class="diff-grid">
+                  <div class="pdp-pane">
+                    <div class="pane-label"><span class="pl-dot"></span>Current</div>
+                    <div class="diff-text">${L.diffCurrent(cur, sug)}</div>
+                  </div>
+                  <div class="pdp-pane optimized">
+                    <div class="pane-label"><span class="pl-dot"></span>Suggested</div>
+                    <div class="diff-text" data-suggested="${id}">${suggestedHtml}</div>
+                  </div>
+                </div>
+                ${needsConfirm && fact.note ? factNoteBox(fact.note) : ''}
+                ${tagsHtml}
+              </div>
+              ${actionFooter('')}
+            </div>`;
+        }
+
+        return `
+          <div class="panel-intro" data-reveal>
+            <span class="eyebrow">Bullets · highest-impact rewrite</span>
+            <h1>Bullets</h1>
+            <p class="lede muted">${L.esc(m.description)}</p>
+            <p class="sug-impact" style="margin-top:10px">${icon.spark} ${L.esc(m.reason)} <span class="dot-sep" style="margin:0 6px">·</span> ${L.esc(m.impact)}</p>
+          </div>
+          ${blocks}`;
+      }
+
+      /* ============================ PANEL: A+ PAGE ============================ */
+      function renderAplus() {
+        const m = M.aplus;
+        const mods = m.modules || [];
+        const needsRedesign = mods.filter(x => x.needsRedesign).length;
+
+        const tiles = `
+          <div class="metric-strip">
+            <div class="stat-tile" data-reveal>
+              <div class="st-num">${m.imageCountAnalyzed}</div>
+              <div class="st-label">Image assets analyzed</div>
+            </div>
+            <div class="stat-tile" data-reveal>
+              <div class="st-num">${mods.length}</div>
+              <div class="st-label">Issue evidence modules</div>
+            </div>
+            <div class="stat-tile" data-reveal>
+              <div class="st-num">${needsRedesign}<span class="st-den"> / ${mods.length}</span></div>
+              <div class="st-label">Need redesign</div>
+            </div>
+          </div>`;
+
+        const cards = mods.map((item, index) => {
+          const c = item.current || {};
+          const s = item.suggestion || {};
+          const fallbackImageMap = { hero: 'assets/aplus-hero.png', feature: 'assets/aplus-feature.png', lifestyle: 'assets/aplus-lifestyle.png' };
+          const imageUrl = (Array.isArray(item.imageUrls) && item.imageUrls[0])
+            || item.currentImageUrl
+            || item.current_image_url
+            || '';
+          const thumbSrc = imageUrl || fallbackImageMap[item.moduleType] || '';
+          const redesignBadge = item.needsRedesign
+            ? `<span class="ap-badge redesign">${icon.alert} Needs redesign</span>`
+            : `<span class="ap-badge ok">${icon.check} Layout OK</span>`;
+          const keepBadge = s.keepImage
+            ? `<span class="ap-badge keep">Keep image</span>` : '';
+
+          const visibleList = (c.visibleText || []).map(t => `<li>${L.esc(t)}</li>`).join('');
+          const claimTags = (c.claims || []).map(t => `<span class="tag tag-usp">${L.esc(t)}</span>`).join('');
+          const thumbHtml = thumbSrc
+            ? `<img class="thumb-img" src="${L.esc(thumbSrc)}" alt="${L.esc(item.moduleType)} A+ module" loading="lazy"><span class="thumb-label on-img">${L.esc(item.moduleType)}</span>`
+            : `<span class="thumb-label">${L.esc(item.moduleType)}</span>`;
+
+          return `
+            <div class="card ap-card sug-card" data-reveal data-aplus-index="${index}">
+              <div class="ap-head">
+                <span class="ap-id">Module <span class="ap-mono">${L.esc(item.id)}</span> · ${L.esc(item.moduleType)}</span>
+                ${L.riskChip('MED')}
+                ${keepBadge}
+                ${redesignBadge}
+                <span class="accepted-flag" style="margin-left:auto">${icon.check} Accepted</span>
+              </div>
+              <div class="ap-body">
+                <div class="ap-col left">
+                  <div class="ap-thumb">
+                    <span class="thumb-tag">A+ module</span>
+                    ${thumbHtml}
+                  </div>
+                  <div class="ap-sub">Current A+ display</div>
+                  <p class="ap-text">${L.esc(c.visualSummary || '')}</p>
+                  ${visibleList ? `<div class="ap-sub">On-image copy</div><ul class="ap-visible-list">${visibleList}</ul>` : ''}
+                  ${claimTags ? `<div class="ap-sub">Selling points / claims</div><div class="tag-row">${claimTags}</div>` : ''}
+                  <div class="ap-sub">Risk / hidden evidence</div>
+                  <div class="ap-issue">${icon.alert}<span>${L.esc(item.issue || '')}</span></div>
+                </div>
+                <div class="ap-col right">
+                  <div class="ap-sub" style="color:var(--forest-600)">Revision suggestion</div>
+                  <div class="ap-sug-h">${L.esc(s.suggestedHeadline || '')}</div>
+                  <p class="ap-sug-body">${L.esc(s.suggestedBody || '')}</p>
+                  <p class="ap-sug-dir">${L.esc(s.suggestedVisualDirection || '')}</p>
+                  <div style="display:flex;justify-content:flex-end;margin-top:18px">
+                    <button class="btn btn-primary btn-sm" data-accept data-action="accept" type="button">${icon.check} Accept & copy</button>
+                  </div>
+                  <div class="copy-feedback" data-copy-feedback role="status" aria-live="polite" hidden></div>
+                </div>
+              </div>
+            </div>`;
+        }).join('');
+
+        return `
+          <div class="panel-intro" data-reveal>
+            <span class="eyebrow">A+ page · ${m.imageCountDetected} modules detected</span>
+            <h1>A+ Page</h1>
+            <p class="lede muted">${L.esc(m.summary)}</p>
+          </div>
+          ${tiles}
+          ${cards}`;
+      }
+
+      /* ============================ PANEL: SEARCH TERMS ============================ */
+      function renderSearchTerms() {
+        const m = M.searchTerms;
+        const id = decisionId('searchTerms');
+        const joined = (m.suggestedTerms || []).join(', ');
+        registerDecision(id, {
+          field: 'searchTerms', label: 'Search Terms (backend)',
+          suggestedValue: joined,
+          riskLevel: riskKey(m.riskLevel),
+          factStatus: null,
+          byteLimit: m.byteLimit || 250,
+          bannedWords: m.bannedWords || []
+        });
+        // current value in diff-del styling; each suggested term wrapped as diff-add
+        const currentHtml = `<span class="diff-del">${L.esc(m.currentValue)}</span>`;
+        const suggestedHtml = (m.suggestedTerms || [])
+          .map(t => `<span class="diff-add">${L.esc(t)}</span>`)
+          .join('<span style="color:var(--muted)">, </span>');
+
+        // ---- safety checks ----
+        const limit = m.byteLimit || 250;
+        const bytes = byteLen(joined);
+        const overByte = bytes > limit;
+        const lower = joined.toLowerCase();
+        const hits = (m.bannedWords || []).filter(w => lower.indexOf(String(w).toLowerCase()) !== -1);
+        const banHtml = hits.length
+          ? `<span class="st-check-bad">${icon.alert} Restricted term(s): ${hits.map(h => `<span class="tag">${L.esc(h)}</span>`).join(' ')}</span>`
+          : `<span class="st-check-ok">${icon.check} No restricted terms detected</span>`;
+
+        const safetyHtml = `
+          <div class="st-safety">
+            <div class="st-safety-row" data-st-byte-row>
+              <span class="ssr-label">Byte budget</span>
+              <span class="st-byte ${overByte ? 'over' : ''}" data-st-bytes>${bytes} / ${limit} bytes</span>
+              <span data-st-byte-note style="margin-left:auto">${overByte ? `<span class="st-check-bad">${icon.alert} Over limit — trim before saving</span>` : `<span class="muted" style="font-size:.8rem">Amazon caps the backend block at ${limit} bytes</span>`}</span>
+            </div>
+            <div class="st-safety-row" data-st-restricted-row>
+              <span class="ssr-label">Restricted words</span>
+              <span data-st-restricted>${banHtml}</span>
+            </div>
+            <div class="st-note" style="margin-top:0">${icon.info}<span>${L.esc(m.mergeNote)}</span></div>
+          </div>`;
+
+        return `
+          <div class="panel-intro" data-reveal>
+            <span class="eyebrow">Search Terms · backend keyword block</span>
+            <h1>Search Terms</h1>
+            <p class="lede muted">${L.esc(m.reason)}</p>
+            <p class="sug-impact" style="margin-top:10px">${icon.target} ${L.esc(m.impact)}</p>
+            <div class="st-note">${icon.info}<span>Placement: backend Search Terms (synonyms, not frontend-readable). These never appear on the live PDP — they only widen retrieval.</span></div>
+          </div>
+
+          <div class="card sug-card" data-reveal data-decision="${id}">
+            <div class="sug-head">
+              <div class="sh-left">
+                <div class="sug-title-row">
+                  <span class="sug-kicker">Suggested backend block</span>
+                  ${L.riskChip(riskKey(m.riskLevel))}
+                  ${L.prioChip(m.priority)}
+                </div>
+              </div>
+              <span class="accepted-flag">${icon.check} Accepted</span>
+            </div>
+            <div class="sug-body">
+              <div class="diff-grid">
+                <div class="pdp-pane">
+                  <div class="pane-label"><span class="pl-dot"></span>Current</div>
+                  <div class="diff-text diff-mono">${currentHtml}</div>
+                </div>
+                <div class="pdp-pane optimized">
+                  <div class="pane-label"><span class="pl-dot"></span>Suggested — backend keyword block</div>
+                  <div class="diff-text diff-mono" data-suggested="${id}">${suggestedHtml}</div>
+                </div>
+              </div>
+              ${safetyHtml}
+              <div class="tag-block">
+                ${evidenceRow(m.sourceEvidence)}
+                ${tagRow('Unused frontend terms', m.unusedFrontendTerms, 'tag-kw')}
+              </div>
+            </div>
+            ${actionFooter('Single backend Search Terms block')}
+          </div>`;
+      }
+
+      /* ============================ MOUNT PANELS ============================ */
+      if (moduleAvailability.title) document.querySelector('[data-panel="title"]').innerHTML = renderTitle();
+      else document.querySelector('[data-panel="title"]').remove();
+      if (moduleAvailability.bullets) document.querySelector('[data-panel="bullets"]').innerHTML = renderBullets();
+      else document.querySelector('[data-panel="bullets"]').remove();
+      if (moduleAvailability.aplus) document.querySelector('[data-panel="aplus"]').innerHTML = renderAplus();
+      else document.querySelector('[data-panel="aplus"]').remove();
+      if (moduleAvailability.searchTerms) document.querySelector('[data-panel="searchTerms"]').innerHTML = renderSearchTerms();
+      else document.querySelector('[data-panel="searchTerms"]').remove();
+
+      /* ---- answerability: base/total + weights once decisions are registered ---- */
+      if (answerBaseEl) answerBaseEl.textContent = answerBase;
+      if (answerTotalEl) answerTotalEl.textContent = answerTotal;
+      buildAnswerWeights();
+      refreshAnswerability();
+
+      /* ============================ BUILD TABS ============================ */
+      const TAB_DEF = [
+        { key: 'title',       label: 'Title',        mod: M.title },
+        { key: 'bullets',     label: 'Bullets',      mod: M.bullets },
+        { key: 'aplus',       label: 'A+ Page',      mod: M.aplus },
+        { key: 'searchTerms', label: 'Search Terms', mod: M.searchTerms }
+      ].filter(t => moduleAvailability[t.key]);
+      // suggestion count per tab = number of [data-accept] inside its panel
+      function panelCount(key) {
+        const p = document.querySelector(`[data-panel="${key}"]`);
+        return p ? p.querySelectorAll('[data-accept]').length : 0;
+      }
+      const tabsHtml = TAB_DEF.map((t, i) => {
+        const cnt = panelCount(t.key);
+        return `
+          <button class="tab ${i === 0 ? 'tab-active' : ''}" data-tab="${t.key}" type="button">
+            <span>${L.esc(t.label)}</span>
+            <span class="ws-tab-meta">
+              <span class="ws-tab-count">${cnt}</span>
+              ${L.riskChip(riskKey(t.mod.riskLevel))}
+            </span>
+          </button>`;
+      }).join('');
+      document.getElementById('ws-tabs').innerHTML = tabsHtml;
+
+      document.querySelectorAll('.ws-panel').forEach((panel, index) => {
+        const key = panel.getAttribute('data-panel');
+        if (!moduleAvailability[key]) return;
+        panel.style.display = index === 0 ? '' : 'none';
+      });
+
+      refreshTotal();
+      L.initTabs();
+
+      /* ============================ ACCEPT / REJECT / EDIT ============================ */
+      // Keep the decisions map in sync with the card UI. Cards that carry data-decision
+      // feed the export brief + answerability; others (A+) only move the accepted count.
+      function setAcceptBtn(btn, accepted) {
+        if (accepted) {
+          btn.innerHTML = `${icon.check} Copied · Undo`;
+          btn.title = 'Click to undo'; btn.setAttribute('aria-pressed', 'true');
+          btn.classList.remove('btn-primary'); btn.classList.add('btn-outline');
+        } else {
+          btn.innerHTML = `${icon.check} Accept & copy`;
+          btn.title = ''; btn.setAttribute('aria-pressed', 'false');
+          btn.classList.remove('btn-outline'); btn.classList.add('btn-primary');
+        }
+      }
+      function setDecisionState(card, state) {
+        const id = card.getAttribute('data-decision');
+        if (id && decisions[id]) decisions[id].state = state;
+      }
+      function trackSuggestionDecision(id, decision) {
+        const item = decisions[id] || {};
+        L.trackListingEvent('LISTING_SUGGESTION_DECISION', {
+          field: item.field || String(id || '').split(':')[0] || '',
+          decision,
+          riskLevel: item.riskLevel || '',
+          factStatus: item.factStatus || '',
+          reportId: D.product.reportId || workspaceRecord?.reportId || workspaceArtifact?.reportId || '',
+          threadId: workspaceRecord?.threadId || workspaceArtifact?.threadId || historyThreadId || ''
+        });
+      }
+      function currentDecisionText(id, card) {
+        const d = decisions[id];
+        if (!d) return '';
+        const liveEditor = card?.querySelector('[data-title-editor]');
+        if (card?.classList.contains('is-editing') && liveEditor) {
+          return (liveEditor.value || '').replace(/\s+\n/g, '\n').trim();
+        }
+        const preview = card?.querySelector('[data-suggested]');
+        const previewText = (preview?.innerText || preview?.textContent || '').replace(/\s+\n/g, '\n').trim();
+        if (previewText) return d.field === 'searchTerms' ? normalizeSearchTermsText(previewText) : previewText;
+        if (d.editedText != null) return d.editedText;
+        return d.suggestedValue || '';
+      }
+      function updateSearchTermsSafety(card, text) {
+        const id = card?.getAttribute('data-decision');
+        const d = id ? decisions[id] : null;
+        if (!card || !d || d.field !== 'searchTerms') return;
+        const normalized = normalizeSearchTermsText(text);
+        const limit = d.byteLimit || 250;
+        const bytes = byteLen(normalized);
+        const overByte = bytes > limit;
+        const bytesEl = card.querySelector('[data-st-bytes]');
+        const byteNoteEl = card.querySelector('[data-st-byte-note]');
+        const restrictedEl = card.querySelector('[data-st-restricted]');
+        if (bytesEl) {
+          bytesEl.textContent = `${bytes} / ${limit} bytes`;
+          bytesEl.classList.toggle('over', overByte);
+        }
+        if (byteNoteEl) {
+          byteNoteEl.innerHTML = overByte
+            ? `<span class="st-check-bad">${icon.alert} Over limit — trim before saving</span>`
+            : `<span class="muted" style="font-size:.8rem">Amazon caps the backend block at ${limit} bytes</span>`;
+        }
+        if (restrictedEl) {
+          const lower = normalized.toLowerCase();
+          const hits = (d.bannedWords || []).filter(w => lower.indexOf(String(w).toLowerCase()) !== -1);
+          restrictedEl.innerHTML = hits.length
+            ? `<span class="st-check-bad">${icon.alert} Restricted term(s): ${hits.map(h => `<span class="tag">${L.esc(h)}</span>`).join(' ')}</span>`
+            : `<span class="st-check-ok">${icon.check} No restricted terms detected</span>`;
+        }
+      }
+      function updateTitleCounter(card, text) {
+        const counter = card?.querySelector('[data-char-counter]');
+        if (!counter) return;
+        const n = String(text || '').trim().length;
+        const nEl = counter.querySelector('[data-char-n]');
+        if (nEl) nEl.textContent = n;
+        counter.classList.toggle('amber', n > 200);
+        counter.classList.toggle('over', n > 200);
+        counter.classList.toggle('ok', n > 0 && n <= 200);
+        counter.innerHTML = `<span data-char-n>${n}</span> / 200 characters${n > 200 ? ' · over Amazon title limit' : n > 0 ? ' · within Amazon title limit' : ''}`;
+      }
+      function toggleTitleEditButtons(card, editing) {
+        if (!card) return;
+        const actionMap = {
+          accept: !editing,
+          reject: true,
+          edit: !editing
+        };
+        Object.keys(actionMap).forEach(action => {
+          const el = card.querySelector(`[data-action="${action}"]`);
+          if (el) el.hidden = !actionMap[action];
+        });
+      }
+      function syncTitleEditorStatus(card, text) {
+        const status = card?.querySelector('[data-title-edit-status]');
+        if (!status) return;
+        const n = String(text || '').trim().length;
+        status.textContent = n > 200
+          ? 'Title is over the 200-character limit.'
+          : n > 0
+            ? 'Ready to save this edited title.'
+            : 'Title cannot be empty.';
+      }
+      function enterTitleEditMode(card) {
+        if (!card) return false;
+        const id = card.getAttribute('data-decision');
+        const editor = card.querySelector('[data-title-editor]');
+        if (!id || !decisions[id] || !editor) return false;
+        const draft = decisions[id].editedText != null ? decisions[id].editedText : decisions[id].suggestedValue || '';
+        editor.value = draft;
+        card.classList.add('is-editing');
+        toggleTitleEditButtons(card, true);
+        clearValidationGate(card);
+        clearCopyFeedback(card);
+        updateTitleCounter(card, draft);
+        syncTitleEditorStatus(card, draft);
+        window.requestAnimationFrame(() => {
+          editor.focus();
+          editor.setSelectionRange(editor.value.length, editor.value.length);
+        });
+        return true;
+      }
+      function exitTitleEditMode(card) {
+        if (!card) return;
+        const id = card.getAttribute('data-decision');
+        const current = id && decisions[id]
+          ? (decisions[id].editedText != null ? decisions[id].editedText : decisions[id].suggestedValue || '')
+          : '';
+        card.classList.remove('is-editing');
+        toggleTitleEditButtons(card, false);
+        updateTitleCounter(card, current);
+        syncTitleEditorStatus(card, current);
+      }
+      function saveTitleEdit(card) {
+        if (!card) return false;
+        const id = card.getAttribute('data-decision');
+        const editor = card.querySelector('[data-title-editor]');
+        const preview = card.querySelector('[data-suggested]');
+        const wasAccepted = card.classList.contains('is-accepted');
+        if (!id || !decisions[id] || !editor || !preview) return false;
+        const txt = (editor.value || '').replace(/\s+\n/g, '\n').trim();
+        if (!txt) {
+          syncTitleEditorStatus(card, txt);
+          updateTitleCounter(card, txt);
+          editor.focus();
+          return false;
+        }
+        decisions[id].editedText = txt;
+        decisions[id].state = wasAccepted ? 'edited' : 'pending';
+        decisions[id].suggestedValue = txt;
+        card.classList.remove('is-rejected');
+        card.classList.add('is-edited');
+        preview.innerHTML = renderConfirm(txt);
+        const acc = card.querySelector('[data-action="accept"]');
+        if (wasAccepted) {
+          card.classList.add('is-accepted');
+          if (acc) setAcceptBtn(acc, true);
+        } else {
+          card.classList.remove('is-accepted');
+          if (acc) setAcceptBtn(acc, false);
+        }
+        exitTitleEditMode(card);
+        clearValidationGate(card);
+        clearCopyFeedback(card);
+        refreshAnswerability();
+        return true;
+      }
+
+      function acceptedCopyText(card) {
+        const id = card?.getAttribute('data-decision');
+        if (id && decisions[id]) return currentDecisionText(id, card);
+        const optimized = card?.querySelector('.pdp-pane.optimized .diff-text, .optimized .diff-text, [data-suggested]');
+        return (optimized?.innerText || optimized?.textContent || '').replace(/\s+\n/g, '\n').trim();
+      }
+      function showValidationGate(card, message) {
+        const gate = card?.querySelector('[data-validation-gate]');
+        if (!gate) return;
+        gate.innerHTML = `${icon.alert}<span>${L.esc(message)}</span>`;
+        gate.hidden = false;
+        card.classList.add('has-validation-gate');
+      }
+      function clearValidationGate(card) {
+        const gate = card?.querySelector('[data-validation-gate]');
+        if (!gate) return;
+        gate.hidden = true;
+        gate.innerHTML = '';
+        card.classList.remove('has-validation-gate');
+      }
+      function showCopyFeedback(card, message) {
+        const feedback = card?.querySelector('[data-copy-feedback]');
+        if (!feedback) return;
+        feedback.innerHTML = `${icon.check} ${L.esc(message)}`;
+        feedback.hidden = false;
+        card.classList.add('has-copy-feedback');
+        clearTimeout(feedback._hideTimer);
+        feedback._hideTimer = setTimeout(() => clearCopyFeedback(card), 2200);
+      }
+      function clearCopyFeedback(card) {
+        const feedback = card?.querySelector('[data-copy-feedback]');
+        if (!feedback) return;
+        feedback.hidden = true;
+        feedback.innerHTML = '';
+        card.classList.remove('has-copy-feedback');
+      }
+      function validationIssueFor(id, value, opts) {
+        const d = decisions[id];
+        if (!d) return '';
+        const text = String(value == null ? '' : value).trim();
+        const confirmed = !!(opts && opts.confirmed) || d.state === 'edited' || d.editedText != null;
+
+        if (!text) return 'Add a final field value before accepting.';
+
+        if (d.field === 'title') {
+          const max = d.maxChars || 200;
+          if (text.length > max) {
+            return `Title is ${text.length}/${max} characters. Trim it before accepting.`;
+          }
+        }
+
+        if (d.field === 'searchTerms') {
+          const limit = d.byteLimit || 250;
+          const bytes = byteLen(text);
+          if (bytes > limit) {
+            return `Search Terms are ${bytes}/${limit} bytes. Trim them before accepting.`;
+          }
+          const lower = text.toLowerCase();
+          const hit = (d.bannedWords || []).find(w => lower.indexOf(String(w).toLowerCase()) !== -1);
+          if (hit) {
+            return `Remove restricted term "${hit}" before accepting.`;
+          }
+        }
+
+        if (hasConfirmToken(text)) {
+          return 'Replace every [confirm ...] placeholder with seller-confirmed facts before accepting.';
+        }
+
+        if (d.factStatus === 'needs_confirmation' && !confirmed) {
+          return 'Confirm or remove this claim before accepting.';
+        }
+
+        return '';
+      }
+      function validateAcceptableCard(card) {
+        const id = card?.getAttribute('data-decision');
+        if (!id || !decisions[id]) return null;
+        const issue = validationIssueFor(id, currentDecisionText(id, card));
+        if (issue) return issue;
+        return null;
+      }
+
+      function copyAcceptedSuggestion(card) {
+        const text = acceptedCopyText(card);
+        if (!text) {
+          clearCopyFeedback(card);
+          return;
+        }
+        const id = card?.getAttribute('data-decision') || '';
+        const item = decisions[id] || {};
+        const commonPayload = {
+          field: item.field || String(id || '').split(':')[0] || '',
+          completion_source: 'fix_accept',
+          asin: D.product.asin || '',
+          marketplace: D.product.country || D.product.marketplace || '',
+          reportId: D.product.reportId || workspaceRecord?.reportId || workspaceArtifact?.reportId || '',
+          threadId: workspaceRecord?.threadId || workspaceArtifact?.threadId || historyThreadId || ''
+        };
+        const blockReason = invalidAcceptReason(text, item);
+        const validForCompletedLoop = !blockReason;
+        if (blockReason) {
+          L.trackListingEvent('LISTING_FIX_VALIDATION_BLOCK', Object.assign({
+            block_reason: blockReason,
+            validation_reason_code: 'unconfirmed_claim'
+          }, commonPayload));
+        }
+        const trackCopyResult = (clipboardResult) => {
+          L.trackListingEvent('LISTING_FIX_AUTO_COPY', Object.assign({
+            clipboard_result: clipboardResult,
+            manual_copy_available: clipboardResult === 'failed',
+            validation_status: validForCompletedLoop ? 'valid' : 'blocked',
+            validation_reason_code: blockReason ? 'unconfirmed_claim' : ''
+          }, commonPayload));
+        };
+        const done = () => {
+          showCopyFeedback(card, 'Copied to clipboard.');
+          trackCopyResult('success');
+          if (validForCompletedLoop) trackCompletedLoopOnce(commonPayload);
+        };
+        const failed = () => {
+          showCopyFeedback(card, 'Copy failed. Select and copy manually.');
+          trackCopyResult('failed');
+          L.trackListingEvent('LISTING_FIX_MANUAL_COPY', Object.assign({
+            clipboard_result: 'manual_prompt_shown',
+            validation_status: validForCompletedLoop ? 'valid' : 'blocked',
+            validation_reason_code: blockReason ? 'unconfirmed_claim' : ''
+          }, commonPayload));
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(done).catch(failed);
+        } else {
+          failed();
+        }
+      }
+
+      document.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-action]');
+        if (!btn) return;
+        const action = btn.getAttribute('data-action');
+        const card = btn.closest('.sug-card');
+        if (!card) return;
+
+        if (action === 'accept') {
+          const wasAccepted = card.classList.contains('is-accepted');
+          if (wasAccepted) {
+            const id = card.getAttribute('data-decision');
+            bumpAccepted(-1);
+            setAcceptBtn(btn, false);
+            setDecisionState(card, 'pending');
+            card.classList.remove('is-edited');
+            card.classList.remove('is-accepted');
+            clearCopyFeedback(card);
+            clearValidationGate(card);
+            if (id) trackSuggestionDecision(id, 'undo_accept');
+            refreshAnswerability();
+            return;
+          }
+          const validationMessage = validateAcceptableCard(card);
+          if (validationMessage) {
+            showValidationGate(card, validationMessage);
+            return;
+          }
+          clearValidationGate(card);
+          card.classList.remove('is-rejected');
+          card.classList.toggle('is-accepted');
+          const nowAccepted = card.classList.contains('is-accepted');
+
+          if (nowAccepted && !wasAccepted) {
+            bumpAccepted(1);
+            setAcceptBtn(btn, true);
+            // if the card was edited keep the edited state, else mark accepted
+            const id = card.getAttribute('data-decision');
+            if (id && decisions[id] && decisions[id].editedText != null) {
+              decisions[id].state = 'edited'; card.classList.add('is-edited');
+            } else {
+              setDecisionState(card, 'accepted');
+            }
+            trackSuggestionDecision(id, 'accept');
+            copyAcceptedSuggestion(card);
+          }
+          refreshAnswerability();
+        } else if (action === 'reject') {
+          // if it was accepted, decrement
+          if (card.classList.contains('is-accepted')) {
+            bumpAccepted(-1);
+            const acc = card.querySelector('[data-action="accept"]');
+            if (acc) setAcceptBtn(acc, false);
+          }
+          card.classList.remove('is-accepted');
+          card.classList.remove('is-edited');
+          card.classList.remove('is-editing');
+          toggleTitleEditButtons(card, false);
+          clearCopyFeedback(card);
+          const nowRejected = !card.classList.contains('is-rejected');
+          card.classList.toggle('is-rejected');
+          setDecisionState(card, nowRejected ? 'rejected' : 'pending');
+          const id = card.getAttribute('data-decision');
+          if (id) trackSuggestionDecision(id, nowRejected ? 'reject' : 'undo_reject');
+          clearValidationGate(card);
+          refreshAnswerability();
+        } else if (action === 'edit') {
+          if (card.getAttribute('data-decision') === 'title' && enterTitleEditMode(card)) return;
+          // make the optimized pane editable; on blur, capture edited text → 'edited'
+          const pane = card.querySelector('.pdp-pane.optimized .diff-text');
+          if (pane) {
+            clearValidationGate(card);
+            clearCopyFeedback(card);
+            pane.setAttribute('contenteditable', 'true');
+            pane.style.outline = '2px solid var(--forest-600)';
+            pane.style.outlineOffset = '4px';
+            pane.focus();
+            pane.addEventListener('blur', () => {
+              pane.removeAttribute('contenteditable');
+              pane.style.outline = '';
+              const id = card.getAttribute('data-decision');
+              if (id && decisions[id]) {
+                const rawTxt = (pane.innerText || pane.textContent || '').replace(/\s+\n/g, '\n').trim();
+                const txt = decisions[id].field === 'searchTerms' ? normalizeSearchTermsText(rawTxt) : rawTxt;
+                if (decisions[id].field === 'searchTerms') {
+                  pane.textContent = txt;
+                  updateSearchTermsSafety(card, txt);
+                }
+                if (txt && txt !== (decisions[id].suggestedValue || '')) {
+                  decisions[id].editedText = txt;
+                  decisions[id].suggestedValue = txt;
+                  const issue = validationIssueFor(id, txt, { confirmed: true });
+                  if (issue) {
+                    if (card.classList.contains('is-accepted')) {
+                      card.classList.remove('is-accepted');
+                      bumpAccepted(-1);
+                      const acc = card.querySelector('[data-action="accept"]');
+                      if (acc) setAcceptBtn(acc, false);
+                    }
+                    decisions[id].state = 'pending';
+                    card.classList.remove('is-edited');
+                    showValidationGate(card, issue);
+                    refreshAnswerability();
+                    return;
+                  }
+                  const wasAccepted = card.classList.contains('is-accepted');
+                  decisions[id].state = wasAccepted ? 'edited' : 'pending';
+                  card.classList.remove('is-rejected');
+                  card.classList.add('is-edited');
+                  clearValidationGate(card);
+                  const acc = card.querySelector('[data-action="accept"]');
+                  if (wasAccepted) {
+                    card.classList.add('is-accepted');
+                    if (acc) setAcceptBtn(acc, true);
+                  } else {
+                    card.classList.remove('is-accepted');
+                    if (acc) setAcceptBtn(acc, false);
+                  }
+                  clearCopyFeedback(card);
+                  refreshAnswerability();
+                  trackSuggestionDecision(id, 'edit');
+                }
+              }
+            }, { once: true });
+          }
+        } else if (action === 'cancel-edit') {
+          exitTitleEditMode(card);
+        } else if (action === 'save-edit') {
+          saveTitleEdit(card);
+        }
+      });
+
+      document.addEventListener('input', (e) => {
+        const editor = e.target.closest('[data-title-editor]');
+        if (editor) {
+          const card = editor.closest('.sug-card');
+          if (!card) return;
+          updateTitleCounter(card, editor.value);
+          syncTitleEditorStatus(card, editor.value);
+          clearValidationGate(card);
+          return;
+        }
+        const pane = e.target.closest('.pdp-pane.optimized .diff-text');
+        const card = pane?.closest('.sug-card');
+        const id = card?.getAttribute('data-decision');
+        if (!pane || !card || !id || !decisions[id]) return;
+        if (decisions[id].field === 'searchTerms') {
+          updateSearchTermsSafety(card, pane.innerText || pane.textContent || '');
+          clearValidationGate(card);
+        }
+      });
+
+      /* ============================ RE-AUDIT (projection affordance) ============================ */
+      const reauditBtn = document.getElementById('reaudit-btn');
+      if (reauditBtn) {
+        reauditBtn.addEventListener('click', () => {
+          const proj = projectedAnswerability();
+          L.trackListingEvent('LISTING_REAUDIT_CLICK', {
+            acceptedCount,
+            projectedScore: proj,
+            totalScore: answerTotal,
+            reportId: D.product.reportId || workspaceRecord?.reportId || workspaceArtifact?.reportId || '',
+            threadId: workspaceRecord?.threadId || workspaceArtifact?.threadId || historyThreadId || ''
+          });
+          if (answerPillEl) {
+            answerPillEl.classList.add('reaudited');
+            answerPillEl.animate(
+              [{ transform: 'scale(1)' }, { transform: 'scale(1.06)' }, { transform: 'scale(1)' }],
+              { duration: 420, easing: 'cubic-bezier(.4,0,.2,1)' }
+            );
+            // settle the displayed projection and briefly hold the highlighted state
+            if (answerProjEl) answerProjEl.textContent = proj;
+            const prev = reauditBtn.innerHTML;
+            reauditBtn.innerHTML = `${icon.check} Projected ${proj}/${answerTotal}`;
+            setTimeout(() => {
+              reauditBtn.innerHTML = prev;
+              answerPillEl.classList.remove('reaudited');
+            }, 1600);
+          }
+        });
+      }
+
+      /* ============================ EXPORT MODAL ============================ */
+      const overlay = document.getElementById('export-overlay');
+      const exportBody = document.getElementById('export-body');
+
+      // value store for copy buttons (rebuilt each open)
+      let valueById = {};
+
+      // Render a value into HTML keeping [confirm …] tokens visible/styled.
+      function copyBoxHtml(value, mono) {
+        const empty = !value;
+        const inner = empty
+          ? `<span class="copy-empty">— no accepted changes —</span>`
+          : wrapConfirmInHtml(L.esc(value));
+        return { inner, mono: !!mono };
+      }
+      function copyBlock(label, value, mono) {
+        const id = 'cb-' + Math.random().toString(36).slice(2, 8);
+        const box = copyBoxHtml(value, mono);
+        valueById[id] = value || '';
+        return `
+          <div class="copy-block">
+            <div class="copy-block-head">
+              <span class="cb-label">${L.esc(label)}</span>
+              ${value ? `<button class="btn btn-outline btn-sm" data-copy="${id}" type="button">${icon.copy} Copy</button>` : ''}
+            </div>
+            <div class="copy-box ${box.mono ? 'mono' : ''}" id="${id}">${box.inner}</div>
+          </div>`;
+      }
+
+      // Pull the resolved text for an accepted/edited decision.
+      function resolvedValue(id) {
+        const d = decisions[id];
+        if (!d) return '';
+        if (d.state === 'rejected' || d.state === 'pending') return '';
+        return (d.state === 'edited' && d.editedText != null) ? d.editedText : d.suggestedValue;
+      }
+
+      function reportSafeSlug(value) {
+        return String(value || '')
+          .trim()
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-+|-+$/g, '');
+      }
+
+      function reportDateStamp() {
+        const now = new Date();
+        const yyyy = now.getFullYear();
+        const mm = String(now.getMonth() + 1).padStart(2, '0');
+        const dd = String(now.getDate()).padStart(2, '0');
+        return `${yyyy}-${mm}-${dd}`;
+      }
+
+      function reportFileName() {
+        const base = reportSafeSlug(D.product?.asin || D.product?.reportId || 'listing');
+        return `luckee-listing-accepted-report-${base || 'listing'}-${reportDateStamp()}.html`;
+      }
+
+      function acceptedDecisionIds(prefix) {
+        return Object.keys(decisions)
+          .filter(id => id.indexOf(prefix) === 0)
+          .filter(id => {
+            const d = decisions[id];
+            return d && (d.state === 'accepted' || d.state === 'edited');
+          })
+          .sort((a, b) => Number(a.split(':')[1] || 0) - Number(b.split(':')[1] || 0));
+      }
+
+      function collectAcceptedAplusModules() {
+        const panel = document.querySelector('[data-panel="aplus"]');
+        const modules = (M.aplus?.modules || []);
+        if (!panel || !modules.length) return [];
+        return [...panel.querySelectorAll('.ap-card.is-accepted')]
+          .map(card => {
+            const index = Number(card.getAttribute('data-aplus-index'));
+            const item = modules[index];
+            if (!item) return null;
+            return {
+              id: item.id || `aplus-${index + 1}`,
+              moduleType: item.moduleType || `Module ${index + 1}`,
+              current: item.current || {},
+              suggestion: item.suggestion || {},
+              issue: item.issue || '',
+              keepImage: !!item.keepImage,
+              needsRedesign: !!item.needsRedesign
+            };
+          })
+          .filter(Boolean);
+      }
+
+      function collectAcceptedReportData() {
+        const titleId = decisionId('title');
+        const titleAccepted = decisions[titleId] && (decisions[titleId].state === 'accepted' || decisions[titleId].state === 'edited')
+          ? {
+              current: M.title?.currentValue || '',
+              suggested: resolvedValue(titleId),
+              reason: M.title?.reason || '',
+              impact: M.title?.impact || ''
+            }
+          : null;
+
+        const acceptedBullets = acceptedDecisionIds('bullet:').map(id => {
+          const index = Number(id.split(':')[1]) - 1;
+          const note = (M.bullets?.itemNotes || []).find(item => item.index === index + 1) || null;
+          return {
+            label: `Bullet ${index + 1}`,
+            current: M.bullets?.currentItems?.[index] || '',
+            suggested: resolvedValue(id),
+            keywords: note?.embeddedKeywords || [],
+            scenarios: note?.scenarioTerms || [],
+            usps: note?.uspTerms || []
+          };
+        }).filter(item => item.suggested);
+
+        const searchTermsId = decisionId('searchTerms');
+        const searchTermsAccepted = decisions[searchTermsId] && (decisions[searchTermsId].state === 'accepted' || decisions[searchTermsId].state === 'edited')
+          ? {
+              current: M.searchTerms?.currentValue || '',
+              suggested: resolvedValue(searchTermsId),
+              byteLimit: decisions[searchTermsId].byteLimit || 250,
+              bytes: byteLen(resolvedValue(searchTermsId))
+            }
+          : null;
+
+        const acceptedAplus = collectAcceptedAplusModules();
+        const acceptedTotal = [titleAccepted ? 1 : 0, acceptedBullets.length, searchTermsAccepted ? 1 : 0, acceptedAplus.length]
+          .reduce((sum, value) => sum + value, 0);
+
+        return {
+          generatedAt: new Date().toLocaleString(),
+          product: {
+            asin: D.product?.asin || '',
+            country: D.product?.country || '',
+            reportId: D.product?.reportId || ''
+          },
+          acceptedTotal,
+          title: titleAccepted,
+          bullets: acceptedBullets,
+          aplus: acceptedAplus,
+          searchTerms: searchTermsAccepted
+        };
+      }
+
+      function renderAcceptedReportHtml(data) {
+        const esc = (value) => L.esc(String(value == null ? '' : value));
+        const pillList = [];
+        if (data.title) pillList.push(`<a class="jump-pill" href="#report-title">Title</a>`);
+        if (data.bullets.length) pillList.push(`<a class="jump-pill" href="#report-bullets">Bullets <span>${data.bullets.length}</span></a>`);
+        if (data.aplus.length) pillList.push(`<a class="jump-pill" href="#report-aplus">A+ Page <span>${data.aplus.length}</span></a>`);
+        if (data.searchTerms) pillList.push(`<a class="jump-pill" href="#report-search-terms">Search Terms</a>`);
+
+        const sectionTitle = data.title ? `
+          <section class="report-section" id="report-title">
+            <div class="report-kicker">Title</div>
+            <h2>Accepted title</h2>
+            <div class="pair-grid">
+              <article class="pair-card">
+                <div class="pair-label">Current</div>
+                <p>${esc(data.title.current)}</p>
+              </article>
+              <article class="pair-card pair-card-accent">
+                <div class="pair-label">Accepted suggestion</div>
+                <p>${esc(data.title.suggested)}</p>
+              </article>
+            </div>
+          </section>` : '';
+
+        const sectionBullets = data.bullets.length ? `
+          <section class="report-section" id="report-bullets">
+            <div class="report-kicker">Bullets</div>
+            <h2>Accepted bullet rewrites</h2>
+            <div class="stack">
+              ${data.bullets.map(item => `
+                <article class="bullet-card">
+                  <div class="bullet-head">
+                    <strong>${esc(item.label)}</strong>
+                    <span class="state-pill">Accepted</span>
+                  </div>
+                  <div class="pair-grid">
+                    <div class="pair-card">
+                      <div class="pair-label">Current</div>
+                      <p>${esc(item.current)}</p>
+                    </div>
+                    <div class="pair-card pair-card-accent">
+                      <div class="pair-label">Accepted suggestion</div>
+                      <p>${esc(item.suggested)}</p>
+                      ${(item.keywords || []).length ? `<div class="meta-row"><span class="meta-label">Keywords</span>${item.keywords.map(tag => `<span class="meta-chip">${esc(tag)}</span>`).join('')}</div>` : ''}
+                      ${(item.scenarios || []).length ? `<div class="meta-row"><span class="meta-label">Scenario</span>${item.scenarios.map(tag => `<span class="meta-chip">${esc(tag)}</span>`).join('')}</div>` : ''}
+                      ${(item.usps || []).length ? `<div class="meta-row"><span class="meta-label">USP</span>${item.usps.map(tag => `<span class="meta-chip">${esc(tag)}</span>`).join('')}</div>` : ''}
+                    </div>
+                  </div>
+                </article>`).join('')}
+            </div>
+          </section>` : '';
+
+        const sectionAplus = data.aplus.length ? `
+          <section class="report-section" id="report-aplus">
+            <div class="report-kicker">A+ Page</div>
+            <h2>Accepted module revisions</h2>
+            <div class="stack">
+              ${data.aplus.map(item => `
+                <article class="bullet-card">
+                  <div class="bullet-head">
+                    <strong>${esc(item.moduleType)}</strong>
+                    <div class="inline-pills">
+                      ${item.keepImage ? '<span class="mini-pill">Keep image</span>' : ''}
+                      ${item.needsRedesign ? '<span class="mini-pill warn">Needs redesign</span>' : '<span class="mini-pill ok">Layout OK</span>'}
+                    </div>
+                  </div>
+                  <div class="pair-grid">
+                    <div class="pair-card">
+                      <div class="pair-label">Current A+ display</div>
+                      <p>${esc(item.current.visualSummary || '')}</p>
+                      ${(item.current.visibleText || []).length ? `<div class="meta-row"><span class="meta-label">On-image copy</span>${item.current.visibleText.map(tag => `<span class="meta-chip">${esc(tag)}</span>`).join('')}</div>` : ''}
+                      ${(item.current.claims || []).length ? `<div class="meta-row"><span class="meta-label">Claims</span>${item.current.claims.map(tag => `<span class="meta-chip">${esc(tag)}</span>`).join('')}</div>` : ''}
+                    </div>
+                    <div class="pair-card pair-card-accent">
+                      <div class="pair-label">Accepted revision</div>
+                      <p class="headline">${esc(item.suggestion.suggestedHeadline || '')}</p>
+                      <p>${esc(item.suggestion.suggestedBody || '')}</p>
+                      ${item.suggestion.suggestedVisualDirection ? `<p class="subtle">${esc(item.suggestion.suggestedVisualDirection)}</p>` : ''}
+                    </div>
+                  </div>
+                </article>`).join('')}
+            </div>
+          </section>` : '';
+
+        const sectionSearchTerms = data.searchTerms ? `
+          <section class="report-section" id="report-search-terms">
+            <div class="report-kicker">Search Terms</div>
+            <h2>Accepted backend terms</h2>
+            <div class="pair-grid">
+              <article class="pair-card">
+                <div class="pair-label">Current</div>
+                <p>${esc(data.searchTerms.current)}</p>
+              </article>
+              <article class="pair-card pair-card-accent">
+                <div class="pair-label">Accepted suggestion</div>
+                <p>${esc(data.searchTerms.suggested)}</p>
+                <div class="meta-row">
+                  <span class="meta-label">Byte budget</span>
+                  <span class="meta-chip">${esc(`${data.searchTerms.bytes} / ${data.searchTerms.byteLimit} bytes`)}</span>
+                </div>
+              </article>
+            </div>
+          </section>` : '';
+
+        return `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Luckee Listing Accepted Report</title>
+  <style>
+    :root {
+      --ink: #223126;
+      --ink-soft: #667164;
+      --line: rgba(34,49,38,.10);
+      --mint: #edf7ef;
+      --mint-strong: #406046;
+      --paper: #fcf8f1;
+      --paper-2: #fffdfa;
+      --accent: #eef7ef;
+      --shadow: 0 28px 60px -42px rgba(34,49,38,.28);
+      --radius-xl: 32px;
+      --radius-lg: 24px;
+      --radius-md: 18px;
+      --radius-pill: 999px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(1200px 540px at 0% 0%, rgba(94, 128, 101, .16), transparent 54%),
+        radial-gradient(880px 520px at 100% 0%, rgba(196, 162, 83, .12), transparent 48%),
+        linear-gradient(180deg, #fbf7f0 0%, #f5efe4 100%);
+      line-height: 1.6;
+    }
+    .page {
+      width: min(1180px, calc(100vw - 40px));
+      margin: 24px auto 48px;
+    }
+    .hero {
+      padding: 28px 30px 22px;
+      border: 1px solid rgba(255,255,255,.4);
+      border-radius: 36px;
+      background: rgba(255,253,249,.84);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+    .eyebrow {
+      color: var(--mint-strong);
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      font-size: 12px;
+      font-weight: 800;
+    }
+    h1 {
+      margin: 8px 0 10px;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      line-height: .98;
+      letter-spacing: -.04em;
+    }
+    .hero-copy {
+      margin: 0;
+      max-width: 860px;
+      color: var(--ink-soft);
+      font-size: 15px;
+    }
+    .hero-row, .jump-row, .meta-row, .inline-pills {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .hero-row { margin-top: 16px; }
+    .hero-pill, .jump-pill, .meta-chip, .mini-pill, .state-pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 0 12px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.74);
+      color: var(--ink-soft);
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .jump-row { margin: 18px 0 6px; }
+    .jump-pill { color: var(--ink); }
+    .jump-pill span { margin-left: 8px; opacity: .65; }
+    .report-section {
+      margin-top: 18px;
+      padding: 20px 22px 22px;
+      border-radius: var(--radius-xl);
+      border: 1px solid rgba(34,49,38,.08);
+      background: rgba(255,253,249,.86);
+      box-shadow: 0 20px 44px -34px rgba(34,49,38,.20);
+    }
+    .report-kicker {
+      color: var(--mint-strong);
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      font-size: 12px;
+      font-weight: 800;
+    }
+    h2 {
+      margin: 6px 0 12px;
+      font-size: 28px;
+      letter-spacing: -.03em;
+      line-height: 1.05;
+    }
+    .pair-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .pair-card, .bullet-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: rgba(255,255,255,.74);
+      overflow: hidden;
+    }
+    .pair-card {
+      padding: 18px 18px 16px;
+    }
+    .pair-card-accent {
+      background: linear-gradient(180deg, rgba(237,244,237,.96), rgba(248,252,248,.8));
+    }
+    .pair-label {
+      margin-bottom: 10px;
+      color: var(--mint-strong);
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .pair-card p, .bullet-card p {
+      margin: 0;
+      white-space: pre-wrap;
+      font-size: 15px;
+    }
+    .stack {
+      display: grid;
+      gap: 16px;
+    }
+    .bullet-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255,252,247,.88);
+    }
+    .bullet-head strong {
+      font-size: 18px;
+      letter-spacing: -.02em;
+    }
+    .bullet-card .pair-grid {
+      padding: 16px;
+    }
+    .meta-row {
+      margin-top: 12px;
+      align-items: flex-start;
+    }
+    .meta-label {
+      min-width: 84px;
+      padding-top: 6px;
+      color: var(--ink-soft);
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      font-size: 11px;
+      font-weight: 800;
+    }
+    .state-pill {
+      background: var(--mint);
+      color: var(--mint-strong);
+      border-color: rgba(64,96,70,.14);
+    }
+    .mini-pill.ok {
+      background: var(--mint);
+      color: var(--mint-strong);
+      border-color: rgba(64,96,70,.14);
+    }
+    .mini-pill.warn {
+      background: #fff2dc;
+      color: #ac6f18;
+      border-color: rgba(172,111,24,.16);
+    }
+    .headline {
+      font-weight: 700;
+      letter-spacing: -.02em;
+    }
+    .subtle {
+      margin-top: 12px !important;
+      color: var(--ink-soft);
+      font-style: italic;
+    }
+    @media (max-width: 840px) {
+      .page { width: min(100vw - 22px, 1180px); }
+      .hero, .report-section { padding-left: 18px; padding-right: 18px; }
+      .pair-grid { grid-template-columns: 1fr; }
+      .bullet-card .pair-grid { padding: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="hero">
+      <div class="eyebrow">Luckee Listing · Accepted HTML report</div>
+      <h1>Accepted optimization handoff</h1>
+      <p class="hero-copy">This file includes only the changes the seller explicitly accepted or edited in the workspace. Pending and rejected suggestions are omitted so the output behaves like a clean handoff artifact.</p>
+      <div class="hero-row">
+        ${data.product.asin ? `<span class="hero-pill">ASIN · ${esc(data.product.asin)}</span>` : ''}
+        ${data.product.country ? `<span class="hero-pill">Marketplace · ${esc(data.product.country)}</span>` : ''}
+        ${data.product.reportId ? `<span class="hero-pill">Report · ${esc(data.product.reportId)}</span>` : ''}
+        <span class="hero-pill">Accepted blocks · ${esc(data.acceptedTotal)}</span>
+        <span class="hero-pill">Generated · ${esc(data.generatedAt)}</span>
+      </div>
+      ${pillList.length ? `<nav class="jump-row">${pillList.join('')}</nav>` : ''}
+    </header>
+    ${sectionTitle}
+    ${sectionBullets}
+    ${sectionAplus}
+    ${sectionSearchTerms}
+  </div>
+</body>
+</html>`;
+      }
+
+      function downloadAcceptedHtmlReport(triggerBtn) {
+        const data = collectAcceptedReportData();
+        if (!data.acceptedTotal) {
+          if (triggerBtn) {
+            const prev = triggerBtn.innerHTML;
+            triggerBtn.innerHTML = `${icon.alert} Accept something first`;
+            setTimeout(() => { triggerBtn.innerHTML = prev; }, 1600);
+          }
+          return false;
+        }
+        const html = renderAcceptedReportHtml(data);
+        const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = reportFileName();
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        if (triggerBtn) {
+          const prev = triggerBtn.innerHTML;
+          triggerBtn.innerHTML = `${icon.check} Report downloaded`;
+          setTimeout(() => { triggerBtn.innerHTML = prev; }, 1600);
+        }
+        return true;
+      }
+
+      function buildExport() {
+        valueById = {};
+        // ---- decision tallies ----
+        let acc = 0, edt = 0, rej = 0, pend = 0;
+        Object.keys(decisions).forEach(id => {
+          const s = decisions[id].state;
+          if (s === 'accepted') acc++;
+          else if (s === 'edited') edt++;
+          else if (s === 'rejected') rej++;
+          else pend++;
+        });
+
+        // ---- Final Title (only if accepted/edited) ----
+        const finalTitle = resolvedValue(decisionId('title'));
+
+        // ---- Final Bullets (accepted/edited, in order) ----
+        const bulletVals = [];
+        const bulletIds = Object.keys(decisions)
+          .filter(id => id.indexOf('bullet:') === 0)
+          .sort((a, b) => Number(a.split(':')[1]) - Number(b.split(':')[1]));
+        bulletIds.forEach(id => {
+          const v = resolvedValue(id);
+          if (v) bulletVals.push(v);
+        });
+        const finalBullets = bulletVals.join('\n');
+
+        // ---- Search Terms ----
+        const finalTerms = resolvedValue(decisionId('searchTerms'));
+
+        // ---- unresolved-spec gate ----
+        // Count accepted/edited items that still contain a [confirm …] token OR are
+        // flagged needs_confirmation. Tokens are KEPT in the copied text on purpose.
+        let unresolvedSpecs = 0;
+        Object.keys(decisions).forEach(id => {
+          const d = decisions[id];
+          if (d.state !== 'accepted' && d.state !== 'edited') return;
+          const text = resolvedValue(id);
+          if (hasConfirmToken(text) || d.factStatus === 'needs_confirmation') unresolvedSpecs++;
+        });
+
+        // ---- unresolved HIGH-risk gaps (still pending or rejected) ----
+        let highOpen = false;
+        Object.keys(decisions).forEach(id => {
+          const d = decisions[id];
+          if (d.riskLevel === 'HIGH' && (d.state === 'pending' || d.state === 'rejected')) highOpen = true;
+        });
+
+        const countsHtml = `
+          <div class="export-counts" role="status">
+            <span class="ec-pill acc">${icon.check} Accepted ${acc}</span>
+            <span class="ec-pill edt">${icon.edit} Edited ${edt}</span>
+            <span class="ec-pill rej">${icon.x} Rejected ${rej}</span>
+            <span class="ec-pill">Pending ${pend}</span>
+          </div>`;
+
+        const specWarn = unresolvedSpecs > 0
+          ? `<div class="export-warn">${icon.alert}<span><b>⚠ ${unresolvedSpecs} change${unresolvedSpecs === 1 ? '' : 's'} still need${unresolvedSpecs === 1 ? 's' : ''} your real specs before publishing.</b> The <span class="confirm-token" style="border-style:dashed">[confirm …]</span> placeholders below are kept in the copied text so you know exactly what to fill in — we never invent specs.</span></div>`
+          : '';
+
+        const highWarn = highOpen
+          ? `<div class="export-warn high">${icon.alert}<span>You have unresolved HIGH-risk gaps — a HIGH-risk suggestion is still pending or rejected.</span></div>`
+          : '';
+
+        exportBody.innerHTML =
+          countsHtml + specWarn + highWarn +
+          copyBlock('Final Title', finalTitle, false) +
+          copyBlock('Final Bullets', finalBullets, false) +
+          copyBlock('Search Terms (backend)', finalTerms, true) +
+          `<div class="copy-block" style="display:flex;justify-content:flex-start;margin-top:26px">
+            <button class="btn btn-primary" id="dl-aplus" type="button">${icon.download} Download accepted HTML report</button>
+          </div>`;
+      }
+
+      exportBody.addEventListener('click', (e) => {
+        const cb = e.target.closest('[data-copy]');
+        if (cb) {
+          const id = cb.getAttribute('data-copy');
+          const text = valueById[id] || '';
+          const lblEl = cb.closest('.copy-block') && cb.closest('.copy-block').querySelector('.cb-label');
+          const done = () => {
+            const copyType = lblEl ? lblEl.textContent : 'Content';
+            L.trackListingEvent('LISTING_EXPORT_COPY', {
+              copyType,
+              clipboard_result: 'success',
+              asin: D.product.asin || '',
+              marketplace: D.product.country || D.product.marketplace || '',
+              reportId: D.product.reportId || workspaceRecord?.reportId || workspaceArtifact?.reportId || '',
+              threadId: workspaceRecord?.threadId || workspaceArtifact?.threadId || historyThreadId || ''
+            });
+            const prev = cb.innerHTML;
+            cb.innerHTML = `${icon.check} Copied`;
+            cb.classList.add('btn-primary'); cb.classList.remove('btn-outline');
+            const status = document.getElementById('copy-status');
+            if (status) status.textContent = copyType + ' copied to clipboard';
+            trackCompletedLoopOnce({
+              copyType,
+              completion_source: 'export_copy',
+              asin: D.product.asin || '',
+              marketplace: D.product.country || D.product.marketplace || '',
+              reportId: D.product.reportId || workspaceRecord?.reportId || workspaceArtifact?.reportId || '',
+              threadId: workspaceRecord?.threadId || workspaceArtifact?.threadId || historyThreadId || ''
+            });
+            setTimeout(() => { cb.innerHTML = prev; cb.classList.remove('btn-primary'); cb.classList.add('btn-outline'); }, 1400);
+          };
+          const failed = () => {
+            const status = document.getElementById('copy-status');
+            if (status) status.textContent = (lblEl ? lblEl.textContent : 'Content') + ' copy failed';
+            L.trackListingEvent('LISTING_FIX_MANUAL_COPY', {
+              copyType: lblEl ? lblEl.textContent : 'Content',
+              clipboard_result: 'manual_prompt_shown',
+              completion_source: 'export_copy',
+              asin: D.product.asin || '',
+              marketplace: D.product.country || D.product.marketplace || '',
+              reportId: D.product.reportId || workspaceRecord?.reportId || workspaceArtifact?.reportId || '',
+              threadId: workspaceRecord?.threadId || workspaceArtifact?.threadId || historyThreadId || ''
+            });
+          };
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(done).catch(failed);
+          } else { failed(); }
+          return;
+        }
+        const dl = e.target.closest('#dl-aplus');
+        if (dl) {
+          const downloaded = downloadAcceptedHtmlReport(dl);
+          if (downloaded) {
+            L.trackListingEvent('LISTING_APLUS_BRIEF_DOWNLOAD', {
+              asin: D.product.asin || '',
+              marketplace: D.product.country || D.product.marketplace || '',
+              reportId: D.product.reportId || workspaceRecord?.reportId || workspaceArtifact?.reportId || '',
+              threadId: workspaceRecord?.threadId || workspaceArtifact?.threadId || historyThreadId || ''
+            }, { immediate: true });
+            trackCompletedLoopOnce({
+              completion_source: 'export_download',
+              asin: D.product.asin || '',
+              marketplace: D.product.country || D.product.marketplace || '',
+              reportId: D.product.reportId || workspaceRecord?.reportId || workspaceArtifact?.reportId || '',
+              threadId: workspaceRecord?.threadId || workspaceArtifact?.threadId || historyThreadId || ''
+            });
+          }
+        }
+      });
+
+      const modalEl = document.getElementById('export-modal');
+      const openBtn = document.getElementById('open-export');
+      let lastFocused = null;
+
+      function focusables() {
+        return [...modalEl.querySelectorAll('button, [href], input, textarea, [tabindex]:not([tabindex="-1"])')]
+          .filter(el => el.offsetParent !== null);
+      }
+      function trap(e) {
+        if (e.key !== 'Tab') return;
+        const f = focusables(); if (!f.length) return;
+        const first = f[0], last = f[f.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+      function openExport() {
+        lastFocused = document.activeElement;
+        buildExport(); // rebuild from the current decisions map every time
+        const counts = Object.keys(decisions).reduce((acc, id) => {
+          const state = decisions[id].state;
+          if (state === 'accepted') acc.acceptedCount++;
+          else if (state === 'edited') acc.editedCount++;
+          else if (state === 'rejected') acc.rejectedCount++;
+          else acc.pendingCount++;
+          return acc;
+        }, { acceptedCount: 0, editedCount: 0, rejectedCount: 0, pendingCount: 0 });
+        L.trackListingEvent('LISTING_EXPORT_OPEN', Object.assign({
+          reportId: D.product.reportId || workspaceRecord?.reportId || workspaceArtifact?.reportId || '',
+          threadId: workspaceRecord?.threadId || workspaceArtifact?.threadId || historyThreadId || ''
+        }, counts));
+        overlay.classList.add('open'); document.body.style.overflow = 'hidden';
+        modalEl.addEventListener('keydown', trap);
+        document.getElementById('export-close').focus();
+      }
+      function closeExport() {
+        overlay.classList.remove('open'); document.body.style.overflow = '';
+        modalEl.removeEventListener('keydown', trap);
+        if (lastFocused && lastFocused.focus) lastFocused.focus();
+      }
+
+      openBtn.addEventListener('click', openExport);
+      document.getElementById('export-close').addEventListener('click', closeExport);
+      overlay.addEventListener('click', (e) => { if (e.target === overlay) closeExport(); });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && overlay.classList.contains('open')) closeExport(); });
+
+      /* re-run reveal for freshly injected blocks */
+      L.initReveal(document);
+    })();
+  </script>
+</body>
+</html>

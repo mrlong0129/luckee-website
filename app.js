@@ -9,7 +9,83 @@
   'use strict';
 
   var CONTACT_EMAIL = 'contact@luckee.ai';
+  var LISTING_EMAIL = 'hello@luckee.ai';
   var PRIMARY_CTA_HREF = '/amazon-assistant/';
+
+  /* ---- Shared nav config — update here to change nav on all pages ---- */
+  var NAV_PRODUCTS = [
+    { href: '/luckee-website/products/amazon-operation-assistant.html', title: 'Amazon Operation Assistant', desc: 'Daily Amazon account operations in plain language.' },
+    { href: '/luckee-website/products/amazon-ads-workbench.html', title: 'Amazon Ads Workbench', desc: 'Human-approved PPC execution from diagnosis to outcome.' }
+  ];
+  var NAV_SOLUTIONS = [
+    { href: '/luckee-website/solutions/listing-optimizer/', title: 'Listing Optimizer', desc: 'Listing copy, A+ content, backend keywords, and answerability.' },
+    { href: '/luckee-website/solutions/ads-audit.html', title: 'Ads Audit', desc: 'PPC diagnosis for TACoS, ROAS, CPC, placement, and waste.' },
+    { href: '/luckee-website/solutions/ads-automation.html', title: 'Ads Automation', desc: 'Human-approved bid, budget, keyword, and negative changes.' },
+    { href: '/luckee-website/solutions/image-generation.html', title: 'E-commerce Image Generation', desc: 'Conversion-focused product, lifestyle, and comparison visuals.' },
+    { href: '/luckee-website/solutions/review-analysis.html', title: 'Review Analysis', desc: 'Complaint themes, buyer language, and product improvement signals.' },
+    { href: '/luckee-website/solutions/competition-analysis.html', title: 'Competition Analysis', desc: 'Competitor pricing, creatives, keywords, reviews, and market moves.' }
+  ];
+
+  function mkMegaItems(items) {
+    return items.map(function (it) {
+      return '<a href="' + it.href + '"><strong>' + it.title + '</strong><span>' + it.desc + '</span></a>';
+    }).join('');
+  }
+
+  var siteHeader = document.querySelector('.site-header');
+  if (siteHeader) {
+    siteHeader.innerHTML = [
+      '<nav class="wrap nav" aria-label="Primary navigation">',
+      '<a class="brand" href="/luckee-website/" aria-label="Luckee AI home">',
+      '<span class="brand-mark" aria-hidden="true"></span><span>Luckee AI</span>',
+      '</a>',
+      '<ul class="nav-list">',
+      '<li class="nav-item">',
+      '<a class="nav-link" href="/luckee-website/products/amazon-operation-assistant.html">Products</a>',
+      '<div class="mega" aria-label="Product links">' + mkMegaItems(NAV_PRODUCTS) + '</div>',
+      '</li>',
+      '<li class="nav-item">',
+      '<a class="nav-link" href="/luckee-website/solutions.html">Solutions</a>',
+      '<div class="mega" aria-label="Solution links">' + mkMegaItems(NAV_SOLUTIONS) + '</div>',
+      '</li>',
+      '<li class="nav-item"><a class="nav-link" href="/luckee-website/#loop">How it works</a></li>',
+      '<li class="nav-item"><a class="nav-link" href="/luckee-website/#why">Why Luckee</a></li>',
+      '</ul>',
+      '<div class="nav-actions">',
+      '<a class="btn btn-outline btn-sm" href="/luckee-website/solutions.html">See solutions</a>',
+      '<a class="btn btn-primary btn-sm" href="/luckee-website/#contact">Hire a team</a>',
+      '<button class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">',
+      '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>',
+      '</button>',
+      '</div>',
+      '</nav>'
+    ].join('');
+  }
+
+  var mobileMenuEl = document.getElementById('mobile-menu');
+  if (mobileMenuEl) {
+    mobileMenuEl.innerHTML = [
+      '<div class="mobile-menu-panel">',
+      '<div class="mm-head">',
+      '<a class="brand" href="/luckee-website/"><span class="brand-mark" aria-hidden="true"></span><span>Luckee AI</span></a>',
+      '<button class="mm-close" aria-label="Close menu">',
+      '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>',
+      '</button>',
+      '</div>',
+      '<span class="mm-group-label">Products</span>',
+      NAV_PRODUCTS.map(function (p) { return '<a href="' + p.href + '">' + p.title + '</a>'; }).join(''),
+      '<span class="mm-group-label">Solutions</span>',
+      NAV_SOLUTIONS.map(function (s) { return '<a href="' + s.href + '">' + s.title + '</a>'; }).join(''),
+      '<span class="mm-group-label">More</span>',
+      '<a href="/luckee-website/#loop">How it works</a>',
+      '<a href="/luckee-website/#why">Why Luckee</a>',
+      '<div class="mm-actions">',
+      '<a class="btn btn-outline btn-block" href="/luckee-website/solutions.html">See solutions</a>',
+      '<a class="btn btn-primary btn-block" href="/luckee-website/#contact">Hire a team</a>',
+      '</div>',
+      '</div>'
+    ].join('');
+  }
 
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -84,15 +160,20 @@
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
   }
 
-  /* ---- Contact links ---- */
-  var contactMailto = 'mailto:' + CONTACT_EMAIL;
-  var contactLinks = Array.prototype.slice.call(document.querySelectorAll('a[href^="mailto:"]')).filter(function (link) {
-    var href = link.getAttribute('href') || '';
-    if (link.hasAttribute('data-primary-cta')) return false;
-    return /^mailto:contact@luckee\.ai/i.test(href);
-  });
-  contactLinks.forEach(function (link) {
-    link.href = contactMailto;
+  /* ---- Contact links ----
+     Emails are wired at runtime from JS constants and are never shipped as
+     literal mailto:/text in the HTML, so Cloudflare Email Obfuscation cannot
+     rewrite them into broken /cdn-cgi/l/email-protection links. Markup uses
+     data-contact-mailto (optionally ="hello") and data-contact-mailto-text. */
+  var CONTACT_EMAIL_BY_KEY = { '': CONTACT_EMAIL, contact: CONTACT_EMAIL, hello: LISTING_EMAIL };
+  var contactLinks = [];
+  Array.prototype.slice.call(document.querySelectorAll('a[data-contact-mailto]')).forEach(function (link) {
+    if (link.hasAttribute('data-primary-cta')) return;
+    var email = CONTACT_EMAIL_BY_KEY[link.getAttribute('data-contact-mailto') || ''] || CONTACT_EMAIL;
+    link.href = 'mailto:' + email;
+    if (link.hasAttribute('data-contact-mailto-text')) link.textContent = email;
+    // contact@ links open the in-page contact dialog (wired further below).
+    if (email === CONTACT_EMAIL) contactLinks.push(link);
   });
 
   var primaryCtaLinks = Array.prototype.slice.call(document.querySelectorAll('[data-primary-cta]'));
@@ -301,4 +382,127 @@
       navItems.forEach(function (n) { n.classList.remove('open-tap'); n.classList.remove('mega-open'); });
     }
   });
+
+  /* ---- Website analytics tracking ---- */
+  (function () {
+    var T = window.LuckeeWebsiteTrack;
+    if (!T || !T.track) return;
+
+    // Page view — immediate on load
+    T.trackPageView();
+
+    function getHref(el) { return el ? (el.getAttribute('href') || '') : ''; }
+    function getLabel(el) {
+      if (!el) return '';
+      var strong = el.querySelector && el.querySelector('strong');
+      return ((strong ? strong.textContent : (el.textContent || el.innerText || '')) || '').trim();
+    }
+    function targetTypeFromHref(href) {
+      href = String(href || '');
+      if (href.indexOf('listing-optimizer') >= 0) return 'listing_optimizer';
+      if (href.indexOf('ads-workbench') >= 0)      return 'ads_workbench';
+      if (href === '#contact' || href === '/#contact') return 'contact';
+      if (href === '#products' || href === '/#products') return 'products_overview';
+      return 'page';
+    }
+
+    // Nav: Solutions dropdown
+    var solutionMega = document.querySelector('.mega[aria-label="Solution links"]');
+    if (solutionMega) {
+      solutionMega.addEventListener('click', function (e) {
+        var a = e.target.closest('a');
+        if (!a) return;
+        var href = getHref(a);
+        var label = getLabel(a);
+        var ttype = targetTypeFromHref(href);
+        T.track(T.EVENTS.SOLUTION_NAV_CLICK, { section: 'nav', cta_label: label, target_url: a.href, target_type: ttype });
+        if (ttype === 'listing_optimizer') {
+          T.track(T.EVENTS.LISTING_OPTIMIZER_CTA_CLICK, { section: 'nav', cta_label: label, target_url: a.href, target_type: ttype });
+        }
+      });
+    }
+
+    // Nav: Products dropdown
+    var productMega = document.querySelector('.mega[aria-label="Product links"]');
+    if (productMega) {
+      productMega.addEventListener('click', function (e) {
+        var a = e.target.closest('a');
+        if (!a) return;
+        var href = getHref(a);
+        var label = getLabel(a);
+        var ttype = targetTypeFromHref(href);
+        T.track(T.EVENTS.PRODUCT_NAV_CLICK, { section: 'nav', cta_label: label, target_url: a.href, target_type: ttype });
+        if (ttype === 'ads_workbench') {
+          T.track(T.EVENTS.ADS_WORKBENCH_CTA_CLICK, { section: 'nav', cta_label: label, target_url: a.href, target_type: ttype });
+        }
+      });
+    }
+
+    // Hero CTAs and demo interactions
+    var heroSection = document.querySelector('.home-hero');
+    if (heroSection) {
+      var heroLinks = heroSection.querySelectorAll('.hero-actions a');
+      if (heroLinks[0]) {
+        heroLinks[0].addEventListener('click', function () {
+          T.track(T.EVENTS.HOMEPAGE_PRIMARY_CTA_CLICK, {
+            section: 'hero', cta_label: getLabel(heroLinks[0]),
+            target_url: heroLinks[0].href, target_type: targetTypeFromHref(getHref(heroLinks[0]))
+          });
+        });
+      }
+      if (heroLinks[1]) {
+        heroLinks[1].addEventListener('click', function () {
+          T.track(T.EVENTS.HOMEPAGE_SECONDARY_CTA_CLICK, {
+            section: 'hero', cta_label: getLabel(heroLinks[1]),
+            target_url: heroLinks[1].href, target_type: targetTypeFromHref(getHref(heroLinks[1]))
+          });
+        });
+      }
+      var wbApprove = heroSection.querySelector('.wb-approve');
+      if (wbApprove) {
+        wbApprove.addEventListener('click', function () {
+          T.track(T.EVENTS.HERO_DEMO_APPROVE_CLICK, { section: 'hero' });
+        });
+      }
+      var wbEvidence = heroSection.querySelector('.wb-evidence');
+      if (wbEvidence) {
+        wbEvidence.addEventListener('click', function () {
+          T.track(T.EVENTS.HERO_DEMO_EVIDENCE_CLICK, { section: 'hero' });
+        });
+      }
+    }
+
+    // Product guide section — Ads Workbench and Listing Optimizer cards
+    var productGuideSection = document.getElementById('products');
+    if (productGuideSection) {
+      productGuideSection.addEventListener('click', function (e) {
+        var a = e.target.closest('a[href]');
+        if (!a) return;
+        var ttype = targetTypeFromHref(getHref(a));
+        var label = getLabel(a);
+        if (ttype === 'ads_workbench') {
+          T.track(T.EVENTS.ADS_WORKBENCH_CTA_CLICK, { section: 'products', cta_label: label, target_url: a.href, target_type: ttype });
+        } else if (ttype === 'listing_optimizer') {
+          T.track(T.EVENTS.LISTING_OPTIMIZER_CTA_CLICK, { section: 'products', cta_label: label, target_url: a.href, target_type: ttype });
+        }
+      });
+    }
+
+    // Contact clicks — "Hire a team" in nav / footer / CTA section.
+    // Exclude hero primary CTA (already tracked as homepage_primary_cta_click).
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest('a[href], button[data-contact]');
+      if (!a) return;
+      if (getHref(a) !== '#contact' && getHref(a) !== '/#contact') return;
+      if (a.closest('.home-hero')) return; // hero CTA already tracked above
+      var sectionEl = a.closest('[id]');
+      var sectionId = sectionEl ? sectionEl.id : '';
+      var section = a.closest('.site-header') ? 'nav'
+                  : sectionId === 'contact'   ? 'contact_cta'
+                  : sectionId || 'unknown';
+      T.track(T.EVENTS.CONTACT_CLICK, {
+        section: section, cta_label: getLabel(a), target_type: 'contact'
+      });
+    });
+  }());
 })();

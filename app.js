@@ -21,7 +21,7 @@
     { href: '/luckee-website/solutions/listing-optimizer/', title: 'Listing Optimizer', desc: 'Listing copy, A+ content, backend keywords, and answerability.' },
     { href: '/luckee-website/solutions/ads-audit.html', title: 'Ads Audit', desc: 'PPC diagnosis for TACoS, ROAS, CPC, placement, and waste.' },
     { href: '/luckee-website/solutions/ads-automation.html', title: 'Ads Automation', desc: 'Human-approved bid, budget, keyword, and negative changes.' },
-    { href: '/luckee-website/solutions/image-generation.html', title: 'E-commerce Image Generation', desc: 'Conversion-focused product, lifestyle, and comparison visuals.' },
+    { href: '/luckee-website/solutions/image-generation.html', title: 'Image Generation', desc: 'Conversion-focused product, lifestyle, and comparison visuals.' },
     { href: '/luckee-website/solutions/review-analysis.html', title: 'Review Analysis', desc: 'Complaint themes, buyer language, and product improvement signals.' },
     { href: '/luckee-website/solutions/competition-analysis.html', title: 'Competition Analysis', desc: 'Competitor pricing, creatives, keywords, reviews, and market moves.' }
   ];
